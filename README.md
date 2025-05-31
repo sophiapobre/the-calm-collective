@@ -1,1 +1,3 @@
-# students-spobre
+# Sophia Pobre
+
+## Assignment 2

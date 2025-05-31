@@ -1,0 +1,30 @@
+import React from 'react';
+import { Link } from 'react-router-dom'
+
+import './Bag.css';
+import data from '../assets/products.js'
+
+// Adapted code from GreatStack Tutorial
+const Bag = (item) => {
+    const electronicProducts = data.filter(item => item.category === 'bags');
+
+    return (
+        <div className='bag-container'>
+            {
+                electronicProducts.map((item) => (
+                    <div className='bag'>
+                        <Link to='/' className='link'>
+                        <img src={item.image} alt='' className='bag-img'/>
+                        <p>{item.name}</p>
+                        </Link>
+                        <div className='bag-price'>
+                            ${item.price}
+                        </div>
+                    </div>
+                ))
+            }
+        </div>
+    )
+}
+
+export default Bag
