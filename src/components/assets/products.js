@@ -6,7 +6,7 @@ import product5 from './nintendo_switch_2.jpg';
 import product6 from './samsonite_rosaline_backpack.webp';
 import product7 from './tumi_montana_backpack.jpeg';
 
-// Format adapted from GreatStack Tutorial
+// Format adapted from GreatStack Tutorial https://www.youtube.com/watch?v=jbfuzcrfjqQ&ab_channel=GreatStack
 let products = [
     {
         id: 1,

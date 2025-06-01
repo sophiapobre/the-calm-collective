@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 import './Searchbar.css';
 import data from '../assets/products.js'
 
-// Adapted code from React with Masoud
+// Adapted code from React with Masoud https://www.youtube.com/watch?v=Jd7s7egjt30&ab_channel=ReactwithMasoud https://www.youtube.com/watch?v=Jd7s7egjt30&ab_channel=ReactwithMasoud https://www.youtube.com/watch?v=Jd7s7egjt30&ab_channel=ReactwithMasoud
 const Searchbar = (item) => {
     const [keyword, setKeyword] = useState('');
     const [result, setResult] = useState(null);

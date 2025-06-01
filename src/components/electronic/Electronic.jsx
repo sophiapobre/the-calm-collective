@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import './Electronic.css';
 import data from '../assets/products.js';
 
-// Adapted code from GreatStack Tutorial
+// Adapted code from GreatStack Tutorial https://www.youtube.com/watch?v=jbfuzcrfjqQ&ab_channel=GreatStack
 const Electronic = (item) => {
     const electronicProducts = data.filter(item => item.category === 'electronics');
 

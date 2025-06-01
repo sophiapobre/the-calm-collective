@@ -5,7 +5,7 @@ import { addToCart } from '../../store/slices/cartSlice';
 
 import './Item.css';
 
-// Adapted code from GreatStack Tutorial and Code with Yousaf
+// Adapted code from GreatStack Tutorial https://www.youtube.com/watch?v=jbfuzcrfjqQ&ab_channel=GreatStack and Code with Yousaf https://www.youtube.com/watch?v=DvR-kOl2_SM&ab_channel=CodeWithYousaf
 const Item = (props) => {
     const {item} = props;
 

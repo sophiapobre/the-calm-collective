@@ -10,7 +10,7 @@ import Product from './pages/Product';
 import Checkout from './pages/Checkout';
 import store from './store/Store';
 
-// Adapted code from GreatStack Tutorial
+// Adapted code from GreatStack Tutorial https://www.youtube.com/watch?v=jbfuzcrfjqQ&ab_channel=GreatStack
 function App() {
   return (
     <Provider store={store}>

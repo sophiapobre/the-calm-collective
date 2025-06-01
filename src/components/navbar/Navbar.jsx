@@ -6,7 +6,7 @@ import './Navbar.css';
 import logo from '../assets/logo.png';
 import cartImage from '../assets/cart.png';
 
-// Adapted code from GreatStack Tutorial
+// Adapted code from GreatStack Tutorial https://www.youtube.com/watch?v=jbfuzcrfjqQ&ab_channel=GreatStack
 const Navbar = () => {
     const cartItems = useSelector(state => state.cart.cart);
 

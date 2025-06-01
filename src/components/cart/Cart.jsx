@@ -4,7 +4,7 @@ import { clearCart } from '../../store/slices/cartSlice';
 
 import './Cart.css';
 
-// Adapted code from Code with Yousaf
+// Adapted code from Code with Yousaf https://www.youtube.com/watch?v=DvR-kOl2_SM&ab_channel=CodeWithYousaf
 const Cart = () => {
     const cartItems = useSelector(state => state.cart.cart);
     const dispatch = useDispatch();
