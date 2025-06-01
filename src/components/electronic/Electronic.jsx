@@ -13,7 +13,7 @@ const Electronic = (item) => {
             {
                 electronicProducts.map((item) => (
                     <div className='electronic'>
-                        <Link to='/' className='link'>
+                        <Link to={`/product/${item.id}`} className='link'>
                             <img src={item.image} alt='' className='electronic-img'/>
                             <p>{item.name}</p>
                         </Link>

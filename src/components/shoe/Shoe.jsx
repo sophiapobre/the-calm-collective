@@ -13,7 +13,7 @@ const Shoe = (item) => {
             {
                 shoeProducts.map((item) => (
                     <div className='shoe'>
-                        <Link to='/' className='link'>
+                        <Link to={`/product/${item.id}`} className='link'>
                             <img src={item.image} alt='' className='shoe-img'/>
                             <p>{item.name}</p>
                         </Link>

@@ -13,9 +13,9 @@ const Bag = (item) => {
             {
                 electronicProducts.map((item) => (
                     <div className='bag'>
-                        <Link to='/' className='link'>
-                        <img src={item.image} alt='' className='bag-img'/>
-                        <p>{item.name}</p>
+                        <Link to={`/product/${item.id}`} className='link'>
+                            <img src={item.image} alt='' className='bag-img'/>
+                            <p>{item.name}</p>
                         </Link>
                         <div className='bag-price'>
                             ${item.price}

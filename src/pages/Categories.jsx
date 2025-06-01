@@ -7,16 +7,16 @@ import Electronic from '../components/electronic/Electronic';
 const Categories = () => {
     return (
         <div>
-            <h1>Electronics</h1>
+            <h1>Categories</h1>
+
+            <h2 className='categories-title'>Electronics</h2>
             <Electronic />
             
-            <h1>Bags</h1>
+            <h2 className='categories-title'>Bags</h2>
             <Bag />
             
-            <h1>Shoes</h1>
-            <Shoe />
-
-            
+            <h2 className='categories-title'>Shoes</h2>
+            <Shoe />  
         </div>
     )
 }

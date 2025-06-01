@@ -12,7 +12,7 @@ code {
     monospace;
 }
 
-h1 {
+.categories-title {
   color: #e74e3a;
   text-decoration: none;
 }

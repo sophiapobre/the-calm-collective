@@ -10,15 +10,15 @@ import product7 from './tumi_montana_backpack.jpeg';
 let products = [
     {
         id: 1,
-        name: 'Asics Gel Nimbus 26 (Women\'s 7)',
+        name: 'Asics Gel Nimbus 26',
         category: 'shoes',
-        description: 'Experience cloud-like comfort with the ASICS Men\'s GEL-NIMBUS™ 26 Running Shoes.',
+        description: 'Experience cloud-like comfort with the ASICS Women\'s GEL-NIMBUS™ 26 Running Shoes.',
         image: product1,
         price: 180.0
     },
     {
         id: 2,
-        name: 'Brooks Ghost Max 2 (Women\'s 7D)',
+        name: 'Brooks Ghost Max 2',
         category: 'shoes',
         description: 'Soft, smooth, and protective, the Ghost Max 2 women\'s road-running shoes deliver maximum comfort for running or walking.',
         image: product2,
@@ -26,7 +26,7 @@ let products = [
     },
     {
         id: 3,
-        name: 'Hoka Clifton 10 (Women\'s 6.5D)',
+        name: 'Hoka Clifton 10',
         category: 'shoes',
         description: 'The women\'s HOKA® Clifton 10 delivers ultra-light cushioning and a smooth ride—perfect for daily running, walking, and all-day support.',
         image: product3,
@@ -34,7 +34,7 @@ let products = [
     },
     {
         id: 4,
-        name: 'Apple iPhone 16 (128 GB Storage)',
+        name: 'Apple iPhone 16',
         category: 'electronics',
         description: 'iPhone 16 is built for Apple Intelligence, the personal intelligence system that helps you write, express yourself and get things done effortlessly.',
         image: product4,

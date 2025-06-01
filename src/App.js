@@ -1,15 +1,19 @@
 import './App.css';
-import Navbar from './components/navbar/Navbar';
+import { Provider } from 'react-redux';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+
+import Navbar from './components/navbar/Navbar';
 import Home from './pages/Home';
 import Categories from './pages/Categories';
 import Search from './pages/Search';
 import Product from './pages/Product';
-import Cart from './pages/Cart';
+import Checkout from './pages/Checkout';
+import store from './store/Store';
 
 // Adapted code from GreatStack Tutorial
 function App() {
   return (
+    <Provider store={store}>
     <div>
       <BrowserRouter>
       <Navbar/>
@@ -17,7 +21,7 @@ function App() {
         <Route path='/' element={<Home/>}/>
         <Route path='/categories' element={<Categories/>}/>
         <Route path='/search' element={<Search/>}/>
-        <Route path='/cart' element={<Cart/>}/>
+        <Route path='/checkout' element={<Checkout/>}/>
         <Route path='/product' element={<Product/>}>
           <Route path=':productId' element={<Product/>}/>
         </Route>
@@ -25,6 +29,7 @@ function App() {
       </BrowserRouter>
       
     </div>
+    </Provider>
   );
 }
 
