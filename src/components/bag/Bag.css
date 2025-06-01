@@ -1,5 +1,10 @@
+/* Adapted code from GreatStack Tutorial */
 .bag {
-    width: 360px;
+    width: 340px;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    padding: 16px;
+    margin: 16px auto;
 }
 
 .bag p {
@@ -17,11 +22,9 @@
 }
 
 .bag-img {
-    width: 300px;
-    height: auto;
-}
-
-.link {
-  color: #e74e3a;
-  text-decoration: none;
+    width: 250px;
+    height: 250px;
+    display: block;
+    margin: 0 auto;
+    object-fit: contain;
 }

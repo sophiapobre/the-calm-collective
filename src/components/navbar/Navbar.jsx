@@ -38,13 +38,10 @@ const Navbar = () => {
             </ul>
             
             <div className='nav-login-cart'>
-                <button>Login</button>
                 <Link to='/Checkout'>
                     <img src={cartImage} alt=''/>
                 </Link>
-                <Link to='/Checkout'>
-                    <div className='nav-cart-count'>{cartItems.length}</div>
-                </Link>
+                <div className='nav-cart-count'>{cartItems.length}</div>
             </div>
         </div>
     )

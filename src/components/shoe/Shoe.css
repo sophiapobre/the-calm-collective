@@ -1,5 +1,10 @@
+/* Adapted code from GreatStack Tutorial */
 .shoe {
-    width: 360px;
+    width: 340px;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    padding: 16px;
+    margin: 16px auto;
 }
 
 .shoe p {
@@ -17,8 +22,11 @@
 }
 
 .shoe-img {
-    width: 300px;
-    height: auto;
+    width: 250px;
+    height: 250px;
+    display: block;
+    margin: 0 auto;
+    object-fit: contain;
 }
 
 .link {

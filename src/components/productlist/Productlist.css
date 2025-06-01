@@ -1,0 +1,27 @@
+/* Adapted code from GreatStack Tutorial */
+.product-grid {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem;
+}
+
+h1,
+h2 {
+  text-align: center;
+}
+
+.category-section {
+  width: 30%;
+  margin-bottom: 3rem;
+}
+
+.product-container {
+  display: flex;
+  gap: 2rem;
+  justify-content: center;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1rem;
+  flex-wrap: wrap;
+}

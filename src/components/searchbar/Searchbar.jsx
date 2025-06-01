@@ -26,26 +26,29 @@ const Searchbar = (item) => {
     }
 
     return (
-        <div className='search-container'>
-            <div className='search-bar'>
-                <input type='text' placeholder='Search...' value={keyword} onChange={onChange}/>
-                <button onClick={() => onSubmit(keyword)}>Search</button>
-            </div>
+        <div>
+            <h1>Product Search</h1>
+            <div className='search-container'>
+                <div className='search-bar'>
+                    <input type='text' placeholder='Search...' value={keyword} onChange={onChange}/>
+                    <button onClick={() => onSubmit(keyword)}>Search</button>
+                </div>
 
-            <div className='result-container'>
-                {
-                    result ? (
-                        <div className='search-result'>
-                            <img src={result.image} alt='' />
-                            <Link to={`/Product/${result.id}`}>
-                                <p>{result.name}</p>
-                            </Link>
-                            <p>${result.price}</p>
-                        </div>
-                    ) : result === false ? (
-                        <p>No matching products found.</p>
-                    ) : null
-                }
+                <div className='result-container'>
+                    {
+                        result ? (
+                            <div className='search-result'>
+                                <img src={result.image} alt='' />
+                                <Link to={`/Product/${result.id}`}>
+                                    <p className='search-result-name'>{result.name}</p>
+                                </Link>
+                                <p className='search-result-price'>${result.price}</p>
+                            </div>
+                        ) : result === false ? (
+                            <p>No matching products found.</p>
+                        ) : null
+                    }
+                </div>
             </div>
         </div>
     )

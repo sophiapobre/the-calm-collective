@@ -1,0 +1,53 @@
+/* Adapted code from GreatStack Tutorial */
+.cart-item {
+  border: 1px solid #eee;
+  border-radius: 8px;
+  padding: 16px;
+  margin: 16px auto;
+  max-width: 400px;
+  text-align: center;
+  font-weight: 400;
+}
+
+.cart-item img {
+  width: 200px;
+  height: 200px;
+  object-fit: contain;
+  margin: 8px 0;
+}
+
+.cart-total {
+  text-align: center;
+  margin: 24px 0 8px 0;
+  font-weight: bold;
+}
+
+.clear-cart {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 32px;
+}
+
+.button-clear-cart {
+  background: #e74e3a;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 10px 24px;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.clear-cart-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 50px;
+  align-items: center;;
+}
+
+.empty-cart {
+  display: flex;
+  justify-content: center;
+  margin-top: 50px;
+  align-items: center;;
+}
