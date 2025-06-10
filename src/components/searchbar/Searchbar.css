@@ -61,3 +61,13 @@ h1 {
   font-size: 1.1rem;
   font-weight: 400;
 }
+
+.search-result {
+  display: flex;  
+  width: 340px;
+  border: 1px solid #eee;
+  border-radius: 8px;
+  padding: 16px;
+  align-items: center;
+  flex-direction: column;
+}
