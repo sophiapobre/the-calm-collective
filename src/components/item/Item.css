@@ -76,3 +76,11 @@
   margin-top: 10px;
   font-weight: 600;
 }
+
+.item-left img {
+  width: 200px;        
+  height: 200px;       
+  object-fit: contain; 
+  display: block;
+  margin: 0 auto;
+}

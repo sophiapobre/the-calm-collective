@@ -43,10 +43,11 @@ h1 {
 }
 
 .search-result img {
-  width: 200px;
+  width: 200px;        
   height: 200px;
-  object-fit: contain;
-  margin-bottom: 8px;
+  object-fit: contain; 
+  display: block;
+  margin: 0 auto;
 }
 
 .search-result-name{
