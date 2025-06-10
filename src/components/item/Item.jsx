@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { addToCart } from '../../store/slices/cartSlice';
@@ -11,6 +11,14 @@ const Item = (props) => {
 
     const dispatch = useDispatch();
 
+    const [showConfirmation, setShowConfirmation] = useState(false);
+
+    const handleClick = () => {
+      dispatch(addToCart(item));
+      setShowConfirmation(true);
+      setTimeout(() => setShowConfirmation(false), 2000);
+    }
+
     return (
         <div className='item-details'>
             <div className='item-left'>
@@ -21,9 +29,15 @@ const Item = (props) => {
                 <h3>${item.price}</h3>
                 <p>{item.description}</p>
                 
-                <button className='button-add-to-cart' onClick={() => dispatch(addToCart(item))}>
+                <button className='button-add-to-cart' onClick={handleClick}>
                     Add to Cart
                 </button>
+
+                {showConfirmation && (
+                    <div className='confirmation-message'>
+                        <p>Added to cart!</p>
+                    </div>
+                )}
             </div>
         </div>
     )
