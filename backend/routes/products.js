@@ -13,6 +13,20 @@ router.get('/', async (request, response) => {
   }
 });
 
-// GET /api/products/:id
+// GET /api/products/:productId
+router.get('/:productId', async (request, response) => {
+  try {
+    const product = await Product.findById(request.params.productId);
+
+    if (product === null) {
+      return response.status(404).json({ message: 'Product not found' });
+    }
+
+    response.json(product);
+  } catch (error) {
+    console.error('Error fetching product:', error);
+    response.status(500).json({ message: 'Internal server error' });
+  }
+});
 
 module.exports = router;
