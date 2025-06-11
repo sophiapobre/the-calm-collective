@@ -1,16 +1,16 @@
 const express = require('express');
 const router = express.Router();
-const Product = require('../models/product');
+const Category = require('../models/category');
 
 // GET /api/categories
 router.get('/', async (request, response) => {
-  // try {
-  //   const products = await Product.find();
-  //   response.json(products);
-  // } catch (error) {
-  //   console.error('Error fetching products:', error);
-  //   response.status(500).json({ message: 'Internal server error' });
-  // }
+  try {
+    const categories = await Category.find();
+    response.json(categories);
+  } catch (error) {
+    console.error('Error fetching categories:', error);
+    response.status(500).json({ message: 'Internal server error' });
+  }
 });
 
 module.exports = router;

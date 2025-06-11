@@ -1,5 +1,5 @@
-/* Adapted code from GreatStack Tutorial */
-.shoe {
+/* Adapted code from GreatStack Tutorial https://www.youtube.com/watch?v=jbfuzcrfjqQ&ab_channel=GreatStack */
+.itemcard {
     width: 340px;
     border: 1px solid #eee;
     border-radius: 8px;
@@ -7,13 +7,13 @@
     margin: 16px auto;
 }
 
-.shoe p {
+.itemcard p {
     margin: 6px 0px;
     font-size: 20px;
     font-weight: 600;
 }
 
-.shoe-price {
+.itemcard-price {
     display: flex;
     gap: 20px;
     font-size: 19px;
@@ -21,7 +21,7 @@
     color: black;
 }
 
-.shoe-img {
+.itemcard-img {
     width: 200px;        
     height: 200px;
     object-fit: contain; 
@@ -30,6 +30,6 @@
 }
 
 .link {
-  color: #e74e3a;
-  text-decoration: none;
+    color: #e74e3a;
+    text-decoration: none;
 }

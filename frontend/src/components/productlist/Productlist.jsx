@@ -1,36 +1,44 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import ItemCard from '../itemcard/ItemCard'; // Adjust the path if needed
 
 import './Productlist.css';
-import Bag from '../bag/Bag'
-import Shoe from '../shoe/Shoe';
-import Electronic from '../electronic/Electronic';
 
 const Productlist = () => {
+    const [products, setProducts] = useState([]);
+    const [categories, setCategories] = useState([]);
+    
+    // Fetch products
+    useEffect(() => {
+        fetch('http://localhost:4000/api/products')
+            .then(res => res.json())
+            .then(data => setProducts(data))
+            .catch(err => console.error(err));
+    }, []);
+
+    // Fetch categories
+    useEffect(() => {
+        fetch('http://localhost:4000/api/categories')
+            .then(res => res.json())
+            .then(data => setCategories(data))
+            .catch(err => console.error(err));
+    }, []);
+
     return (
         <div className='product-grid'>
-            <div className='category-section'>
-                <h1>Categories</h1>
-                <h2 className='categories-title'>Electronics</h2>
-                <div className='product-container'>
-                    <Electronic />
-                </div>
-            </div>
+            <h1>Categories</h1>
 
-            <div className='category-section'>
-                <h2 className='categories-title'>Bags</h2>
-                <div className='product-container'>
-                    <Bag />
+            {categories.map(category => (
+                <div className='category-section' key={category.name}>
+                    <h2 className='categories-title'>
+                        {category.name.charAt(0).toUpperCase() + category.name.slice(1)}
+                    </h2>
+                    <div className='product-container'>
+                        <ItemCard products={products.filter(product => product.category === category.name)} />
+                    </div>
                 </div>
-            </div>
-
-            <div className='category-section'>
-                <h2 className='categories-title'>Shoes</h2>
-                <div className='product-container'>
-                    <Shoe />
-                </div>
-            </div>
+            ))}
         </div>
-    )
+    );
 }
 
 export default Productlist
