@@ -8,7 +8,7 @@ import Item from '../components/item/Item';
 const Product = () => {
     const {products} = useContext(StoreContext);
     const {productId} = useParams();
-    const product = products.find((e) => e.id == Number(productId));
+    const product = products.find((e) => e.id === Number(productId));
     
     return (
         <div>
