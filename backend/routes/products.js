@@ -18,7 +18,7 @@ router.get('/:productId', async (request, response) => {
   try {
     const product = await Product.findById(request.params.productId);
 
-    if (product === null) {
+    if (!product) {
       return response.status(404).json({ message: 'Product not found' });
     }
 

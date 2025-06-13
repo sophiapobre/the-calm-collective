@@ -9,7 +9,7 @@ router.get('/:categoryName', async (request, response) => {
     // Find category
     const category = await Category.findOne({ name: request.params.categoryName });
     
-    if (category === null) {
+    if (!category) {
       return response.status(404).json({ message: 'Category not found'});
     }
 
