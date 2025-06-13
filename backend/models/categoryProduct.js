@@ -3,11 +3,13 @@ const mongoose = require('mongoose');
 const categoryProductSchema = new mongoose.Schema({
   categoryId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Category'
+    ref: 'Category',
+    required: true
   },
   productId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Product'
+    ref: 'Product',
+    required: true
   }
 });
 

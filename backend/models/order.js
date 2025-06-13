@@ -7,14 +7,17 @@ const orderSchema = new mongoose.Schema({
     {
       productId: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Product'
+        ref: 'Product',
+        required: true
       },
       productAttributeId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'ProductAttribute'
       },
-      quantity: Number,
-      price: Number
+      quantity: {
+        type: Number,
+        required: true
+      }
     }
   ]
 });
