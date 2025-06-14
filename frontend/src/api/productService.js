@@ -26,6 +26,20 @@ export async function getProductAttributes(productId) {
   return response.json();
 }
 
+export async function getProductAttribute(attributeId) {
+  const response = await fetch(`http://localhost:4000/api/product-attributes/attribute/${attributeId}`, {
+    method: 'GET',
+    headers: { 'Content-Type': 'application/json' },
+  });
+
+  if (response.status !== 200) {
+    const errorMsg = await response.json();
+    throw new Error(errorMsg.message);
+  }
+
+  return response.json();
+}
+
 export async function getProductAttributePrices(productId) {
   const response = await fetch(`http://localhost:4000/api/product-attribute-prices/${productId}/all`, {
     method: 'GET',

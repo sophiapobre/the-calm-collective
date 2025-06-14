@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { createNewCart, addItemToCart, getCart, deleteCart } from '../../api/cartService';
+import { getCart, deleteCart } from '../../api/cartService';
+import { getProduct, getProductAttribute, getProductAttributePrice } from '../../api/productService';
 
 import './Cart.css';
 
@@ -23,15 +24,30 @@ const Cart = () => {
         // Fetch product details for each item
         let productDetails = [];
         for (const item of cart.items) {
-            const response = await fetch(`http://localhost:4000/api/products/${item.productId}`);
-            const product = await response.json();
+          const product = await getProduct(item.productId);
 
-            productDetails.push({ 
-              ...product, 
-              productAttributeId: item.productAttributeId, 
-              count: item.quantity 
-            });
-        }
+          let variantName = null;
+          let variantValue = null;
+          let variantPrice = null;
+
+          if (item.productAttributeId) {
+            const attribute = await getProductAttribute(item.productAttributeId);
+            variantName = attribute.attributeName;
+            variantValue = attribute.attributeValue;
+
+            const priceObj = await getProductAttributePrice(item.productId, item.productAttributeId);
+            variantPrice = priceObj.price;
+          }
+
+          productDetails.push({
+            ...product,
+            productAttributeId: item.productAttributeId,
+            count: item.quantity,
+            variantName,
+            variantValue,
+            price: variantPrice !== null ? variantPrice : product.price
+          });
+        } 
         setCartItems(productDetails);
       }
       fetchCartItems();
@@ -66,6 +82,11 @@ const Cart = () => {
                 cartItems.map(item => (
                     <div className='cart-item' key={item._id}>
                         <h4>{item.name}</h4>
+                        {
+                          item.productAttributeId && item.variantName && item.variantValue && (
+                            <p>{item.variantName}: {item.variantValue}</p>
+                          )
+                        }
                         <p>Price: ${item.price}</p>
                         <img src={`/images/${item.image}`} alt=''/>
                         <p>Quantity: {item.count}</p>

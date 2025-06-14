@@ -95,7 +95,7 @@ const Item = () => {
     
                 <p>{product.description}</p>
                 
-                <button className='button-add-to-cart' onClick={() => handleAddToCart(product._id, null)}>
+                <button className='button-add-to-cart' onClick={() => handleAddToCart(product._id, selectedAttribute ? selectedAttribute._id : null)}>
                     Add to Cart
                 </button>
 
