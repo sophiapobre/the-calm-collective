@@ -9,7 +9,7 @@ router.get('/:productId', async (request, response) => {
     const productAttributes = await ProductAttribute.find({ productId: request.params.productId });
     response.json(productAttributes); // Returns empty array if product has no attributes
   } catch (error) {
-    console.error('Error fetching products:', error);
+    console.error('Error fetching product attributes:', error);
     response.status(500).json({ message: 'Internal server error' });
   }
 });

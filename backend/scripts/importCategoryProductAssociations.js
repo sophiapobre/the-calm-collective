@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const Category = require('../models/category');
 const Product = require('../models/product');
-const CategoryProduct = require('../models/categoryproduct');
+const CategoryProduct = require('../models/categoryProduct');
 
 const productCategoryMap = [
   { productName: 'Asics Gel Nimbus 26', categoryName: 'shoes' },

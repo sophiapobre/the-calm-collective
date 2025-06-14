@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { createNewCart, addItemToCart } from '../../api/cartService';
+import { getProduct, getProductAttributesAndPrices } from '../../api/productService';
 
 import './Item.css';
 
@@ -25,16 +26,41 @@ const Item = () => {
       setTimeout(() => setShowConfirmation(false), 2000);
     }
 
+    // Get product ID from params
     const { productId } = useParams();
+
     const [product, setProduct] = useState(null);
+    const [attributesAndPrices, setAttributesAndPrices] = useState([]);
 
     // Fetch product by ID
     useEffect(() => {
-      fetch(`http://localhost:4000/api/products/${productId}`)
-        .then(res => res.json())
-        .then(data => setProduct(data))
-        .catch(err => console.error(err));
+      getProduct(productId)
+        .then(setProduct)
+        .catch(console.error);
+    }, []);
+
+    // Fetch product attributes and prices
+    useEffect(() => {
+      getProductAttributesAndPrices(productId)
+        .then(setAttributesAndPrices)
+        .catch(console.error);
     }, [productId]);
+
+    const [selectedAttribute, setSelectedAttribute] = useState(null);
+
+    // Set default selected attribute as the first attribute price by default
+    useEffect(() => {
+      if (attributesAndPrices.length > 0 && !selectedAttribute) {
+        setSelectedAttribute(attributesAndPrices[0]);
+      }
+    }, [attributesAndPrices, selectedAttribute]);
+
+    // Variant selection handler
+    const handleVariantSelection = async (event) => {
+      const productAttributeId = event.target.value;
+      const selected = attributesAndPrices.find(attr => attr._id === productAttributeId);
+      setSelectedAttribute(selected);
+    }
 
     // Product not found message
     if (product === null) {
@@ -50,11 +76,25 @@ const Item = () => {
             </div>
             <div className='item-right'>
                 <h1>{product.name}</h1>
-                <h3>${product.price}</h3>
+                {
+                  attributesAndPrices.length > 0 && selectedAttribute ? (
+                    <div className='product-attribute-selection'>
+                      <h3>${selectedAttribute.price}</h3>
+                      <h4>Select {attributesAndPrices[0].attributeName}:</h4>
+                      
+                      <select onChange={handleVariantSelection} value={selectedAttribute._id}>
+                        {attributesAndPrices.map(attr => (
+                          <option key={attr._id} value={attr._id}>{attr.attributeValue}</option>
+                        ))}
+                      </select>
+                    </div>
+                  ) : (
+                    <h3>${product.price}</h3>
+                  )
+                }
+    
                 <p>{product.description}</p>
                 
-                {/* TODO: Display product attributes */}
-
                 <button className='button-add-to-cart' onClick={() => handleAddToCart(product._id, null)}>
                     Add to Cart
                 </button>
