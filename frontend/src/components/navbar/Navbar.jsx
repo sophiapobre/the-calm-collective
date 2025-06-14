@@ -41,7 +41,7 @@ const Navbar = () => {
                 <Link to='/Checkout'>
                     <img src={cartImage} alt=''/>
                 </Link>
-                <div className='nav-cart-count'>{cartItems.length}</div>
+                {/* <div className='nav-cart-count'>{cartItems.length}</div> */}
             </div>
         </div>
     )
