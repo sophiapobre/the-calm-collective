@@ -18,7 +18,7 @@ const Productlist = () => {
     // Fetch products by category
     useEffect(() => {
       categories.forEach(category => {
-        fetch(`http://localhost:4000/api/category-products/${category.name}`)
+        fetch(`http://localhost:4000/api/category-products/category/${category.name}`)
           .then(response => response.json())
           .then(data => {
             // Update state with products for the category
@@ -35,14 +35,18 @@ const Productlist = () => {
         <div className='product-grid'>
             <h1>Categories</h1>
 
-            {categories.map(category => (
+            {categories
+              // Only render products for categories other than 'best sellers'
+              // This is because 'best sellers' has its own page
+              .filter(category => category.name !== 'best sellers')
+              .map(category => (
                 <div className='category-section' key={category.name}>
-                    <h2 className='categories-title'>
-                        {category.name.charAt(0).toUpperCase() + category.name.slice(1)}
-                    </h2>
-                    <div className='product-container'>
-                        <ItemCard products={productsByCategory[category.name] ?? []} />
-                    </div>
+                  <h2 className='categories-title'>
+                    {category.name.charAt(0).toUpperCase() + category.name.slice(1)}
+                  </h2>
+                  <div className='product-container'>
+                    <ItemCard products={productsByCategory[category.name] ?? []} />
+                  </div>
                 </div>
             ))}
         </div>

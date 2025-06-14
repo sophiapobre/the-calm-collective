@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+// import { useSelector } from 'react-redux';
 
 import './Navbar.css';
 import logo from '../assets/logo.png';
@@ -8,7 +8,7 @@ import cartImage from '../assets/cart.png';
 
 // Adapted code from GreatStack Tutorial https://www.youtube.com/watch?v=jbfuzcrfjqQ&ab_channel=GreatStack
 const Navbar = () => {
-    const cartItems = useSelector(state => state.cart.cart);
+    // const cartItems = useSelector(state => state.cart.cart);
 
     return (
         <div className='navbar'>
@@ -31,6 +31,11 @@ const Navbar = () => {
                     </Link>
                 </li>
                 <li>
+                    <Link to='/BestSellers' className='link'>
+                    Best Sellers
+                    </Link>
+                </li>
+                <li>
                     <Link to='/Search' className='link'>
                     Search
                     </Link>
@@ -38,7 +43,7 @@ const Navbar = () => {
             </ul>
             
             <div className='nav-login-cart'>
-                <Link to='/Checkout'>
+                <Link to='/Cart'>
                     <img src={cartImage} alt=''/>
                 </Link>
                 {/* <div className='nav-cart-count'>{cartItems.length}</div> */}

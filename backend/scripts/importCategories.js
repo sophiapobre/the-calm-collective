@@ -10,7 +10,8 @@ mongoose.connect('mongodb://127.0.0.1:27017/e-commerce')
     await Category.insertMany([
       { name: 'shoes' },
       { name: 'bags' },
-      { name: 'electronics' }
+      { name: 'electronics' },
+      { name: 'best sellers' }
     ]);
 
     console.log('Categories imported successfully');
