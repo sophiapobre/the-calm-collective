@@ -7,9 +7,8 @@ import Home from './pages/Home';
 import Categories from './pages/Categories';
 import Search from './pages/Search';
 import Product from './pages/Product';
-import Checkout from './pages/Checkout';
+import CartPage from './pages/CartPage';
 import store from './store/Store';
-import Item from './components/item/Item';
 
 // Adapted code from GreatStack Tutorial https://www.youtube.com/watch?v=jbfuzcrfjqQ&ab_channel=GreatStack
 function App() {
@@ -22,7 +21,7 @@ function App() {
         <Route path='/' element={<Home/>}/>
         <Route path='/categories' element={<Categories/>}/>
         <Route path='/search' element={<Search/>}/>
-        <Route path='/checkout' element={<Checkout/>}/>
+        <Route path='/checkout' element={<CartPage/>}/>
         <Route path='/products/:productId' element={<Product/>}>
         </Route>
       </Routes>

@@ -16,4 +16,4 @@ const productAttributeSchema = new mongoose.Schema({
   }
 });
 
-module.exports = mongoose.model('ProductAttribute', productAttributeSchema);
+module.exports = mongoose.models.ProductAttribute || mongoose.model('ProductAttribute', productAttributeSchema);

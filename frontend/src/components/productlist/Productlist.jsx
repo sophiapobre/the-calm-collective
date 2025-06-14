@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import ItemCard from '../itemcard/ItemCard'; // Adjust the path if needed
+import ItemCard from '../itemcard/ItemCard';
 
 import './Productlist.css';
 

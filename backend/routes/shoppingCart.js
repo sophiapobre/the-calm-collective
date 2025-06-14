@@ -1,15 +1,16 @@
 const express = require('express');
 const router = express.Router();
+const mongoose = require('mongoose');
 const Product = require('../models/product');
 const ShoppingCart = require('../models/shoppingCart');
 const ProductAttribute = require('../models/productAttribute');
 
-// Create cart
+// Create new cart
 // POST /api/shopping-cart
 router.post('/', async (request, response) => {
   try {
     const cart = new ShoppingCart({
-      cartId: new mongoose.Types.ObjectId(),
+      cartId: new mongoose.Types.ObjectId().toString(),
       items: []
     });
 
@@ -21,9 +22,9 @@ router.post('/', async (request, response) => {
   }
 });
 
-// Get cart by ID
-// GET /api/shopping-cart/:cartId
-router.get('/:cartId', async (request, response) => {
+// Get cart items by cartId
+// GET /api/shopping-cart/:cartId/items
+router.get('/:cartId/items', async (request, response) => {
   try {
     const cart = await ShoppingCart.findOne({ cartId: request.params.cartId });
     
@@ -53,6 +54,10 @@ router.post('/:cartId/items', async (request, response) => {
     const product = await Product.findById(productId);
     const cart = await ShoppingCart.findOne({ cartId: request.params.cartId });
 
+    if (!cart) {
+      return response.status(404).json({ message: 'Cart not found' });
+    }
+
     // Check if product requires a product attribute and if none was given
     const productAttributes = await ProductAttribute.find({ productId: product._id });
     if (productAttributes.length > 0 && !productAttributeId) {
@@ -78,7 +83,7 @@ router.post('/:cartId/items', async (request, response) => {
     let itemFromCart = null;
 
     // Check if the given productAttributeId (if any) is already in the cart
-    if (productAttributeId !== '') {
+    if (productAttributeId) {
       itemFromCart = cart.items.find(
         item => item.productId.equals(product._id) && item.productAttributeId && (item.productAttributeId.toString() === productAttributeId)
       );
@@ -107,14 +112,12 @@ router.post('/:cartId/items', async (request, response) => {
   }
 });
 
-// Clear cart
-// DELETE /api/shopping-cart/:cartId/items/:itemId
+// Delete cart
+// DELETE /api/shopping-cart/:cartId
 router.delete('/:cartId', async (request, response) => {
   try {
-    await ShoppingCart.updateOne(
-      { cartId: request.params.cartId },
-      { $set: { items: [] } }
-    );
+    const result = await ShoppingCart.deleteOne({ cartId: request.params.cartId });
+    
     response.json({ message: 'Cart cleared successfully' });
   } catch (error) {
     console.error('Error clearing cart:', error);

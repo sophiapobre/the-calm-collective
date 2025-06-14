@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-import { addToCart } from '../../store/slices/cartSlice';
+import { createNewCart, addItemToCart } from '../../api/cartService';
 
 import './Item.css';
 
@@ -11,9 +10,17 @@ const Item = () => {
     const [showConfirmation, setShowConfirmation] = useState(false);
 
     // Add to cart handler
-    const dispatch = useDispatch();
-    const handleClick = () => {
-      dispatch(addToCart(product));
+    const handleAddToCart = async (productId, productAttributeId) => {
+      // Retrieve cartId if it exists, otherwise create a new cart
+      let cartId = localStorage.getItem('cartId'); 
+      if (!cartId) {
+        cartId = await createNewCart();
+      }
+
+      // Add item to cart
+      await addItemToCart(cartId, productId, productAttributeId);
+
+      // Display confrimation message for 2 seconds
       setShowConfirmation(true);
       setTimeout(() => setShowConfirmation(false), 2000);
     }
@@ -46,7 +53,9 @@ const Item = () => {
                 <h3>${product.price}</h3>
                 <p>{product.description}</p>
                 
-                <button className='button-add-to-cart' onClick={handleClick}>
+                {/* TODO: Display product attributes */}
+
+                <button className='button-add-to-cart' onClick={() => handleAddToCart(product._id, null)}>
                     Add to Cart
                 </button>
 

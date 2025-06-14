@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Product = require('../models/product');
 
+// Get all products
 // GET /api/products
 router.get('/', async (request, response) => {
   try {
@@ -13,6 +14,7 @@ router.get('/', async (request, response) => {
   }
 });
 
+// Get a single product by productId
 // GET /api/products/:productId
 router.get('/:productId', async (request, response) => {
   try {
