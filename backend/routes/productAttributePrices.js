@@ -19,7 +19,7 @@ router.get('/:productId/all', async (request, response) => {
     const attributes = await ProductAttribute.find({ productId: product._id });
 
     if (!attributes || attributes.length === 0) {
-      return response.status(404).json({ message: 'Product does not have any attributes' });
+      return response.json([]); // Return empty array if no attributes found
     }
 
     const attributePrices = [];

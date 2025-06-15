@@ -40,7 +40,7 @@ const Hero = () => {
             <h2>Our Best Sellers</h2>
             <div className='hero-images'>
                 {images.map((img) => (
-                    <img src={img} className='hero-img'/>
+                    <img src={img} className='hero-img' key={img}/>
                 ))}
             </div>
             <div className='hero-content'>

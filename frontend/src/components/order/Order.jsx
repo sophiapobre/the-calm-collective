@@ -1,32 +1,29 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { getCart, deleteCart } from '../../api/cartService';
 import { getProduct, getProductAttribute, getProductAttributePrice } from '../../api/productService';
 
-import './Cart.css';
+import './Order.css';
 
 // Adapted code from Code with Yousaf https://www.youtube.com/watch?v=DvR-kOl2_SM&ab_channel=CodeWithYousaf
-const Cart = () => {
-    const [cartItems, setCartItems] = useState([]);
+const Order = () => {
+    // Get order number from params
+    const { orderNumber } = useParams();
 
-    const navigate = useNavigate();
+    const [customerName, setCustomerName] = useState('');
+    const [orderItems, setOrderItems] = useState([]);
 
     useEffect(() => {
-      async function fetchCartItems() {
-        const cartId = localStorage.getItem('cartId');
+      async function fetchOrderDetails() {
+        // Get order by order number
+        const response = await fetch(`http://localhost:4000/api/orders/${orderNumber}`);
+        const order = await response.json();
 
-        // If no cartId is saved, do not create a new one
-        if (!cartId) {
-          setCartItems([]);
-          return;
-        }
-
-        // Get items array from cart
-        const cart = await getCart(cartId);
+        setCustomerName(order.customerName);
 
         // Fetch product details for each item
         let productDetails = [];
-        for (const item of cart.items) {
+        for (const item of order.items) {
           const product = await getProduct(item.productId);
 
           let variantName = null;
@@ -51,38 +48,24 @@ const Cart = () => {
             price: variantPrice !== null ? variantPrice : product.price
           });
         } 
-        setCartItems(productDetails);
+        setOrderItems(productDetails);
       }
-      fetchCartItems();
+      fetchOrderDetails();
     }, []);
 
-    const handleClearCart = async () => {
-      const cartId = localStorage.getItem('cartId');
-
-      if (cartId) {
-        await deleteCart(cartId);
-        localStorage.removeItem('cartId');
-        setCartItems([]);
-      }
-    }
-
-    let totalPrice = cartItems.reduce((sum, item) => sum + item.price * item.count, 0);
-
-    if (cartItems.length === 0) {
-        return (
-            <div>
-                <h1>Shopping Cart</h1>
-                <p className='empty-cart'>Your shopping cart is empty.</p>
-            </div>
-        );
-    }
+    let totalPrice = orderItems.reduce((sum, item) => sum + item.price * item.count, 0);
 
     return (
         <div>
-            <h1>Shopping Cart</h1>
-            
+            <h1>Order Confirmation</h1>
+            <div className='thanks-container'>
+              Thanks for your order, {customerName}!
+            </div>
+            <div className='ordernumber-container'>
+              <b>Order Number:</b> {orderNumber}
+            </div>
             {
-                cartItems.map(item => (
+                orderItems.map(item => (
                     <div className='cart-item' key={item._id}>
                         <h4>{item.name}</h4>
                         {
@@ -101,16 +84,8 @@ const Cart = () => {
             <div className='cart-total'>
                 <h3>TOTAL: ${totalPrice}</h3>
             </div>
-            <div className='clear-cart-container'>
-                <button className='button-clear-cart' onClick={() => handleClearCart()}>
-                    Clear Cart
-                </button>
-                <button className='button-checkout' onClick={() => navigate('/Checkout')}>
-                    Checkout
-                </button>
-            </div>
         </div>
     );
 }
 
-export default Cart;
+export default Order;
