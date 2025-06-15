@@ -13,7 +13,8 @@ const productCategoryMap = [
   { productName: 'Tumi Montana Backpack', categoryName: 'bags' },
   { productName: 'Hoka Clifton 10', categoryName: 'best sellers' },
   { productName: 'Nintendo Switch 2', categoryName: 'best sellers' },
-  { productName: 'Samsonite Rosaline Eco Backpack', categoryName: 'best sellers' }
+  { productName: 'Samsonite Rosaline Eco Backpack', categoryName: 'best sellers' },
+  { productName: 'Tumi Montana Backpack', categoryName: 'best sellers' },
 ];
 
 mongoose.connect('mongodb://127.0.0.1:27017/e-commerce')
