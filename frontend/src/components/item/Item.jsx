@@ -7,8 +7,6 @@ import './Item.css';
 
 // Adapted code from GreatStack Tutorial https://www.youtube.com/watch?v=jbfuzcrfjqQ&ab_channel=GreatStack and Code with Yousaf https://www.youtube.com/watch?v=DvR-kOl2_SM&ab_channel=CodeWithYousaf
 const Item = () => {
-    // Add to product confirmation message
-    const [showConfirmation, setShowConfirmation] = useState(false);
 
     // Add to cart handler
     const handleAddToCart = async (productId, productAttributeId) => {
@@ -21,9 +19,8 @@ const Item = () => {
       // Add item to cart
       await addItemToCart(cartId, productId, productAttributeId);
 
-      // Display confrimation message for 2 seconds
-      setShowConfirmation(true);
-      setTimeout(() => setShowConfirmation(false), 2000);
+      // Display confirmation message
+      alert('Added to cart!');
     }
 
     // Get product ID from params
@@ -65,7 +62,7 @@ const Item = () => {
     // Product not found message
     if (product === null) {
       return (
-        <div>Product not found.</div>
+        <div></div> // Display nothing while loading
       );
     }
 
@@ -99,11 +96,6 @@ const Item = () => {
                     Add to Cart
                 </button>
 
-                {showConfirmation && (
-                    <div className='confirmation-message'>
-                        <p>Added to cart!</p>
-                    </div>
-                )}
             </div>
         </div>
     )
