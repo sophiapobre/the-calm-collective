@@ -12,6 +12,9 @@ import store from './store/Store';
 import BestSellers from './pages/BestSellers';
 import CheckoutPage from './pages/CheckoutPage';
 import OrderConfirmation from './pages/OrderConfirmation';
+import AdminPage from './pages/AdminPage';
+import ShoppingCarts from './pages/ShoppingCarts';
+import Orders from './pages/Orders';
 
 // Adapted code from GreatStack Tutorial https://www.youtube.com/watch?v=jbfuzcrfjqQ&ab_channel=GreatStack
 function App() {
@@ -25,6 +28,9 @@ function App() {
         <Route path='/categories' element={<Categories/>}/>
         <Route path='/bestsellers' element={<BestSellers/>}/>
         <Route path='/search' element={<Search/>}/>
+        <Route path='/admin' element={<AdminPage/>}/>
+        <Route path='/admin/shopping-carts' element={<ShoppingCarts/>}/>
+        <Route path='/admin/orders' element={<Orders/>}/>
         <Route path='/cart' element={<CartPage/>}/>
         <Route path='/checkout' element={<CheckoutPage/>}/>
         <Route path='/orders/:orderNumber' element={<OrderConfirmation/>}/>

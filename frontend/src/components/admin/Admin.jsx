@@ -1,0 +1,23 @@
+import { React, useState } from 'react';
+import { Link } from 'react-router-dom'
+
+import './Admin.css';
+
+const Admin = (item) => {
+
+    return (
+        <div>
+            <h1>Admin</h1>
+            <div className='admin-container'>
+                <Link to='/Admin/shopping-carts'>
+                    <button className='admin-button'>View Shopping Carts</button>
+                </Link>
+                <Link to='/Admin/orders'>
+                    <button className='admin-button'>View Orders</button>
+                </Link>
+            </div>
+        </div>
+    )
+}
+
+export default Admin;

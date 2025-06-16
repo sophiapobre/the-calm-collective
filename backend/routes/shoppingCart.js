@@ -22,6 +22,18 @@ router.post('/', async (request, response) => {
   }
 });
 
+// Get all carts
+// GET /api/shopping-cart
+router.get('/', async (request, response) => {
+  try {
+    const carts = await ShoppingCart.find({});
+    response.json(carts);
+  } catch (error) {
+    console.error('Error fetching carts:', error);
+    response.status(500).json({ message: 'Internal server error' });
+  }
+});
+
 // Get cart items by cartId
 // GET /api/shopping-cart/:cartId/items
 router.get('/:cartId/items', async (request, response) => {

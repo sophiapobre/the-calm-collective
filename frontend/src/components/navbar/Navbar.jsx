@@ -40,6 +40,11 @@ const Navbar = () => {
                     Search
                     </Link>
                 </li>
+                <li>
+                    <Link to='/Admin' className='link'>
+                    Admin
+                    </Link>
+                </li>
             </ul>
             
             <div className='nav-login-cart'>
