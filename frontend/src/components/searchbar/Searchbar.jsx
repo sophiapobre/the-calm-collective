@@ -2,28 +2,28 @@ import { React, useState } from 'react';
 import { Link } from 'react-router-dom'
 
 import './Searchbar.css';
-import data from '../assets/products.js'
 
 // Adapted code from React with Masoud https://www.youtube.com/watch?v=Jd7s7egjt30&ab_channel=ReactwithMasoud
-const Searchbar = (item) => {
+const Searchbar = () => {
     const [keyword, setKeyword] = useState('');
-    const [result, setResult] = useState(null);
+    const [results, setResults] = useState(null);
 
     const onChange = (e) => {
         setKeyword(e.target.value);
     }
 
-    const onSubmit = (input) => {
-        for (let i = 0; i < data.length; i++) {
-            if (data[i].name.toLowerCase() === input.toLowerCase()) {
-                setResult(data[i]);
-                break;
-            }
-            else {
-                setResult(false);
-            }
+    const onSubmit = async () => {
+        // Trim whitespace and check if keyword is empty
+        if (!keyword.trim()) {
+          setResults(null);
+          return;
         }
-    }
+
+        // Fetch search results from API
+        const response = await fetch(`http://localhost:4000/api/products/search?q=${encodeURIComponent(keyword)}`);
+        const data = await response.json();
+        setResults(data);
+    };
 
     return (
         <div>
@@ -31,22 +31,24 @@ const Searchbar = (item) => {
             <div className='search-container'>
                 <div className='search-bar'>
                     <input type='text' placeholder='Search...' value={keyword} onChange={onChange}/>
-                    <button onClick={() => onSubmit(keyword)}>Search</button>
+                    <button onClick={() => onSubmit()}>Search</button>
                 </div>
 
                 <div className='result-container'>
-                    {
-                        result ? (
-                            <div className='search-result'>
-                                <img src={result.image} alt='' />
-                                <Link to={`/Product/${result.id}`}>
-                                    <p className='search-result-name'>{result.name}</p>
-                                </Link>
-                                <p className='search-result-price'>${result.price}</p>
-                            </div>
-                        ) : result === false ? (
+                    {results === null ? null :
+                        results.length === 0 ? (
                             <p>No matching products found.</p>
-                        ) : null
+                        ) : (
+                            results.map(product => (
+                                <div className='search-result' key={product._id}>
+                                    <Link to={`/products/${product._id}`}>
+                                        <img src={`/images/${product.image}`} alt='' />
+                                        <p className='search-result-name'>{product.name}</p>
+                                    </Link>
+                                    <p className='search-result-price'>${product.price}</p>
+                                </div>
+                            ))
+                        )
                     }
                 </div>
             </div>
