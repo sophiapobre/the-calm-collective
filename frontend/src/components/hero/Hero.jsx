@@ -27,7 +27,7 @@ const Hero = () => {
           // Randomly select 3 images from the best sellers category
           const shuffledData = shuffleImages(data);
           for (let i = 0; i < 3; i++) {
-            imgs.push(`/images/${shuffledData[i].image}`);
+            imgs.push(`http://localhost:4000/images/${shuffledData[i].image}`);
           }
 
           setImages(imgs);

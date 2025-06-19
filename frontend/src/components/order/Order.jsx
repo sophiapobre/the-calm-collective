@@ -74,7 +74,7 @@ const Order = () => {
                           )
                         }
                         <p>Price: ${item.price}</p>
-                        <img src={`/images/${item.image}`} alt=''/>
+                        <img src={`http://localhost:4000/images/${item.image}`} alt=''/>
                         <p>Quantity: {item.count}</p>
                         <p>Product Total: ${(item.price * item.count)}</p>
                     </div>

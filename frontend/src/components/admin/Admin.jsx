@@ -9,11 +9,14 @@ const Admin = (item) => {
         <div>
             <h1>Admin</h1>
             <div className='admin-container'>
-                <Link to='/Admin/shopping-carts'>
+                <Link to='/admin/shopping-carts'>
                     <button className='admin-button'>View Shopping Carts</button>
                 </Link>
-                <Link to='/Admin/orders'>
+                <Link to='/admin/orders'>
                     <button className='admin-button'>View Orders</button>
+                </Link>
+                <Link to='/admin/products'>
+                    <button className='admin-button'>Manage Products</button>
                 </Link>
             </div>
         </div>

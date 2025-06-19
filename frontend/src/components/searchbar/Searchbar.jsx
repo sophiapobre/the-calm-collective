@@ -42,7 +42,7 @@ const Searchbar = () => {
                             results.map(product => (
                                 <div className='search-result' key={product._id}>
                                     <Link to={`/products/${product._id}`}>
-                                        <img src={`/images/${product.image}`} alt='' />
+                                        <img src={`http://localhost:4000/images/${product.image}`} alt='' />
                                         <p className='search-result-name'>{product.name}</p>
                                     </Link>
                                     <p className='search-result-price'>${product.price}</p>

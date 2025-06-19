@@ -48,3 +48,5 @@ app.use('/api/shopping-cart', shoppingCartRoutes);
 
 const orderRoutes = require('./routes/orders');
 app.use('/api/orders', orderRoutes);
+
+app.use('/images', express.static('public/images'));

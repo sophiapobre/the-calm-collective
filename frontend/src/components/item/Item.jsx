@@ -69,7 +69,7 @@ const Item = () => {
     return (
         <div className='item-details'>
             <div className='item-left'>
-                <img src={`/images/${product.image}`} alt=''/>
+                <img src={`http://localhost:4000/images/${product.image}`} alt=''/>
             </div>
             <div className='item-right'>
                 <h1>{product.name}</h1>

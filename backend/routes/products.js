@@ -2,8 +2,11 @@ const express = require('express');
 const router = express.Router();
 const Product = require('../models/product');
 const ProductAttribute = require('../models/productAttribute');
+const ProductAttributePrice = require('../models/productAttributePrice');
 const CategoryProduct = require('../models/categoryProduct');
 const Category = require('../models/category');
+const multer = require('multer');
+const path = require('path');
 
 // Get category names for a product
 function getCategoryNames(productId, categoryProducts, categories) {
@@ -107,6 +110,66 @@ router.get('/:productId', async (request, response) => {
     response.json(product);
   } catch (error) {
     console.error('Error fetching product:', error);
+    response.status(500).json({ message: 'Internal server error' });
+  }
+});
+
+// Set up storage for uploaded images
+// Adapted from https://expressjs.com/en/resources/middleware/multer.html
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'public/images/');
+  },
+  filename: function (req, file, cb) {
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+    const extension = path.extname(file.originalname);
+    cb(null, uniqueSuffix + extension);
+  }
+});
+const upload = multer({ storage: storage });
+
+// Add a product
+// POST /api/products
+router.post('/', upload.single('image'), async (request, response) => {
+  try {
+    const { name, description, price, category, bestseller } = request.body;
+    const image = request.file ? request.file.filename : '';
+
+    // Create product
+    const product = new Product({ name, description, price: Number(price), image });
+    await product.save();
+
+    // Add CateoryProduct association for provided general category
+    if (category) {
+      let categoryDoc = await Category.findOne({ name: category.toLowerCase() });
+      
+      // If category doesn't exist, create it
+      if (!categoryDoc) {
+        categoryDoc = new Category({ name: category.toLowerCase() });
+        await categoryDoc.save();
+      }
+
+      // Create CategoryProduct association
+      await CategoryProduct.create({ productId: product._id, categoryId: categoryDoc._id });
+    }
+
+    // Add "best sellers" CategoryProduct association if bestseller is true
+    if (bestseller === 'true') {
+      let bestSellersCategory = await Category.findOne({ name: 'best sellers' });
+      
+      // If category doesn't exist, create it
+      if (!bestSellersCategory) {
+        bestSellersCategory = new Category({ name: 'best sellers' });
+        await bestSellersCategory.save();
+      }
+
+      // Create CategoryProduct association
+      await CategoryProduct.create({ productId: product._id, categoryId: bestSellersCategory._id });
+    }
+
+    response.status(201).json(product);
+  } catch (error) {
+    console.error('Error adding product:', error);
     response.status(500).json({ message: 'Internal server error' });
   }
 });
