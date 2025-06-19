@@ -48,7 +48,7 @@ const ProductManager = () => {
 
                          <div className="button-row">
                             <button className="admin-button" onClick={() => navigate(`/admin/products/edit/${product._id}`)}>
-                                Edit
+                                Manage
                             </button>
                             <button className="admin-button" onClick={() => handleDelete(product._id)}>
                                 Delete

@@ -1,0 +1,183 @@
+.manage-product-attributes-form {
+  max-width: 500px;
+  margin: 40px auto;
+  padding: 24px 28px;
+  background: #fff;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  border: 1px solid #eee;
+}
+
+.edit-product-form {
+  max-width: 500px;
+  margin: 40px auto;
+  padding: 24px 28px;
+  background: #fff;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  border: 1px solid #eee;
+}
+
+.edit-product-form input[type="text"],
+.edit-product-form input[type="number"],
+.edit-product-form input[type="file"],
+.edit-product-form textarea {
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid #bbb;
+  border-radius: 4px;
+  font-size: 1rem;
+  background: #fafafa;
+  margin-bottom: 8px;
+  box-sizing: border-box;
+}
+
+.checkbox-row {
+  display: inline-block;
+  align-items: center; 
+  gap: 8px;
+  margin-bottom: 8px;
+  width: 100%;
+  padding-left: 0;
+}
+
+.checkbox-row input[type="checkbox"] {
+  margin: 0;
+}
+
+.checkbox-row label {
+  margin: 0;
+  font-size: 1rem;
+  display: inline;
+}
+
+.edit-product-form button[type="submit"] {
+  padding: 8px 16px;
+  font-size: 1rem;
+  border: none;
+  border-radius: 4px;
+  background: #e74e3a;
+  color: white;
+  cursor: pointer;
+  margin: 0;
+  margin-top: 8px;
+}
+
+.edit-product-form img {
+  width: 200px;    
+  height: 200px;
+  object-fit: contain; 
+  display: block;
+  margin: 0 auto;
+}
+
+.product-attributes-section {
+  margin-top: 24px;
+  max-width: 100%;
+  align-items: center;
+}
+
+.attribute-name-row {
+  display: block;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.attribute-name-input {
+  width: 65%;
+  font-weight: bold;
+}
+
+.attribute-row {
+  display: grid;
+  grid-template-columns: 1.2fr 1.2fr 1fr 0.9fr 0.9fr;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 10px;
+  width: 100%;
+}
+
+.attribute-row input[type="text"],
+.attribute-row input[type="number"] {
+  width: 100%;
+  min-width: 0;
+  margin-bottom: 0;
+}
+
+.attribute-row button {
+  width: 100%;
+  padding: 6px 0;
+  font-size: 0.95rem;
+  border: none;
+  border-radius: 4px;
+  background: #e74c3c;
+  color: #fff;
+  cursor: pointer;
+  margin: 0;
+}
+
+.add-attribute-form {
+  display: grid;
+  grid-template-columns: 1.2fr 1.2fr 1fr 1fr;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 16px;
+  width: 100%;
+}
+
+.add-attribute-form input[type="text"],
+.add-attribute-form input[type="number"] {
+  width: 100%;
+  min-width: 0;
+  margin-bottom: 0;
+}
+
+.add-attribute-form button[type="submit"] {
+  width: 100%;
+  background: #e74e3a;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 0;
+  font-size: 1rem;
+  cursor: pointer;
+  margin: 0;
+}
+
+.attribute-action-button {
+  background: #e74e3a;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 16px;
+  font-size: 1rem;
+  cursor: pointer;
+  margin-left: 8px;
+}
+
+.attribute-action-button:hover {
+  background: #cf3e2a;
+}
+
+@media (max-width: 600px) {
+  .attribute-row,
+  .add-attribute-form {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 6px;
+  }
+  .attribute-row input,
+  .add-attribute-form input {
+    width: 100%;
+  }
+  .attribute-row button,
+  .add-attribute-form button {
+    width: 100%;
+  }
+}

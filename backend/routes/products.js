@@ -165,6 +165,10 @@ router.post('/', upload.single('image'), async (request, response) => {
     const { name, description, price, category, bestseller } = request.body;
     const image = request.file ? request.file.filename : '';
 
+    if (Number(price) < 0) {
+      return response.status(400).json({ message: 'Price must be at least 0.0' });
+    }
+
     // Create product
     const product = new Product({ name, description, price: Number(price), image });
     await product.save();
@@ -200,6 +204,77 @@ router.post('/', upload.single('image'), async (request, response) => {
     response.status(201).json(product);
   } catch (error) {
     console.error('Error adding product:', error);
+    response.status(500).json({ message: 'Internal server error' });
+  }
+});
+
+// Edit a product by ID
+// PUT /api/products/:productId
+router.put('/:productId', upload.single('image'), async (request, response) => {
+  try {
+    // Get the product, if it exists
+    const product = await Product.findById(request.params.productId);
+
+    if (!product) {
+      return response.status(404).json({ message: 'Product not found' });
+    }
+
+    // Get product details from request body and update fields
+    const { name, description, price, category, bestseller } = request.body;
+
+    if (name) {
+      product.name = name;
+    }
+
+    if (description) {
+      product.description = description;
+    }
+
+    if (price) {
+      if (Number(price) < 0) {
+        return response.status(400).json({ message: 'Price must be at least 0.0' });
+      }
+
+      product.price = Number(price);
+    }
+
+    if (request.file) {
+      product.image = request.file.filename;
+    }
+
+    // Save the updated product
+    await product.save();
+
+    // Delete all existing category associations (main category and "best sellers")
+    await CategoryProduct.deleteMany({ productId: product._id });
+
+    // Add new category association based on category in request body
+    if (category) {
+      // Find matching category document, or create one if it doesn't exist
+      let categoryDoc = await Category.findOne({ name: category.toLowerCase() });
+
+      if (!categoryDoc) {
+        categoryDoc = new Category({ name: category.toLowerCase() });
+        await categoryDoc.save();
+      }
+
+      // Create a category association
+      await CategoryProduct.create({ productId: product._id, categoryId: categoryDoc._id });
+    }
+
+    // Add "best sellers" association if specified
+    if (bestseller === 'true') {
+      let bestSellersCategory = await Category.findOne({ name: 'best sellers' });
+      if (!bestSellersCategory) {
+        bestSellersCategory = new Category({ name: 'best sellers' });
+        await bestSellersCategory.save();
+      }
+      await CategoryProduct.create({ productId: product._id, categoryId: bestSellersCategory._id });
+    }
+
+    response.json({ message: 'Product updated successfully' });
+  } catch (error) {
+    console.error('Error updating product:', error);
     response.status(500).json({ message: 'Internal server error' });
   }
 });

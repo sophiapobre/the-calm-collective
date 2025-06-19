@@ -32,4 +32,62 @@ router.get('/attribute/:attributeId', async (request, response) => {
   }
 });
 
+// Create a new product attribute for a product
+// POST /api/product-attributes/:productId
+router.post('/:productId', async (request, response) => {
+  try {
+    const { attributeName, attributeValue } = request.body;
+
+    const newAttribute = new ProductAttribute({
+      productId: request.params.productId,
+      attributeName,
+      attributeValue
+    });
+
+    await newAttribute.save();
+
+    response.status(201).json(newAttribute);
+  } catch (error) {
+    response.status(500).json({ message: 'Error creating attribute' });
+  }
+});
+
+// Update an existing product attribute by ID
+// PUT /api/product-attributes/attribute/:attributeId
+router.put('/attribute/:attributeId', async (request, response) => {
+  try {
+    const { attributeName, attributeValue } = request.body;
+
+    const updatedAttribute = await ProductAttribute.findByIdAndUpdate(
+      request.params.attributeId,
+      { attributeName, attributeValue },
+      { new: true }
+    );
+
+    if (!updatedAttribute) {
+      return response.status(404).json({ message: 'Attribute not found' });
+    }
+
+    response.json(updatedAttribute);
+  } catch (error) {
+    response.status(500).json({ message: 'Error updating attribute' });
+  }
+});
+
+// Delete a product attribute by ID
+// DELETE /api/product-attributes/attribute/:attributeId
+router.delete('/attribute/:attributeId', async (request, response) => {
+  try {
+    const deletedAttribute = await ProductAttribute.findByIdAndDelete(request.params.attributeId);
+
+    if (!deletedAttribute) {
+      return response.status(404).json({ message: 'Attribute not found' });
+    }
+
+    response.json({ message: 'Attribute deleted successfully' });
+  } catch (error) {
+    response.status(500).json({ message: 'Error deleting attribute' });
+  }
+});
+
 module.exports = router;

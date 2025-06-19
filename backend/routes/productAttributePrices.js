@@ -57,7 +57,7 @@ router.get('/:productId', async (request, response) => {
     }
 
     // Find the price for the given product attribute ID
-    let price = null;;
+    let price = null;
     for (const attribute of attributes) {
       if (attribute._id.toString() === productAttributeId) {
         const productAttributePriceDoc = await ProductAttributePrice.findOne({ productAttributeId: attribute._id });
@@ -74,6 +74,73 @@ router.get('/:productId', async (request, response) => {
   } catch (error) {
     console.error('Error fetching products:', error);
     response.status(500).json({ message: 'Internal server error' });
+  }
+});
+
+// Create a new product attribute price
+// POST /api/product-attribute-prices/:productId
+router.post('/:productId', async (request, response) => {
+  try {
+    const { productAttributeId, price } = request.body;
+
+    if (Number(price) < 0) {
+      return response.status(400).json({ message: 'Price must be at least 0.0' });
+    }
+
+    const newPrice = new ProductAttributePrice({
+      productAttributeId,
+      price: Number(price)
+    });
+
+    await newPrice.save();
+
+    response.status(201).json(newPrice);
+  } catch (error) {
+    response.status(500).json({ message: 'Error creating attribute price' });
+  }
+});
+
+// Update an existing product attribute price
+// PUT /api/product-attribute-prices/:productId
+router.put('/:productId', async (request, response) => {
+  try {
+    const { productAttributeId, price } = request.body;
+
+    if (Number(price) < 0) {
+      return response.status(400).json({ message: 'Price must be at least 0.0' });
+    }
+
+    const updatedPrice = await ProductAttributePrice.findOneAndUpdate(
+      { productAttributeId },
+      { price: Number(price) },
+      { new: true }
+    );
+
+    if (!updatedPrice) {
+      return response.status(404).json({ message: 'Attribute price not found' });
+    }
+
+    response.json(updatedPrice);
+  } catch (error) {
+    response.status(500).json({ message: 'Error updating attribute price' });
+  }
+});
+
+// Delete a product attribute price
+// DELETE /api/product-attribute-prices/:productId
+router.delete('/:productId', async (request, response) => {
+  try {
+    const { productAttributeId } = request.query;
+
+    const deletedAttribute = await ProductAttributePrice.findOneAndDelete({ productAttributeId });
+
+    if (!deletedAttribute) {
+      return response.status(404).json({ message: 'Attribute price not found' });
+    }
+
+    response.json({ message: 'Attribute price deleted' });
+  } catch (error) {
+    response.status(500).json({ message: 'Error deleting attribute price' });
   }
 });
 
