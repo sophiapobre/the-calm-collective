@@ -53,6 +53,7 @@ router.get('/', async (request, response) => {
   }
 });
 
+// Search products by query
 // GET /api/products/search?q=term1+term2
 router.get('/search', async (request, response) => {
   // Get the search query from request parameters
@@ -110,6 +111,35 @@ router.get('/:productId', async (request, response) => {
     response.json(product);
   } catch (error) {
     console.error('Error fetching product:', error);
+    response.status(500).json({ message: 'Internal server error' });
+  }
+});
+
+// Delete a product by ID
+// DELETE /api/products/:productId
+router.delete('/:productId', async (request, response) => {
+  try {
+    // Delete the product if it exists
+    const product = await Product.findByIdAndDelete(request.params.productId);
+
+    if (!product) {
+      return response.status(404).json({ message: 'Product not found' });
+    }
+
+    // Delete any related CategoryProduct associations
+    await CategoryProduct.deleteMany({ productId: request.params.productId });
+
+    // Delete any related ProductAttributes and their prices
+    const attributes = await ProductAttribute.find({ productId: request.params.productId });
+    const attributeIds = attributes.map(attribute => attribute._id);
+    for (const attributeId of attributeIds) {
+      await ProductAttributePrice.deleteMany({ productAttributeId: attributeId });
+    }
+    await ProductAttribute.deleteMany({ productId: request.params.productId });
+    
+    response.json({ message: 'Product deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting product:', error);
     response.status(500).json({ message: 'Internal server error' });
   }
 });
