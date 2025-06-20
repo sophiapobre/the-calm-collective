@@ -2,7 +2,7 @@
 
 by Sophia Pobre
 
-This project is a data-driven e-commerce website called RandomShop, which carries items from 3 random categories: Shoes, Electronics, Bags.
+RandomShop is a data-driven e-commerce website called RandomShop, which carries items from 3 random categories: Shoes, Electronics, Bags.
 
 ### Pages 
 
