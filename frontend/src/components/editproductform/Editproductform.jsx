@@ -60,6 +60,11 @@ function EditProductForm() {
   const handleEditProductSubmit = async (event) => {
     event.preventDefault();
 
+    if (Number(price) < 0) {
+      alert('Price cannot be negative.');
+      return;
+    }
+
     // Gather form data
     const formData = new FormData();
     formData.append('name', name);

@@ -16,6 +16,11 @@ function AddProductForm() {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
+    if (Number(price) < 0) {
+      alert('Price cannot be negative.');
+      return;
+    }
+
     // Collect form data
     const formData = new FormData();
     formData.append('name', name);
