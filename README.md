@@ -37,14 +37,12 @@ The extra feature is the "Manage Products" page which is accessible from the Adm
     - **Manage:** This button links to a page with two sections:
       - **Edit Product Details:** The user can view the product's existing details (name, image, description, price, category, and best seller), and change any of them as needed. All fields in this form are required, with the exception of the image upload. If no image is uploaded, the product continues to use its existing image.
       - **Manage Product Attributes:**
-        - If the product has existing attributes, the user can view the product's main attribute name (e.g., Size, Storage, Color) alongside its product attribute value(s) (e.g., 128GB) and price for each attribute value. The user may also edit the attribute name or edit any existing attribute value and price.
-          - NOTE #1: When editing any of these fields, all of them must be filled (Attribute Name, Attribute Value, Price) before any of them can be saved. The user will be alerted if any of the values are missing, as well as when the new values have been saved successfully.
-          - NOTE #2: Clicking "Save" beside the attribute name input will only save the attribute name, but clicking "Save" beside an attribute value and price will save both the attribute name and the attribute value and price. This is because an attribute value and price needs to be associated with an attribute name.
-          - NOTE #3: Each product can only have one main attribute name.
-        - If the product has existing attributes, the user can also delete any of the existing attributes by clicking the "Delete" button beside the attribute. A confirmation alert will be displayed upon deletion.
-          - NOTE: If the product only has one attribute name and price left, clicking "Delete" will also clear the attribute name. This is because an attribute name needs to be associated with an attribute value and price.
-        - The user can also add a product attribute value and price by filling the input fields and clicking "Add" button beside these fields.
-          - NOTE: To add an attribute value and price, all fields must be filled (Attribute Name, Attribute Value, Price) before it can be successfully added. The user will be alerted if any of the required values are missing. When an attribute value and price is successfully added, the new attribute value and price will be displayed alongside a "Save" and "Delete" button, and the input fields beside the "Add" button will be cleared.
+        - The user can view the product's main attribute name (e.g., Size, Storage) if it is set, alongside any product attribute value(s) (e.g., 128GB) and price for each attribute value. The user may also edit the attribute name or edit any existing attribute value and price by changing the input fields.
+          - NOTE: Each product can only have one main attribute name.
+        - If the product has existing attributes, the user can mark any of the existing attributes for deletion by checking the "Delete?" checkbox beside the attribute.
+          - NOTE: If the product only has one attribute name and price left, checking the "Delete" checkbox will also clear the attribute name. This is because an attribute name needs to be associated with an attribute value and price.
+        - The user can also add a product attribute value and price by filling the input fields and clicking "Add" button beside these fields. A new row for the attribute value and price will appear alongside a "Delete?" checkbox, and the input fields beside the "Add" button will clear.
+        - The user can save changes by clicking the "Save Changes" button. 
     - **Delete:** This button will trigger an alert that confirms if the user wants to delete the product, and deletes the product from the list of products if the user clicks "OK".
 
 ### Getting Started
