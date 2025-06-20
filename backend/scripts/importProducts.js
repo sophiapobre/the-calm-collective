@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const Product = require('../models/product');
 const products = require('../products');
 
-mongoose.connect('mongodb://127.0.0.1:27017/e-commerce')
+mongoose.connect('mongodb://mongo:27017/e-commerce')
   .then(async () => {
     // Clear products
     await Product.deleteMany();

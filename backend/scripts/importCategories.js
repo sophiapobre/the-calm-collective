@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const Category = require('../models/category');
 
-mongoose.connect('mongodb://127.0.0.1:27017/e-commerce')
+mongoose.connect('mongodb://mongo:27017/e-commerce')
   .then(async () => {
     // Clear categories
     await Category.deleteMany();

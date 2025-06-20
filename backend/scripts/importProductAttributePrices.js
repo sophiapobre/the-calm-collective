@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const ProductAttribute = require('../models/productAttribute');
 const ProductAttributePrice = require('../models/productAttributePrice');
 
-mongoose.connect('mongodb://127.0.0.1:27017/e-commerce')
+mongoose.connect('mongodb://mongo:27017/e-commerce')
   .then(async () => {
     // Clear product attribute prices
     await ProductAttributePrice.deleteMany({});

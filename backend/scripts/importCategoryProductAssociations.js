@@ -17,7 +17,7 @@ const productCategoryMap = [
   { productName: 'Tumi Montana Backpack', categoryName: 'best sellers' },
 ];
 
-mongoose.connect('mongodb://127.0.0.1:27017/e-commerce')
+mongoose.connect('mongodb://mongo:27017/e-commerce')
   .then(async () => {
     // Clear associations
     await CategoryProduct.deleteMany({});

@@ -10,7 +10,7 @@ app.use(express.json());
 app.use(cors());
 
 // MongoDB connection
-mongoose.connect('mongodb://127.0.0.1:27017/e-commerce')
+mongoose.connect('mongodb://mongo:27017/e-commerce')
 
 // API creation
 app.get('/', (request, response) => {

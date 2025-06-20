@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const Order = require('../models/order');
 const Counter = require('../models/counter');
 
-mongoose.connect('mongodb://127.0.0.1:27017/e-commerce')
+mongoose.connect('mongodb://mongo:27017/e-commerce')
   .then(async () => {
     // Clear all orders
     await Order.deleteMany();

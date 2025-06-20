@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const ProductAttribute = require('../models/productattribute');
+const ProductAttribute = require('../models/productAttribute');
 
 // Get all product attributes for a product
 // GET /api/product-attributes/:productId
