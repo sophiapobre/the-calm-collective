@@ -39,13 +39,12 @@ const ProductAttributesEditor = ({ productId, attributes, setAttributes }) => {
     }
 
     // Update attributes in the backend with the new name
-    await Promise.all(attributeValues.map(attribute =>
+    await Promise.all(attributes.map(attribute =>
       fetch(`http://localhost:4000/api/product-attributes/attribute/${attribute._id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          attributeName,
-          attributeValue: attribute.attributeValue
+          attributeName
         })
       })
     ));
