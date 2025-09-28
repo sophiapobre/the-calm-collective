@@ -1,2 +1,3 @@
 backend/node_modules/wrappy/README.md
 .DS_Store
+*.env

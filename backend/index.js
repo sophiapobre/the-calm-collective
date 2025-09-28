@@ -1,4 +1,4 @@
-const port = 4000;
+const port = process.env.PORT || 4000;
 
 const express = require('express');
 const app = express();
@@ -10,7 +10,10 @@ app.use(express.json());
 app.use(cors());
 
 // MongoDB connection
-mongoose.connect('mongodb://mongo:27017/e-commerce')
+const mongoUrl = process.env.MONGO_URL || 'mongodb://localhost:27017/e-commerce';
+mongoose.connect(mongoUrl)
+  .then(() => console.log(`Connected to MongoDB at ${mongoUrl}`))
+  .catch((err) => console.error('MongoDB connection error:', err));
 
 // API creation
 app.get('/', (request, response) => {
@@ -25,9 +28,7 @@ app.listen(port, (error) => {
     }
 })
 
-
 // Import routes
-
 const productRoutes = require('./routes/products');
 app.use('/api/products', productRoutes);
 
