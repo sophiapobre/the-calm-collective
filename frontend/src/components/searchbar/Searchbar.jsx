@@ -1,5 +1,6 @@
 import { React, useState } from 'react';
 import { Link } from 'react-router-dom'
+import ItemCard from '../itemcard/ItemCard';
 
 import './Searchbar.css';
 
@@ -7,6 +8,7 @@ import './Searchbar.css';
 const Searchbar = () => {
     const [keyword, setKeyword] = useState('');
     const [results, setResults] = useState(null);
+    const [submittedKeyword, setSubmittedKeyword] = useState('');
 
     const onChange = (e) => {
         setKeyword(e.target.value);
@@ -19,6 +21,8 @@ const Searchbar = () => {
           return;
         }
 
+        setSubmittedKeyword(keyword);
+
         // Fetch search results from API
         const response = await fetch(`http://localhost:4000/api/products/search?q=${encodeURIComponent(keyword)}`);
         const data = await response.json();
@@ -26,31 +30,25 @@ const Searchbar = () => {
     };
 
     return (
-        <div>
+        <div className='overall-search-container'>
             <h1>Product Search</h1>
             <div className='search-container'>
                 <div className='search-bar'>
-                    <input type='text' placeholder='Search...' value={keyword} onChange={onChange}/>
+                    <input type='text' placeholder='Search...' value={keyword} onChange={onChange} />
                     <button onClick={() => onSubmit()}>Search</button>
                 </div>
-
-                <div className='result-container'>
-                    {results === null ? null :
-                        results.length === 0 ? (
-                            <p>No matching products found.</p>
-                        ) : (
-                            results.map(product => (
-                                <div className='search-result' key={product._id}>
-                                    <Link to={`/products/${product._id}`}>
-                                        <img src={`http://localhost:4000/images/${product.image}`} alt='' />
-                                        <p className='search-result-name'>{product.name}</p>
-                                    </Link>
-                                    <p className='search-result-price'>${product.price}</p>
-                                </div>
-                            ))
-                        )
-                    }
-                </div>
+                  {results === null ? null :
+                      results.length === 0 ? (
+                          <p>No matching products found.</p>
+                      ) : (
+                          <>
+                              <h2>Showing search results for "{submittedKeyword}"</h2>
+                              <div className='result-container'>
+                                  <ItemCard products={results ?? []} />
+                              </div>
+                          </>
+                      )
+                  }
             </div>
         </div>
     )
