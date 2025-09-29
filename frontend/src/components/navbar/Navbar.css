@@ -6,6 +6,8 @@
   padding: 16px 32px;
   width: 100%;
   box-sizing: border-box;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  background-color: #FAF9F6;
 }
 
 .nav-logo {
