@@ -1,4 +1,8 @@
 /* Adapted code from GreatStack Tutorial https://www.youtube.com/watch?v=jbfuzcrfjqQ&ab_channel=GreatStack */
+.overall-admin-container {
+    padding: 32px;
+} 
+
 .admin-container {
   display: flex;
   flex-direction: column;

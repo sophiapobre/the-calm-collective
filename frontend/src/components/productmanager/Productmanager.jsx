@@ -30,7 +30,7 @@ const ProductManager = () => {
     };
 
     return (
-        <div>
+        <div className='overall-admin-container'>
             <h1>Manage Products</h1>
             <div className='admin-container'>
                 <Link to='/admin/products/add'>

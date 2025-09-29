@@ -67,7 +67,7 @@ const Shoppingcartslist = () => {
   }, [carts]);
 
   return (
-    <div>
+    <div className='overall-admin-container'>
       <h1>Shopping Carts List</h1>
       <div className='admin-container'>
         {carts.length === 0 && <p>There are currently no active shopping carts.</p>}

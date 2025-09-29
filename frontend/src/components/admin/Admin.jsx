@@ -6,7 +6,7 @@ import './Admin.css';
 const Admin = (item) => {
 
     return (
-        <div>
+        <div className='overall-admin-container'>
             <h1>Admin</h1>
             <div className='admin-container'>
                 <Link to='/admin/shopping-carts'>

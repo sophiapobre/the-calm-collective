@@ -1,3 +1,7 @@
+.edit-product-container {
+  padding: 32px;
+}
+
 .manage-product-attributes-form {
   max-width: 500px;
   margin: 40px auto;

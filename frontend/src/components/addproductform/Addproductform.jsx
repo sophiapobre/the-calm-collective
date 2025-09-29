@@ -52,7 +52,7 @@ function AddProductForm() {
   };
 
   return (
-    <div>
+    <div className="overall-admin-container">
       <h1>Add a Product</h1>
       <form className="add-product-form" onSubmit={handleSubmit} encType="multipart/form-data">
         <input value={name} onChange={event => setName(event.target.value)} placeholder="Name" required />

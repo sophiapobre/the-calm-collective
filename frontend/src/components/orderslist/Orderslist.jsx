@@ -69,7 +69,7 @@ const Orderslist = () => {
   }, [orders]);
 
   return (
-    <div>
+    <div className='overall-admin-container'>
       <h1>Orders List</h1>
       <div className='admin-container'>
         {orders.length === 0 && <p>There are no completed orders yet.</p>}
