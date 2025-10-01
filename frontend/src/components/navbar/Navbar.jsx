@@ -1,59 +1,66 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-// import { useSelector } from 'react-redux';
 
 import './Navbar.css';
 import logo from '../assets/logo.png';
 import cartImage from '../assets/cart.png';
 
-// Adapted code from GreatStack Tutorial https://www.youtube.com/watch?v=jbfuzcrfjqQ&ab_channel=GreatStack
 const Navbar = () => {
-    // const cartItems = useSelector(state => state.cart.cart);
+    const [isNavCollapsed, setIsNavCollapsed] = useState(true);
+    const handleNavCollapse = () => setIsNavCollapsed(!isNavCollapsed);
 
     return (
-        <div className='navbar'>
-            <Link to='/' className='link'>
-                <div className='nav-logo'>
-                    <img src={logo} alt=''/>
-                    <p>RandomShop</p>
-                </div>
+      <nav className="navbar navbar-expand-lg navbar-light bg-light">
+        <Link className="navbar-brand" to="/">RandomShop</Link>
+        
+        <button 
+          className="navbar-toggler" 
+          type="button" 
+          onClick={handleNavCollapse}
+          aria-controls="navbarSupportedContent" 
+          aria-expanded={!isNavCollapsed} 
+          aria-label="Toggle navigation"
+        >
+          <span className="navbar-toggler-icon"></span>
+        </button>
+
+        <div className={`${isNavCollapsed ? 'collapse' : ''} navbar-collapse`} id="navbarSupportedContent">
+          <ul className="navbar-nav mr-auto">
+            <li className="nav-item">
+              <Link className="nav-link" to="/" onClick={handleNavCollapse}>
+                Home
+              </Link>
+            </li>
+            <li className="nav-item">
+              <Link className="nav-link" to="/categories" onClick={handleNavCollapse}>
+                Categories
+              </Link>
+            </li>
+            <li className="nav-item">
+              <Link className="nav-link" to="/bestsellers" onClick={handleNavCollapse}>
+                Best Sellers
+              </Link>
+            </li>
+            <li className="nav-item">
+              <Link className="nav-link" to="/search" onClick={handleNavCollapse}>
+                Search
+              </Link>
+            </li>
+            <li className="nav-item">
+              <Link className="nav-link" to="/admin" onClick={handleNavCollapse}>
+                Admin
+              </Link>
+            </li>
+          </ul>
+
+          <div className="navbar-nav ml-auto">
+            <Link to="/cart" onClick={handleNavCollapse}>
+              <img className="cart-icon" src={cartImage} alt="Cart" style={{ width: '25px', height: '25px' }} />
             </Link>
-            
-            <ul className='nav-menu'>
-                <li>
-                    <Link to='/' className='link'>
-                        Home
-                    </Link>
-                </li>
-                <li>
-                    <Link to='/Categories' className='link'>
-                    Categories
-                    </Link>
-                </li>
-                <li>
-                    <Link to='/BestSellers' className='link'>
-                    Best Sellers
-                    </Link>
-                </li>
-                <li>
-                    <Link to='/Search' className='link'>
-                    Search
-                    </Link>
-                </li>
-                <li>
-                    <Link to='/Admin' className='link'>
-                    Admin
-                    </Link>
-                </li>
-            </ul>
-            
-            <div className='nav-login-cart'>
-                <Link to='/Cart'>
-                    <img src={cartImage} alt=''/>
-                </Link>
-                {/* <div className='nav-cart-count'>{cartItems.length}</div> */}
-            </div>
+            <button className="login-button">Login</button>
+          </div>
         </div>
+      </nav>
     )
 }
 

@@ -1,208 +1,23 @@
-/* Adapted code from GreatStack Tutorial https://www.youtube.com/watch?v=jbfuzcrfjqQ&ab_channel=GreatStack */
-.navbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 16px 32px;
-  width: 100%;
-  box-sizing: border-box;
+nav {
+  margin-left: 20px;
+  margin-right: 20px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  background-color: #FAF9F6;
 }
 
-.nav-logo {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  cursor: pointer;
+.cart-icon {
+  margin-top: 10px;
+  margin-right: 25px;
+  margin-bottom: 10px;
 }
 
-.nav-logo p {
-  color: black;
-  width: 50px;
-  height: auto;
-  font-size: 23px;
-  font-weight: 500;
-  margin: 0;
-}
-
-.nav-logo img {
-  width: 40px;
-  height: auto;
-}
-
-.nav-menu {
-  display: flex;
-  align-items: center;
-  list-style: none;
-  gap: 20px;
-  color: #e74e3a;
+.login-button {
+  color: white;
+  background-color: #e74e3a;
+  border: none;
+  border-radius: 30px;
+  padding: 8px 16px;
   font-size: 15px;
   font-weight: 600;
-}
-
-.link {
-  color: #e74e3a;
-  text-decoration: none;
-}
-
-.nav-login-cart {
-  margin-top: 10px;
-  display: flex;
-  align-items: center;
-  gap: 15px;
-}
-
-.nav-login-cart img {
-  width: 25px;
-  height: auto;
-}
-
-.nav-login-cart button {
-  background: #e74e3a;
-  border: #e74e3a;
   cursor: pointer;
-  border-radius: 80px;
-  width: 60px;
-  height: 35px;
-  color: white;
-  font-weight: 600;
-  cursor: pointer;
-}
-
-.nav-cart-count {
-  width: 25px;
-  height: 25px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-top: -35px;
-  margin-left: -10px;
-  border-radius: 20px;
-  font-size: 12px;
-  font-weight: 600;
-  background: #e74e3a;
-  color: white;
-}
-
-@media (max-width: 1280px) {
-  .navbar {
-    padding: 12px 50px;
-  }
-
-  .nav-logo img {
-    width: 35px;
-  }
-}
-
-@media (max-width: 768px) {
-  .navbar {
-    flex-direction: column;
-    align-items: flex-start;
-    padding: 12px 16px;
-  }
-
-  .nav-logo {
-    margin-bottom: 10px;
-  }
-
-  .nav-menu {
-    flex-direction: column;
-    gap: 20px;
-    width: 100%;
-    font-size: 16px;
-    align-items: flex-start;
-    margin-bottom: 10px;
-  }
-
-  .nav-login-cart {
-    width: 100%;
-    justify-content: flex-start;
-    gap: 10px;
-  }
-}
-
-@media (max-width: 480px) {
-  .navbar {
-    padding: 8px 8px;
-  }
-
-  .nav-logo p {
-    font-size: 20px;
-  }
-
-  .nav-menu {
-    font-size: 14px;
-    gap: 12px;
-  }
-
-  .nav-login-cart button {
-    width: 45px;
-    height: 28px;
-    font-size: 12px;
-  }
-
-  .nav-cart-count {
-    width: 18px;
-    height: 18px;
-    font-size: 10px;
-    margin-top: -25px;
-    margin-left: -12px;
-  }
-}
-
-@media (max-width: 768px) {
-  .navbar {
-    flex-direction: column;
-    align-items: flex-start;
-    padding: 12px 16px;
-  }
-
-  .nav-logo {
-    margin-bottom: 10px;
-  }
-
-  .nav-menu {
-    flex-direction: column;
-    gap: 20px;
-    width: 100%;
-    font-size: 16px;
-    align-items: flex-start;
-    margin-bottom: 10px;
-  }
-
-  .nav-login-cart {
-    width: 100%;
-    justify-content: flex-start;
-    gap: 10px;
-  }
-}
-
-@media (max-width: 480px) {
-  .navbar {
-    padding: 8px 4px;
-  }
-
-  .nav-logo p {
-    font-size: 20px;
-  }
-
-  .nav-menu {
-    font-size: 14px;
-    gap: 12px;
-  }
-
-  .nav-login-cart button {
-    width: 45px;
-    height: 28px;
-    font-size: 12px;
-  }
-
-  .nav-cart-count {
-    width: 18px;
-    height: 18px;
-    font-size: 10px;
-    margin-top: -25px;
-    margin-left: -12px;
-  }
+  margin-left: 7px;
 }

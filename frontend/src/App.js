@@ -1,6 +1,8 @@
 import './App.css';
 import { Provider } from 'react-redux';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 
 import Navbar from './components/navbar/Navbar';
 import Home from './pages/Home';
