@@ -56,7 +56,7 @@ const Order = () => {
     let totalPrice = orderItems.reduce((sum, item) => sum + item.price * item.count, 0);
 
     return (
-        <div>
+        <div className='order-container'>
             <h1>Order Confirmation</h1>
             <div className='thanks-container'>
               Thanks for your order, {customerName}!

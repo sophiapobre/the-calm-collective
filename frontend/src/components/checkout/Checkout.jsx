@@ -108,7 +108,7 @@ const Checkout = () => {
     let totalPrice = cartItems.reduce((sum, item) => sum + item.price * item.count, 0);
 
     return (
-        <div>
+        <div className='checkout-container'>
             <h1>Checkout</h1>
 
             <form onSubmit={handleSubmit}>

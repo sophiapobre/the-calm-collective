@@ -1,4 +1,8 @@
 /* Adapted code from GreatStack Tutorial https://www.youtube.com/watch?v=jbfuzcrfjqQ&ab_channel=GreatStack */
+.order-container {
+  padding: 32px;
+}
+
 .cart-item {
   border: 1px solid #eee;
   border-radius: 8px;
