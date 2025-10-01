@@ -20,7 +20,7 @@ import Orders from './pages/Orders';
 import ManageProducts from './pages/ManageProducts';
 import AddProduct from './pages/AddProduct';
 import EditProduct from './pages/EditProduct';
-import ProtectedRoute from './components/ProtectedRoute';
+import ProtectedRoute from './components/protectedroute/ProtectedRoute';
 import Login from './pages/Login'; 
 import { AuthProvider } from './context/AuthContext';
 
