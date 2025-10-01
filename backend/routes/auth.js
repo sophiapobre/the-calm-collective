@@ -9,7 +9,7 @@ const router = express.Router();
 
 // Register endpoint
 router.post('/register', [
-  body('username').isLength({ min: 3 }).trim().escape(),
+  body('name').isLength({ min: 1 }).trim().escape(),
   body('email').isEmail().normalizeEmail(),
   body('password').isLength({ min: 6 }),
   body('role').optional().isIn(['user', 'admin'])
@@ -21,20 +21,18 @@ router.post('/register', [
       return res.status(400).json({ errors: errors.array() });
     }
 
-    const { username, email, password, role = 'user' } = req.body;
+    const { name, email, password, role = 'user' } = req.body;
 
     // Check if user already exists
-    const existingUser = await User.findOne({ 
-      $or: [{ email }, { username }] 
-    });
+    const existingUser = await User.findOne({ email });
     
     if (existingUser) {
-      return res.status(400).json({ message: 'User already exists with this email or username' });
+      return res.status(400).json({ message: 'User already exists with this email' });
     }
 
     // Create new user
     const user = new User({
-      username,
+      name,
       email,
       password,
       role
@@ -54,7 +52,7 @@ router.post('/register', [
       token,
       user: {
         id: user._id,
-        username: user.username,
+        name: user.name,
         email: user.email,
         role: user.role
       }
@@ -103,7 +101,7 @@ router.post('/login', [
       token,
       user: {
         id: user._id,
-        username: user.username,
+        name: user.name,
         email: user.email,
         role: user.role
       }
@@ -120,7 +118,7 @@ router.get('/profile', authenticateToken, async (req, res) => {
     res.json({
       user: {
         id: req.user._id,
-        username: req.user.username,
+        name: req.user.name,
         email: req.user.email,
         role: req.user.role
       }
