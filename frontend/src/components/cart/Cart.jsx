@@ -78,7 +78,7 @@ const Cart = () => {
     }
 
     return (
-        <div>
+        <div className='cart-container'>
             <h1>Shopping Cart</h1>
             
             {
