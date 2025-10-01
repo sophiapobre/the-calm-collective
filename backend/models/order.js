@@ -1,8 +1,20 @@
 const mongoose = require('mongoose');
 
 const orderSchema = new mongoose.Schema({
-  customerName: String,
-  orderNumber: String,
+  customerName: {
+    type: String,
+    required: true
+  },
+  orderNumber: {
+    type: String,
+    required: true,
+    unique: true
+  },
+  userId: {  
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: false // Optional for guest orders
+  },
   items: [
     {
       productId: {
@@ -20,6 +32,8 @@ const orderSchema = new mongoose.Schema({
       }
     }
   ]
+}, {
+  timestamps: true
 });
 
 module.exports = mongoose.model('Order', orderSchema);

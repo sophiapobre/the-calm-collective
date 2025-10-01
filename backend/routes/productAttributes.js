@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const ProductAttribute = require('../models/productAttribute');
+const { authenticateToken, requireAdmin } = require('../middleware/auth');
 
 // Get all product attributes for a product
 // GET /api/product-attributes/:productId
@@ -34,7 +35,7 @@ router.get('/attribute/:attributeId', async (request, response) => {
 
 // Create a new product attribute for a product
 // POST /api/product-attributes/:productId
-router.post('/:productId', async (request, response) => {
+router.post('/:productId', authenticateToken, requireAdmin, async (request, response) => {
   try {
     const { attributeName, attributeValue } = request.body;
 
@@ -54,7 +55,7 @@ router.post('/:productId', async (request, response) => {
 
 // Update an existing product attribute by ID
 // PUT /api/product-attributes/attribute/:attributeId
-router.put('/attribute/:attributeId', async (request, response) => {
+router.put('/attribute/:attributeId', authenticateToken, requireAdmin, async (request, response) => {
   try {
     const { attributeName, attributeValue } = request.body;
 
@@ -76,7 +77,7 @@ router.put('/attribute/:attributeId', async (request, response) => {
 
 // Delete a product attribute by ID
 // DELETE /api/product-attributes/attribute/:attributeId
-router.delete('/attribute/:attributeId', async (request, response) => {
+router.delete('/attribute/:attributeId', authenticateToken, requireAdmin, async (request, response) => {
   try {
     const deletedAttribute = await ProductAttribute.findByIdAndDelete(request.params.attributeId);
 

@@ -7,6 +7,7 @@ const CategoryProduct = require('../models/categoryProduct');
 const Category = require('../models/category');
 const multer = require('multer');
 const path = require('path');
+const { authenticateToken, requireAdmin } = require('../middleware/auth');
 
 // Get category names for a product
 function getCategoryNames(productId, categoryProducts, categories) {
@@ -117,7 +118,7 @@ router.get('/:productId', async (request, response) => {
 
 // Delete a product by ID
 // DELETE /api/products/:productId
-router.delete('/:productId', async (request, response) => {
+router.delete('/:productId', authenticateToken, requireAdmin, async (request, response) => {
   try {
     // Delete the product if it exists
     const product = await Product.findByIdAndDelete(request.params.productId);
@@ -160,7 +161,7 @@ const upload = multer({ storage: storage });
 
 // Add a product
 // POST /api/products
-router.post('/', upload.single('image'), async (request, response) => {
+router.post('/', authenticateToken, requireAdmin, upload.single('image'), async (request, response) => {
   try {
     const { name, description, price, category, bestseller } = request.body;
     const image = request.file ? request.file.filename : '';
@@ -210,7 +211,7 @@ router.post('/', upload.single('image'), async (request, response) => {
 
 // Edit a product by ID
 // PUT /api/products/:productId
-router.put('/:productId', upload.single('image'), async (request, response) => {
+router.put('/:productId', authenticateToken, requireAdmin, upload.single('image'), async (request, response) => {
   try {
     // Get the product, if it exists
     const product = await Product.findById(request.params.productId);

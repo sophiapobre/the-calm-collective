@@ -6,6 +6,9 @@ const app = express();
 const mongoose = require('mongoose');
 const cors = require('cors');
 
+// Add environment variables support
+require('dotenv').config();
+
 app.use(express.json());
 app.use(cors());
 
@@ -20,15 +23,10 @@ app.get('/', (request, response) => {
   response.send('App is running');
 })
 
-app.listen(port, (error) => {
-    if (error) {
-        console.error(`Error starting server: ${error}`);
-    } else {
-        console.log(`Server is running on port ${port}`);
-    }
-})
-
 // Import routes
+const authRoutes = require('./routes/auth');
+app.use('/api/auth', authRoutes);
+
 const productRoutes = require('./routes/products');
 app.use('/api/products', productRoutes);
 
@@ -51,3 +49,11 @@ const orderRoutes = require('./routes/orders');
 app.use('/api/orders', orderRoutes);
 
 app.use('/images', express.static('public/images'));
+
+app.listen(port, (error) => {
+    if (error) {
+        console.error(`Error starting server: ${error}`);
+    } else {
+        console.log(`Server is running on port ${port}`);
+    }
+})

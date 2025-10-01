@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const Product = require('../models/product');
 const ShoppingCart = require('../models/shoppingCart');
 const ProductAttribute = require('../models/productAttribute');
+const { authenticateToken, requireAdmin } = require('../middleware/auth');
 
 // Create new cart
 // POST /api/shopping-cart
@@ -24,7 +25,7 @@ router.post('/', async (request, response) => {
 
 // Get all carts
 // GET /api/shopping-cart
-router.get('/', async (request, response) => {
+router.get('/', authenticateToken, requireAdmin, async (request, response) => {
   try {
     const carts = await ShoppingCart.find({});
     response.json(carts);

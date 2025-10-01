@@ -3,6 +3,7 @@ const router = express.Router();
 const Product = require('../models/product');
 const ProductAttribute = require('../models/productAttribute');
 const ProductAttributePrice = require('../models/productAttributePrice');
+const { authenticateToken, requireAdmin } = require('../middleware/auth');
 
 // Get all product attribute prices for a product
 // GET /api/product-attribute-prices/:productId/all
@@ -79,7 +80,7 @@ router.get('/:productId', async (request, response) => {
 
 // Create a new product attribute price
 // POST /api/product-attribute-prices/:productId
-router.post('/:productId', async (request, response) => {
+router.post('/:productId', authenticateToken, requireAdmin, async (request, response) => {
   try {
     const { productAttributeId, price } = request.body;
 
@@ -102,7 +103,7 @@ router.post('/:productId', async (request, response) => {
 
 // Update an existing product attribute price
 // PUT /api/product-attribute-prices/:productId
-router.put('/:productId', async (request, response) => {
+router.put('/:productId', authenticateToken, requireAdmin, async (request, response) => {
   try {
     const { productAttributeId, price } = request.body;
 
@@ -128,7 +129,7 @@ router.put('/:productId', async (request, response) => {
 
 // Delete a product attribute price
 // DELETE /api/product-attribute-prices/:productId
-router.delete('/:productId', async (request, response) => {
+router.delete('/:productId', authenticateToken, requireAdmin, async (request, response) => {
   try {
     const { productAttributeId } = request.query;
 
