@@ -70,7 +70,7 @@ const Cart = () => {
 
     if (cartItems.length === 0) {
         return (
-            <div>
+            <div className='cart-container'>
                 <h1>Shopping Cart</h1>
                 <p className='empty-cart'>Your shopping cart is empty.</p>
             </div>
