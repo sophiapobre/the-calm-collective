@@ -4,6 +4,7 @@ const path = require('path');
 const scripts = [
   'clearCarts.js',
   'clearOrders.js',
+  'createAdmin.js',
   'importProducts.js',
   'importCategories.js',
   'importCategoryProductAssociations.js',
