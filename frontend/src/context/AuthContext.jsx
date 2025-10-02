@@ -27,7 +27,7 @@ export const AuthProvider = ({ children }) => {
 
         if (token && userData) {
           // Verify token is still valid by making a request to protected route
-          const response = await axios.get('http://localhost:5001/api/auth/profile', {
+          const response = await axios.get('http://localhost:4000/api/auth/profile', {
             headers: {
               'Authorization': `Bearer ${token}`
             }
@@ -55,7 +55,7 @@ export const AuthProvider = ({ children }) => {
     try {
       setLoading(true);
       
-      const response = await axios.post('http://localhost:5001/api/auth/login', {
+      const response = await axios.post('http://localhost:4000/api/auth/login', {
         email,
         password
       });
@@ -92,7 +92,7 @@ export const AuthProvider = ({ children }) => {
     // Notify the backend to invalidate the token server-side
     const token = localStorage.getItem('token');
     if (token) {
-      axios.post('http://localhost:5001/api/auth/logout', {}, {
+      axios.post('http://localhost:4000/api/auth/logout', {}, {
         headers: {
           'Authorization': `Bearer ${token}`
         }

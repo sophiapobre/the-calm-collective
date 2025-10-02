@@ -20,8 +20,8 @@ import Orders from './pages/Orders';
 import ManageProducts from './pages/ManageProducts';
 import AddProduct from './pages/AddProduct';
 import EditProduct from './pages/EditProduct';
-import ProtectedRoute from './components/protectedroute/ProtectedRoute';
-import Login from './pages/Login'; 
+import ProtectedRoute from './components/protectedroute/Protectedroute';
+import Login from './pages/LoginPage'; 
 import { AuthProvider } from './context/AuthContext';
 
 // Adapted code from GreatStack Tutorial https://www.youtube.com/watch?v=jbfuzcrfjqQ&ab_channel=GreatStack
