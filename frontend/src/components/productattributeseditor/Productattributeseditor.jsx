@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext';
 
 import './Productattributeseditor.css'; 
 
@@ -7,8 +8,10 @@ const ProductAttributesEditor = ({ productId, attributes, setAttributes }) => {
   const [attributeName, setAttributeName] = useState('');
   const [attributeValues, setAttributeValues] = useState([]);
   const [attributeToAdd, setAttributeToAdd] = useState({ attributeValue: '', price: '' });
+  const [submitting, setSubmitting] = useState(false);
 
   const navigate = useNavigate();
+  const { getAuthToken } = useAuth();
 
   // Ensure that local state is synced with parent attributes
   useEffect(() => {
@@ -92,6 +95,13 @@ const ProductAttributesEditor = ({ productId, attributes, setAttributes }) => {
   const handleSaveAll = async event => {
     event.preventDefault();
 
+    const token = getAuthToken();
+
+    if (!token) {
+      alert('You must be logged in to perform this action.');
+      return;
+    }
+
     if (!attributeName.trim()) {
       alert('Attribute name is a required field.');
       return;
@@ -104,102 +114,161 @@ const ProductAttributesEditor = ({ productId, attributes, setAttributes }) => {
       }
     }
 
-    // Delete attributes marked for deletion
-    for (const attributeValue of attributeValues) {
-      if (attributeValue.toDelete && attributeValue._id) {
-        // Delete attribute price from backend
-        const priceResponse = await fetch(`http://localhost:4000/api/product-attribute-prices/${productId}?productAttributeId=${attributeValue._id}`, {
-          method: 'DELETE'
-        });
+    setSubmitting(true);
 
-        // Delete attribute from backend
-        const attributeResponse = await fetch(`http://localhost:4000/api/product-attributes/attribute/${attributeValue._id}`, {
-          method: 'DELETE'
-        });
+    try {
+      // Create headers with authorization
+      const headers = {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      };
 
-        if (!priceResponse.ok || !attributeResponse.ok) {
-          alert('Failed to delete some attributes. Please try again.');
-          return;
+      // Delete attributes marked for deletion
+      for (const attributeValue of attributeValues) {
+        if (attributeValue.toDelete && attributeValue._id) {
+          try {
+            // Delete attribute price from backend
+            const priceResponse = await fetch(`http://localhost:4000/api/product-attribute-prices/${productId}?productAttributeId=${attributeValue._id}`, {
+              method: 'DELETE',
+              headers
+            });
+
+            // Delete attribute from backend
+            const attributeResponse = await fetch(`http://localhost:4000/api/product-attributes/attribute/${attributeValue._id}`, {
+              method: 'DELETE',
+              headers
+            });
+
+            if (!priceResponse.ok || !attributeResponse.ok) {
+              if (priceResponse.status === 401 || attributeResponse.status === 401) {
+                alert('Session expired. Please log in again.');
+                return;
+              }
+              alert('Failed to delete some attributes. Please try again.');
+              return;
+            }
+          } catch (error) {
+            console.error('Error deleting attribute:', error);
+            alert('Network error while deleting attributes. Please check your connection.');
+            return;
+          }
         }
       }
-    }
 
-    // Add new attributes (attributes with null _id & not marked for deletion)
-    for (const attributeValue of attributeValues) {
-      if (!attributeValue._id && !attributeValue.toDelete) {
-        // Add attribute to backend
-        const attributeResponse = await fetch(`http://localhost:4000/api/product-attributes/${productId}`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            attributeName,
-            attributeValue: attributeValue.attributeValue
-          })
-        });
+      // Add new attributes (attributes with null _id & not marked for deletion)
+      for (const attributeValue of attributeValues) {
+        if (!attributeValue._id && !attributeValue.toDelete) {
+          try {
+            // Add attribute to backend
+            const attributeResponse = await fetch(`http://localhost:4000/api/product-attributes/${productId}`, {
+              method: 'POST',
+              headers,
+              body: JSON.stringify({
+                attributeName,
+                attributeValue: attributeValue.attributeValue
+              })
+            });
 
-        if (!attributeResponse.ok) {
-          alert('Failed to add new attribute. Please try again.');
-          return;
-        }
+            if (!attributeResponse.ok) {
+              if (attributeResponse.status === 401) {
+                alert('Session expired. Please log in again.');
+                return;
+              }
+              alert('Failed to add new attribute. Please try again.');
+              return;
+            }
 
-        const newAttribute = await attributeResponse.json();
+            const newAttribute = await attributeResponse.json();
 
-        // Add attribute price to backend
-        const priceResponse = await fetch(`http://localhost:4000/api/product-attribute-prices/${productId}`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            productAttributeId: newAttribute._id,
-            price: attributeValue.price
-          })
-        });
+            // Add attribute price to backend
+            const priceResponse = await fetch(`http://localhost:4000/api/product-attribute-prices/${productId}`, {
+              method: 'POST',
+              headers,
+              body: JSON.stringify({
+                productAttributeId: newAttribute._id,
+                price: attributeValue.price
+              })
+            });
 
-        if (!priceResponse.ok) {
-          alert('Failed to add price for new attribute. Please try again.');
-          return;
-        }
-      }
-    }
-
-    // Update existing attributes (with _id & not marked for deletion)
-    for (const attributeValue of attributeValues) {
-      if (attributeValue._id && !attributeValue.toDelete) {
-        // Update attribute name and value in backend
-        const attributeResponse = await fetch(`http://localhost:4000/api/product-attributes/attribute/${attributeValue._id}`, {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            attributeName,
-            attributeValue: attributeValue.attributeValue
-          })
-        });
-
-        // Update price in backend
-        const priceResponse = await fetch(`http://localhost:4000/api/product-attribute-prices/${productId}`, {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            productAttributeId: attributeValue._id,
-            price: attributeValue.price
-          })
-        });
-
-        if (!attributeResponse.ok || !priceResponse.ok) {
-          alert('Failed to update attribute value or price. Please try again.');
-          return;
+            if (!priceResponse.ok) {
+              if (priceResponse.status === 401) {
+                alert('Session expired. Please log in again.');
+                return;
+              }
+              alert('Failed to add price for new attribute. Please try again.');
+              return;
+            }
+          } catch (error) {
+            console.error('Error adding attribute:', error);
+            alert('Network error while adding attributes. Please check your connection.');
+            return;
+          }
         }
       }
-    }
 
-    // Fetch updates from backend and update parent's local state
-    const response = await fetch(`http://localhost:4000/api/product-attributes/${productId}`);
-    if (response.ok) {
-      const updatedAttributes = await response.json();
-      setAttributes(updatedAttributes);
-      alert('Product attributes saved successfully!');
-      navigate('/admin/products');
-    } else {
-      alert('Failed to refresh attributes.');
+      // Update existing attributes (with _id & not marked for deletion)
+      for (const attributeValue of attributeValues) {
+        if (attributeValue._id && !attributeValue.toDelete) {
+          try {
+            // Update attribute name and value in backend
+            const attributeResponse = await fetch(`http://localhost:4000/api/product-attributes/attribute/${attributeValue._id}`, {
+              method: 'PUT',
+              headers,
+              body: JSON.stringify({
+                attributeName,
+                attributeValue: attributeValue.attributeValue
+              })
+            });
+
+            // Update price in backend
+            const priceResponse = await fetch(`http://localhost:4000/api/product-attribute-prices/${productId}`, {
+              method: 'PUT',
+              headers,
+              body: JSON.stringify({
+                productAttributeId: attributeValue._id,
+                price: attributeValue.price
+              })
+            });
+
+            if (!attributeResponse.ok || !priceResponse.ok) {
+              if (attributeResponse.status === 401 || priceResponse.status === 401) {
+                alert('Session expired. Please log in again.');
+                return;
+              }
+              alert('Failed to update attribute value or price. Please try again.');
+              return;
+            }
+          } catch (error) {
+            console.error('Error updating attribute:', error);
+            alert('Network error while updating attributes. Please check your connection.');
+            return;
+          }
+        }
+      }
+
+      // Fetch updates from backend and update parent's local state
+      try {
+        const response = await fetch(`http://localhost:4000/api/product-attributes/${productId}`, {
+          headers
+        });
+
+        if (response.ok) {
+          const updatedAttributes = await response.json();
+          setAttributes(updatedAttributes);
+          alert('Product attributes saved successfully!');
+          navigate('/admin/products');
+        } else if (response.status === 401) {
+          alert('Session expired. Please log in again.');
+        } else {
+          alert('Failed to refresh attributes.');
+        }
+      } catch (error) {
+        console.error('Error refreshing attributes:', error);
+        alert('Network error while refreshing attributes.');
+      }
+
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -213,6 +282,7 @@ const ProductAttributesEditor = ({ productId, attributes, setAttributes }) => {
           onChange={e => setAttributeName(e.target.value)}
           placeholder="Attribute Name (e.g. Size)"
           required
+          disabled={submitting} // Disable during submission
         />
       </div>
 
@@ -224,7 +294,7 @@ const ProductAttributesEditor = ({ productId, attributes, setAttributes }) => {
             placeholder="Attribute Value"
             className="attribute-value-input"
             required
-            disabled={attributeValue.toDelete}
+            disabled={attributeValue.toDelete || submitting} // Disable during submission
           />
           <input
             value={attributeValue.price}
@@ -233,7 +303,7 @@ const ProductAttributesEditor = ({ productId, attributes, setAttributes }) => {
             type="number"
             className="attribute-price-input"
             required
-            disabled={attributeValue.toDelete}
+            disabled={attributeValue.toDelete || submitting} // Disable during submission
           />
           <label className="attribute-delete-label">
             <input
@@ -241,6 +311,7 @@ const ProductAttributesEditor = ({ productId, attributes, setAttributes }) => {
               checked={attributeValue.toDelete}
               onChange={() => handleDeleteToggle(idx)}
               className="attribute-delete-checkbox"
+              disabled={submitting} // Disable during submission
             />
             Delete?
           </label>
@@ -253,6 +324,7 @@ const ProductAttributesEditor = ({ productId, attributes, setAttributes }) => {
           onChange={event => handleAddAttributeChange('attributeValue', event.target.value)}
           placeholder="Attribute Value"
           style={{ width: 120 }}
+          disabled={submitting} // Disable during submission
         />
         <input
           value={attributeToAdd.price}
@@ -260,12 +332,19 @@ const ProductAttributesEditor = ({ productId, attributes, setAttributes }) => {
           placeholder="Price"
           type="number"
           style={{ width: 80 }}
+          disabled={submitting} // Disable during submission
         />
-        <button type="button" onClick={handleAddAttribute}>Add</button>
+        <button 
+          type="button" 
+          onClick={handleAddAttribute}
+          disabled={submitting} // Disable during submission
+        >
+          Add
+        </button>
       </div>
 
-      <button className="attribute-action-button" type="submit">
-        Save Changes
+      <button className="attribute-action-button" type="submit" disabled={submitting}>
+        {submitting ? 'Saving Changes...' : 'Save Changes'}
       </button>
     </form>
   );

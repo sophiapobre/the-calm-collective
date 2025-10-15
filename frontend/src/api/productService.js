@@ -1,7 +1,13 @@
 export async function getProduct(productId) {
+  const token = localStorage.getItem('token');
+  const headers = { 'Content-Type': 'application/json' };
+
+  if (token) {
+    headers['Authorization'] = `Bearer ${token}`;
+  }
   const response = await fetch(`http://localhost:4000/api/products/${productId}`, {
     method: 'GET',
-    headers: { 'Content-Type': 'application/json' },
+    headers: headers,
   });
 
   if (response.status !== 200) {
@@ -13,10 +19,17 @@ export async function getProduct(productId) {
 }
 
 export async function getProductCategoryNames(productId) {
+  const token = localStorage.getItem('token');
+  const headers = { 'Content-Type': 'application/json' };
+
+  if (token) {
+    headers['Authorization'] = `Bearer ${token}`;
+  }
+
   // Get category product documents associated with the product
   const response = await fetch(`http://localhost:4000/api/category-products/product/${productId}`, {
     method: 'GET',
-    headers: { 'Content-Type': 'application/json' },
+    headers: headers,
   });
 
   if (response.status !== 200) {
@@ -48,9 +61,16 @@ export async function getProductCategoryNames(productId) {
 }
 
 export async function getProductAttributes(productId) {
+  const token = localStorage.getItem('token');
+  const headers = { 'Content-Type': 'application/json' };
+
+  if (token) {
+    headers['Authorization'] = `Bearer ${token}`;
+  }
+
   const response = await fetch(`http://localhost:4000/api/product-attributes/${productId}`, {
     method: 'GET',
-    headers: { 'Content-Type': 'application/json' },
+    headers: headers,
   });
 
   if (response.status !== 200) {
@@ -62,9 +82,16 @@ export async function getProductAttributes(productId) {
 }
 
 export async function getProductAttribute(attributeId) {
+  const token = localStorage.getItem('token');
+  const headers = { 'Content-Type': 'application/json' };
+
+  if (token) {
+    headers['Authorization'] = `Bearer ${token}`;
+  }
+
   const response = await fetch(`http://localhost:4000/api/product-attributes/attribute/${attributeId}`, {
     method: 'GET',
-    headers: { 'Content-Type': 'application/json' },
+    headers: headers,
   });
 
   if (response.status !== 200) {
@@ -76,9 +103,16 @@ export async function getProductAttribute(attributeId) {
 }
 
 export async function getProductAttributePrices(productId) {
+  const token = localStorage.getItem('token');
+  const headers = { 'Content-Type': 'application/json' };
+
+  if (token) {
+    headers['Authorization'] = `Bearer ${token}`;
+  }
+
   const response = await fetch(`http://localhost:4000/api/product-attribute-prices/${productId}/all`, {
     method: 'GET',
-    headers: { 'Content-Type': 'application/json' },
+    headers: headers,
   });
 
   if (response.status !== 200) {
@@ -90,9 +124,16 @@ export async function getProductAttributePrices(productId) {
 }
 
 export async function getProductAttributePrice(productId, productAttributeId) {
+  const token = localStorage.getItem('token');
+  const headers = { 'Content-Type': 'application/json' };
+
+  if (token) {
+    headers['Authorization'] = `Bearer ${token}`;
+  }
+
   const response = await fetch(`http://localhost:4000/api/product-attribute-prices/${productId}?productAttributeId=${productAttributeId}`, {
     method: 'GET',
-    headers: { 'Content-Type': 'application/json' },
+    headers: headers,
   });
 
   if (response.status !== 200) {
@@ -103,7 +144,7 @@ export async function getProductAttributePrice(productId, productAttributeId) {
   return response.json();
 }
 
-export async function getProductAttributesAndPrices(productId, productAttributeId) {
+export async function getProductAttributesAndPrices(productId, productAttributeId) {  
   const attributes = await getProductAttributes(productId);
   const attributePrices = await getProductAttributePrices(productId);
 
