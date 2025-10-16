@@ -39,6 +39,7 @@ const Productlist = () => {
               // Only render products for categories other than 'best sellers'
               // This is because 'best sellers' has its own page
               .filter(category => category.name !== 'best sellers')
+              .filter(category => productsByCategory[category.name] && productsByCategory[category.name].length > 0)
               .map(category => (
                 <div className='category-section' key={category.name}>
                   <h2 className='categories-title'>
