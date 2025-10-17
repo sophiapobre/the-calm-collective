@@ -12,6 +12,9 @@ const Login = () => {
   const { login } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
+
+  // Get success message from signup, if any
+  const successMessage = location.state?.message;
   
   // Get the page user was trying to access
   const from = location.state?.from?.pathname || '/';
@@ -36,6 +39,13 @@ const Login = () => {
     <div className="login-container">
       <div className="login-form">
         <h2>Login</h2>
+
+        {/* Show success message from signup */}
+        {successMessage && (
+          <div className="success-message" style={{ color: 'green', marginBottom: '10px' }}>
+            {successMessage}
+          </div>
+        )}
         
         {error && <div className="error-message">{error}</div>}
         
