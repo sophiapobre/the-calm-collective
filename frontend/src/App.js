@@ -40,6 +40,9 @@ function App() {
               <Route path='/search' element={<Search/>}/>
               <Route path='/products/:productId' element={<Product/>}/>
               <Route path='/login' element={<Login/>}/>
+              <Route path='/cart' element={<CartPage/>}/>
+              <Route path='/checkout' element={<CheckoutPage/>}/>
+              <Route path='/orders/:orderNumber' element={<OrderConfirmation/>}/>
 
               {/* Protected admin routes */}
               <Route path='/admin' element={
@@ -74,7 +77,7 @@ function App() {
               }/>
 
               {/* Protected user routes */}
-              <Route path='/cart' element={
+              {/* <Route path='/cart' element={
                 <ProtectedRoute>
                   <CartPage/>
                 </ProtectedRoute>
@@ -83,12 +86,12 @@ function App() {
                 <ProtectedRoute>
                   <CheckoutPage/>
                 </ProtectedRoute>
-              }/>
-              <Route path='/orders/:orderNumber' element={
+              }/> */}
+              {/* <Route path='/orders/:orderNumber' element={
                 <ProtectedRoute>
                   <OrderConfirmation/>
                 </ProtectedRoute>
-              }/>
+              }/> */}
 
             </Routes>
           </BrowserRouter>

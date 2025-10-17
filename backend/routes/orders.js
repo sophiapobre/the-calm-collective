@@ -3,8 +3,13 @@ const router = express.Router();
 const Order = require('../models/order');
 const ShoppingCart = require('../models/shoppingCart');
 const Counter = require('../models/counter');
+const Product = require('../models/product');
+const ProductAttribute = require('../models/productAttribute');
+const ProductAttributePrice = require('../models/productAttributePrice');
+const Category = require('../models/category');
+const CategoryProduct = require('../models/categoryProduct');
 const mongoose = require('mongoose');
-const { authenticateToken, requireAdmin } = require('../middleware/auth');
+const { authenticateToken, requireAdmin, optionalAuth } = require('../middleware/auth');
 
 // Adapted from https://stackoverflow.com/questions/48239888/auto-increment-sequence-in-mongoose
 async function getNextOrderNumber() {
@@ -34,7 +39,7 @@ router.get('/', authenticateToken, requireAdmin, async (request, response) => {
 });
 
 // Get current user's orders
-// GET /api/orders/user/my-orders
+// GET /api/orders/user/my-orders (login required)
 router.get('/user/my-orders', authenticateToken, async (request, response) => {
   try {
     const orders = await Order.find({ userId: request.user._id });
@@ -46,15 +51,17 @@ router.get('/user/my-orders', authenticateToken, async (request, response) => {
 });
 
 // Get order by order number
-// GET /api/orders/:orderNumber
-router.get('/:orderNumber', authenticateToken, async (request, response) => {
+// GET /api/orders/:orderNumber (optional auth)
+router.get('/:orderNumber', optionalAuth, async (request, response) => {
   try {
     let query = { orderNumber: request.params.orderNumber };
     
     // If not admin, only show own orders
-    if (request.user.role !== 'admin') {
+    if (request.user && request.user.role !== 'admin') {
       query.userId = request.user._id; // Add userId to Order model
     }
+
+    // If user is not an admin and not logged in, allow access to any order (for demo purposes)
 
     const order = await Order.findOne(query);
 
@@ -70,8 +77,8 @@ router.get('/:orderNumber', authenticateToken, async (request, response) => {
 });
 
 // Create new order
-// POST /api/orders
-router.post('/', authenticateToken, async (request, response) => {
+// POST /api/orders (optional auth)
+router.post('/', optionalAuth, async (request, response) => {
   // Get name and cartId from request body
   const { name, cartId } = request.body;
 
@@ -91,12 +98,75 @@ router.post('/', authenticateToken, async (request, response) => {
       return response.status(404).json({ message: 'Cart not found' });
     }
 
+    if (!cart.items || cart.items.length === 0) {
+      return response.status(400).json({ message: 'Cart is empty' });
+    }
+
+    let orderTotal = 0;
+    let orderItems = [];
+
+    for (const item of cart.items) {
+
+      // Fetch product details
+      const product = await Product.findById(item.productId);
+
+      // Fetch product category
+      const categoryProduct = await CategoryProduct.findOne({ productId: product._id });
+      let categoryName = null;
+      if (categoryProduct) {
+        const categoryData = await Category.findById(categoryProduct.categoryId);
+        categoryName = categoryData ? categoryData.name : 'Unknown';
+      } else {
+        categoryName = 'Unknown';
+      }
+
+      // Fetch product attribute details if they exist
+      const productAttribute = await ProductAttribute.findById(item.productAttributeId);
+      let attributeId = productAttribute ? productAttribute._id : null;
+      let attributeName = null;
+      let attributeValue = null;
+      let attributePrice = null;
+      if (productAttribute) {
+        attributeName = productAttribute.attributeName;
+        attributeValue = productAttribute.attributeValue;
+
+        const productAttributePrice = await ProductAttributePrice.findOne({ 
+          productId: item.productId,
+          productAttributeId: attributeId 
+        });
+        attributePrice = productAttributePrice ? productAttributePrice.price : null;
+      }
+
+      const orderItem = {
+        productId: item.productId,
+        productAttributeId: attributeId || null,
+        productSnapshot: {
+          name: product.name,
+          description: product.description,
+          price: product.price,
+          image: product.image,
+          category: categoryName
+        },
+        attributeSnapshot: productAttribute ? {
+          attributeName: attributeName,
+          attributeValue: attributeValue,
+          price: attributePrice
+        } : null,
+        quantity: item.quantity,
+        finalPrice: attributePrice ? attributePrice : product.price
+      };
+
+      orderItems.push(orderItem);
+      orderTotal += orderItem.finalPrice * item.quantity;
+    }
+
     const orderNumber = await getNextOrderNumber();
     const order = new Order({
       customerName: name,
       orderNumber: orderNumber.toString(),
       userId: request.user ? request.user._id : null, // Add userId if authenticated
-      items: cart.items
+      items: orderItems,
+      total: orderTotal
     });
 
     await order.save();

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getCart, deleteCart } from '../../api/cartService';
 import { getProduct, getProductAttribute, getProductAttributePrice } from '../../api/productService';
+import { useAuth } from '../../context/AuthContext';
 
 import './Checkout.css';
 
@@ -11,6 +12,7 @@ const Checkout = () => {
     const [name, setName] = useState('');
 
     const navigate = useNavigate();
+    const { getAuthToken } = useAuth();
 
     const handleSubmit = async (event) => {
       event.preventDefault();
@@ -23,14 +25,25 @@ const Checkout = () => {
       }
 
       try {
+        // Get token if user is logged in (optional)
+        const token = getAuthToken();
+
+        const headers = {
+          'Content-Type': 'application/json'
+        }
+
+        if (token) {
+          headers['Authorization'] = `Bearer ${token}`;
+        }
+
         // Create order
         const response = await fetch('http://localhost:4000/api/orders', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: headers,
           body: JSON.stringify({ name, cartId })
         });
 
-        if (response.status !== 200) {
+        if (!response.ok) {
           const error = await response.json();
           alert('Order could not be placed. Please try again.');
           return;

@@ -70,12 +70,6 @@ const orderSchema = new mongoose.Schema({
       }
     }
   ],
-  
-  // Store totals at order level
-  subtotal: {
-    type: Number,
-    required: true
-  },
   total: {
     type: Number,
     required: true

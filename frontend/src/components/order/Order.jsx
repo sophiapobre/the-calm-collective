@@ -17,6 +17,12 @@ const Order = () => {
       async function fetchOrderDetails() {
         // Get order by order number
         const response = await fetch(`http://localhost:4000/api/orders/${orderNumber}`);
+        
+        if (!response.ok) {
+          console.error('Failed to fetch order');
+          return;
+        }
+        
         const order = await response.json();
 
         setCustomerName(order.customerName);
@@ -24,34 +30,30 @@ const Order = () => {
         // Fetch product details for each item
         let productDetails = [];
         for (const item of order.items) {
-          const product = await getProduct(item.productId);
-
           let variantName = null;
           let variantValue = null;
-          let variantPrice = null;
 
-          if (item.productAttributeId) {
-            const attribute = await getProductAttribute(item.productAttributeId);
-            variantName = attribute.attributeName;
-            variantValue = attribute.attributeValue;
-
-            const priceObj = await getProductAttributePrice(item.productId, item.productAttributeId);
-            variantPrice = priceObj.price;
+          if (item.attributeSnapshot) {
+            variantName = item.attributeSnapshot.attributeName;
+            variantValue = item.attributeSnapshot.attributeValue;
           }
 
           productDetails.push({
-            ...product,
+            name: item.productSnapshot.name,
+            description: item.productSnapshot.description,
+            image: item.productSnapshot.image,
+            category: item.productSnapshot.category,
             productAttributeId: item.productAttributeId,
             count: item.quantity,
             variantName,
             variantValue,
-            price: variantPrice !== null ? variantPrice : product.price
+            price: item.finalPrice
           });
         } 
         setOrderItems(productDetails);
       }
       fetchOrderDetails();
-    }, []);
+    }, [orderNumber]);
 
     let totalPrice = orderItems.reduce((sum, item) => sum + item.price * item.count, 0);
 
@@ -69,7 +71,7 @@ const Order = () => {
                     <div className='cart-item' key={item._id}>
                         <h4>{item.name}</h4>
                         {
-                          item.productAttributeId && item.variantName && item.variantValue && (
+                          item.variantName && item.variantValue && (
                             <p>{item.variantName}: {item.variantValue}</p>
                           )
                         }
