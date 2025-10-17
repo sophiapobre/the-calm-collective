@@ -1,15 +1,14 @@
 import React, { useState } from 'react';
-import { useAuth } from '../../context/AuthContext';
 import { useNavigate, useLocation } from 'react-router-dom';
 import './Signup.css';
 
 const Signup = () => {
+  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   
-  const { login } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   
@@ -21,15 +20,38 @@ const Signup = () => {
     setError('');
     setLoading(true);
 
-    const result = await login(email, password);
-    
-    if (result.success) {
-      // Redirect to intended page or home
-      navigate(from, { replace: true });
-    } else {
-      setError(result.error);
+    try {
+      const response = await fetch(`http://localhost:4000/api/auth/register`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: name,
+          email: email,
+          password: password,
+        }),
+      });
+      
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || "Registration failed");
+      }
+
+      // Redirect to login page with success message
+      navigate('/login', { 
+        state: { 
+          message: 'Registration successful! Please log in.',
+          from: from 
+        }
+      });
+    } catch (error) {
+      console.error("Error during registration:", error);
+      setError(`Registration failed: ${error.message}`);
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   return (
@@ -40,6 +62,16 @@ const Signup = () => {
         {error && <div className="error-message">{error}</div>}
         
         <form onSubmit={handleSubmit}>
+          <div className="form-group">
+            <label>Name:</label>
+            <input
+              type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              required
+            />
+          </div>
+          
           <div className="form-group">
             <label>Email:</label>
             <input
@@ -57,6 +89,7 @@ const Signup = () => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
+              minLength="6"
             />
           </div>
 
