@@ -1,3 +1,4 @@
+require('dotenv').config();
 const mongoose = require('mongoose');
 const Category = require('../models/category');
 const Product = require('../models/product');
@@ -17,7 +18,7 @@ const productCategoryMap = [
   { productName: 'Tumi Montana Backpack', categoryName: 'best sellers' },
 ];
 
-mongoose.connect('mongodb://mongo:27017/e-commerce')
+mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/ecommerce')
   .then(async () => {
     // Clear associations
     await CategoryProduct.deleteMany({});

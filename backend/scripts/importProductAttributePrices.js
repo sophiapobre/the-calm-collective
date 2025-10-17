@@ -1,8 +1,9 @@
+require('dotenv').config();
 const mongoose = require('mongoose');
 const ProductAttribute = require('../models/productAttribute');
 const ProductAttributePrice = require('../models/productAttributePrice');
 
-mongoose.connect('mongodb://mongo:27017/e-commerce')
+mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/ecommerce')
   .then(async () => {
     // Clear product attribute prices
     await ProductAttributePrice.deleteMany({});
