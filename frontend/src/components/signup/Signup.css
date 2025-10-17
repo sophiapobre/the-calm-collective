@@ -45,6 +45,7 @@
 }
 
 button {
+  /* width: 100%; */
   color: white;
   background-color: #e74e3a;
   border: none;

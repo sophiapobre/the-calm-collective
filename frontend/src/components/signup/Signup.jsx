@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { useNavigate, useLocation } from 'react-router-dom';
-import './Login.css';
+import './Signup.css';
 
-const Login = () => {
+const Signup = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -35,7 +35,7 @@ const Login = () => {
   return (
     <div className="login-container">
       <div className="login-form">
-        <h2>Login</h2>
+        <h2>Sign Up</h2>
         
         {error && <div className="error-message">{error}</div>}
         
@@ -61,26 +61,16 @@ const Login = () => {
           </div>
 
           <button className="login-button" type="submit" disabled={loading}>
-            {loading ? 'Logging in...' : 'Login'}
+            {loading ? 'Signing up...' : 'Sign Up'}
           </button>
 
           <div className="signup-prompt">
-            Don't have an account yet? Sign up <a className="signup-link" href="/signup">here</a>.
+            Already have an account? Login <a className="signup-link" href="/login">here</a>.
           </div>
         </form>
-        
-        <div className="demo-credentials">
-          <p><strong>Demo Admin Credentials:</strong></p>
-          <p>Email: admin@example.com</p>
-          <p>Password: admin123</p>
-
-          <p><strong>Demo User Credentials:</strong></p>
-          <p>Email: user@example.com</p>
-          <p>Password: user123</p>
-        </div>
       </div>
     </div>
   );
 };
 
-export default Login;
+export default Signup;

@@ -21,7 +21,8 @@ import ManageProducts from './pages/ManageProducts';
 import AddProduct from './pages/AddProduct';
 import EditProduct from './pages/EditProduct';
 import ProtectedRoute from './components/protectedroute/Protectedroute';
-import Login from './pages/LoginPage'; 
+import LoginPage from './pages/LoginPage'; 
+import SignupPage from './pages/SignupPage';
 import { AuthProvider } from './context/AuthContext';
 
 // Adapted code from GreatStack Tutorial https://www.youtube.com/watch?v=jbfuzcrfjqQ&ab_channel=GreatStack
@@ -39,7 +40,8 @@ function App() {
               <Route path='/bestsellers' element={<BestSellers/>}/>
               <Route path='/search' element={<Search/>}/>
               <Route path='/products/:productId' element={<Product/>}/>
-              <Route path='/login' element={<Login/>}/>
+              <Route path='/login' element={<LoginPage/>}/>
+              <Route path='/signup' element={<SignupPage/>}/>
               <Route path='/cart' element={<CartPage/>}/>
               <Route path='/checkout' element={<CheckoutPage/>}/>
               <Route path='/orders/:orderNumber' element={<OrderConfirmation/>}/>
@@ -75,23 +77,6 @@ function App() {
                   <EditProduct/>
                 </ProtectedRoute>
               }/>
-
-              {/* Protected user routes */}
-              {/* <Route path='/cart' element={
-                <ProtectedRoute>
-                  <CartPage/>
-                </ProtectedRoute>
-              }/>
-              <Route path='/checkout' element={
-                <ProtectedRoute>
-                  <CheckoutPage/>
-                </ProtectedRoute>
-              }/> */}
-              {/* <Route path='/orders/:orderNumber' element={
-                <ProtectedRoute>
-                  <OrderConfirmation/>
-                </ProtectedRoute>
-              }/> */}
 
             </Routes>
           </BrowserRouter>
