@@ -10,7 +10,7 @@ const Navbar = () => {
     const [isNavCollapsed, setIsNavCollapsed] = useState(true);
     const handleNavCollapse = () => setIsNavCollapsed(!isNavCollapsed);
 
-    const { user, logout, isAdmin } = useAuth();
+    const { user, logout, isAdmin, isAuthenticated } = useAuth();
 
     const handleLogout = () => {
       logout();
@@ -59,6 +59,14 @@ const Navbar = () => {
                 Search
               </Link>
             </li>
+
+            {user && isAuthenticated() && (
+            <li className="nav-item">
+              <Link className="nav-link" to="/my-orders" onClick={handleNavCollapse}>
+                My Orders
+              </Link>
+            </li>
+            )}
 
             {/* Only show Admin link if user is authenticated and is admin */}
             {user && isAdmin() && (
