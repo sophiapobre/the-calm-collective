@@ -152,16 +152,16 @@ const MyOrders = () => {
                             src={`http://localhost:4000/images/${item.productImage}`}
                             alt={item.productName}
                             onError={(e) => {
-                              e.target.src = '/placeholder-image.png';
+                              e.target.style.display = 'none';
+                              e.target.parentElement.innerHTML = '<div class="image-placeholder"><span>Image not available</span></div>';
                             }}
                           />
                         ) : (
                           <div className="image-placeholder">
-                            <span>📷</span>
+                            <span>Image not available</span>
                           </div>
                         )}
                       </div>
-                      
                       <div className="item-details">
                         <h4 className="item-name">{item.productName}</h4>
                         <p className="item-category">{item.productCategory}</p>
