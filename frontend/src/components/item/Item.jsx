@@ -7,6 +7,8 @@ import './Item.css';
 
 // Adapted code from GreatStack Tutorial https://www.youtube.com/watch?v=jbfuzcrfjqQ&ab_channel=GreatStack and Code with Yousaf https://www.youtube.com/watch?v=DvR-kOl2_SM&ab_channel=CodeWithYousaf
 const Item = () => {
+    // Add quantity state
+    const [quantity, setQuantity] = useState(1);
 
     // Add to cart handler
     const handleAddToCart = async (productId, productAttributeId) => {
@@ -16,11 +18,32 @@ const Item = () => {
         cartId = await createNewCart();
       }
 
-      // Add item to cart
-      await addItemToCart(cartId, productId, productAttributeId);
+      // Add item to cart with quantity
+      for (let i = 0; i < quantity; i++) {
+        await addItemToCart(cartId, productId, productAttributeId);
+      }
 
       // Display confirmation message
-      alert('Added to cart!');
+      alert(`Added ${quantity} item(s) to cart!`);
+      
+      // Reset quantity to 1 after adding
+      setQuantity(1);
+    }
+
+    // Quantity handlers
+    const increaseQuantity = () => {
+      setQuantity(prev => prev + 1);
+    }
+
+    const decreaseQuantity = () => {
+      setQuantity(prev => prev > 1 ? prev - 1 : 1);
+    }
+
+    const handleQuantityChange = (e) => {
+      const value = parseInt(e.target.value);
+      if (value >= 1) {
+        setQuantity(value);
+      }
     }
 
     // Get product ID from params
@@ -92,6 +115,35 @@ const Item = () => {
     
                 <p>{product.description}</p>
                 
+                {/* Quantity selector */}
+                <div className='quantity-selector'>
+                  <label htmlFor='quantity'>Quantity:</label>
+                  <div className='quantity-controls'>
+                    <button 
+                      className='quantity-btn' 
+                      onClick={decreaseQuantity}
+                      aria-label='Decrease quantity'
+                    >
+                      -
+                    </button>
+                    <input 
+                      type='number' 
+                      id='quantity'
+                      className='quantity-input'
+                      value={quantity} 
+                      onChange={handleQuantityChange}
+                      min='1'
+                    />
+                    <button 
+                      className='quantity-btn' 
+                      onClick={increaseQuantity}
+                      aria-label='Increase quantity'
+                    >
+                      +
+                    </button>
+                  </div>
+                </div>
+
                 <button className='button-add-to-cart' onClick={() => handleAddToCart(product._id, selectedAttribute ? selectedAttribute._id : null)}>
                     Add to Cart
                 </button>
