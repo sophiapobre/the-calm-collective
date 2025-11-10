@@ -43,8 +43,14 @@
     margin: 0 auto;
 }
 
-.link {
-    color: #e74e3a;
-    text-decoration: none;
-    text-align: center;
+a.link {
+  color: #e74e3a !important;
+  text-decoration: none !important;
+  text-align: center;
+  display: block;
+}
+
+a.link:hover {
+  color: #d43d29 !important;
+  text-decoration: none !important;
 }
