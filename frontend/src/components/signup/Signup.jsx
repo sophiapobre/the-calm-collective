@@ -16,6 +16,9 @@ const Signup = () => {
   // Get the page user was trying to access
   const from = location.state?.from?.pathname || '/';
 
+  // Password requirement validation
+  const isPasswordValid = Object.values(passwordRequirements).every(req => req === true);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
@@ -90,13 +93,20 @@ const Signup = () => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              minLength="6"
+              minLength="12"
+              disabled={loading}
+              aria-invalid={!isPasswordValid}
             />
           </div>
 
           <PasswordRequirements requirements={passwordRequirements} />
 
-          <button className="login-button" type="submit" disabled={loading}>
+          <button
+            className="login-button"
+            type="submit"
+            disabled={loading || !isPasswordValid} // Disable when password requirements not met
+            title={!isPasswordValid ? 'Password does not meet requirements' : ''}
+          >
             {loading ? 'Signing up...' : 'Sign Up'}
           </button>
 
