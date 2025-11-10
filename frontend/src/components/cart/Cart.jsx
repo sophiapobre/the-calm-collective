@@ -2,12 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getCart, deleteCart } from '../../api/cartService';
 import { getProduct, getProductAttribute, getProductAttributePrice } from '../../api/productService';
+import { useCart } from '../../context/CartContext';
 
 import './Cart.css';
 
 // Adapted code from Code with Yousaf https://www.youtube.com/watch?v=DvR-kOl2_SM&ab_channel=CodeWithYousaf
 const Cart = () => {
     const [cartItems, setCartItems] = useState([]);
+    const { clearCartCount } = useCart();
 
     const navigate = useNavigate();
 
@@ -63,6 +65,7 @@ const Cart = () => {
         await deleteCart(cartId);
         localStorage.removeItem('cartId');
         setCartItems([]);
+        clearCartCount();
       }
     }
 
