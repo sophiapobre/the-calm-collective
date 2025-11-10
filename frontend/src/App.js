@@ -1,5 +1,4 @@
 import './App.css';
-import { Provider } from 'react-redux';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
@@ -10,7 +9,6 @@ import Categories from './pages/Categories';
 import Search from './pages/Search';
 import Product from './pages/Product';
 import CartPage from './pages/CartPage';
-import store from './store/Store';
 import BestSellers from './pages/BestSellers';
 import CheckoutPage from './pages/CheckoutPage';
 import OrderConfirmation from './pages/OrderConfirmation';
@@ -30,7 +28,6 @@ import { CartProvider } from './context/CartContext';
 // Adapted code from GreatStack Tutorial https://www.youtube.com/watch?v=jbfuzcrfjqQ&ab_channel=GreatStack
 function App() {
   return (
-    <Provider store={store}>
       <AuthProvider>
         <CartProvider>
         <div>
@@ -93,7 +90,6 @@ function App() {
         </div>
         </CartProvider>
       </AuthProvider>
-    </Provider>
   );
 }
 
