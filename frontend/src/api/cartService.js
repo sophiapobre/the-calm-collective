@@ -15,11 +15,11 @@ export async function createNewCart() {
   return data.cartId;
 }
 
-export async function addItemToCart(cartId, productId, productAttributeId) {
+export async function addItemToCart(cartId, productId, productAttributeId, quantity) {
   const response = await fetch(`http://localhost:4000/api/shopping-cart/${cartId}/items`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ productId, productAttributeId })
+    body: JSON.stringify({ productId, productAttributeId, quantity })
   });
 
   if (response.status !== 200) {

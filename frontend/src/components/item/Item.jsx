@@ -23,9 +23,7 @@ const Item = () => {
         const qty = parseInt(quantity) || 1;
 
         // Add item to cart with quantity
-        for (let i = 0; i < qty; i++) {
-          await addItemToCart(cartId, productId, productAttributeId);
-        }
+        await addItemToCart(cartId, productId, productAttributeId, qty);
 
         // Display confirmation message
         alert(`Added ${qty} item(s) to cart!`);

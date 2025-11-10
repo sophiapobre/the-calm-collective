@@ -57,10 +57,14 @@ router.get('/:cartId/items', async (request, response) => {
 // POST /api/shopping-cart/:cartId/items
 router.post('/:cartId/items', async (request, response) => {
   try {
-    const { productId, productAttributeId } = request.body;
+    const { productId, productAttributeId, quantity } = request.body;
 
     if (!productId) {
       return response.status(400).json({ message: 'Product ID is required' });
+    }
+
+    if (!quantity || quantity < 1) {
+      return response.status(400).json({ message: 'Quantity must be at least 1' });
     }
 
     // Get product and cart, if they exist
@@ -111,10 +115,10 @@ router.post('/:cartId/items', async (request, response) => {
       cart.items.push({
         productId: product._id,
         productAttributeId: productAttributeId,
-        quantity: 1
+        quantity: quantity
       });
     } else {
-      itemFromCart.quantity++;
+      itemFromCart.quantity += quantity;
     }
 
     await cart.save();
