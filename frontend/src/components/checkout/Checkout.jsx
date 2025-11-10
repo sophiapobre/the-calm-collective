@@ -38,22 +38,28 @@ const Checkout = () => {
           headers['Authorization'] = `Bearer ${token}`;
         }
 
-        const name = `${firstName} ${lastName}`;
+        const payload = { 
+          firstName, 
+          lastName, 
+          deliveryAddress: address, 
+          cartId 
+        };
 
         // Create order
         const response = await fetch('http://localhost:4000/api/orders', {
           method: 'POST',
           headers: headers,
-          body: JSON.stringify({ name, cartId })
+          body: JSON.stringify(payload)
         });
 
+        const responseData = await response.json();
+
         if (!response.ok) {
-          const error = await response.json();
-          alert('Order could not be placed. Please try again.');
+          alert(`Order could not be placed: ${responseData.message || 'Please try again.'}`);
           return;
         }
 
-        const order = await response.json();
+        const order = responseData;
         
         // Delete the cart once the order is placed
         handleClearCart();
@@ -63,7 +69,7 @@ const Checkout = () => {
 
       } catch (err) {
         alert('Error placing order. Please try again.');
-        console.error(err);
+        console.error('Full error:', err);
       }
     }
 

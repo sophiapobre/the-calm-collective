@@ -79,11 +79,19 @@ router.get('/:orderNumber', optionalAuth, async (request, response) => {
 // Create new order
 // POST /api/orders (optional auth)
 router.post('/', optionalAuth, async (request, response) => {
-  // Get name and cartId from request body
-  const { name, cartId } = request.body;
+  // Get firstName, lastName, deliveryAddress and cartId from request body
+  const { firstName, lastName, deliveryAddress, cartId } = request.body;
 
-  if (!name) {
-    return response.status(400).json({ message: 'Customer name is required' });
+  if (!firstName) {
+    return response.status(400).json({ message: 'First name is required' });
+  }
+
+  if (!lastName) {
+    return response.status(400).json({ message: 'Last name is required' });
+  }
+
+  if (!deliveryAddress) {
+    return response.status(400).json({ message: 'Delivery address is required' });
   }
 
   if (!cartId) {
@@ -161,8 +169,13 @@ router.post('/', optionalAuth, async (request, response) => {
     }
 
     const orderNumber = await getNextOrderNumber();
+    const customerName = `${firstName} ${lastName}`;
+    
     const order = new Order({
-      customerName: name,
+      customerName: customerName,
+      firstName: firstName,
+      lastName: lastName,
+      deliveryAddress: deliveryAddress,
       orderNumber: orderNumber.toString(),
       userId: request.user ? request.user._id : null, // Add userId if authenticated
       items: orderItems,

@@ -3,6 +3,18 @@ const mongoose = require('mongoose');
 const orderSchema = new mongoose.Schema({
   customerName: {
     type: String,
+    required: false  // Optional for backward compatibility with old orders
+  },
+  firstName: {
+    type: String,
+    required: true
+  },
+  lastName: {
+    type: String,
+    required: true
+  },
+  deliveryAddress: {
+    type: String,
     required: true
   },
   orderNumber: {
