@@ -9,7 +9,9 @@ import './Checkout.css';
 // Adapted code from Code with Yousaf https://www.youtube.com/watch?v=DvR-kOl2_SM&ab_channel=CodeWithYousaf
 const Checkout = () => {
     const [cartItems, setCartItems] = useState([]);
-    const [name, setName] = useState('');
+    const [firstName, setFirstName] = useState('');
+    const [lastName, setLastName] = useState('');
+    const [address, setAddress] = useState('');
 
     const navigate = useNavigate();
     const { getAuthToken } = useAuth();
@@ -35,6 +37,8 @@ const Checkout = () => {
         if (token) {
           headers['Authorization'] = `Bearer ${token}`;
         }
+
+        const name = `${firstName} ${lastName}`;
 
         // Create order
         const response = await fetch('http://localhost:4000/api/orders', {
@@ -122,42 +126,100 @@ const Checkout = () => {
 
     return (
         <div className='checkout-container'>
-            <h1>Checkout</h1>
+            <div className='checkout-header'>
+              <h1>Checkout</h1>
+              <p className='checkout-subtitle'>Complete your order</p>
+            </div>
 
-            <form onSubmit={handleSubmit}>
-              <div className='name-container'>
-                Please enter your details and review your order.
-                <h4>Name:</h4>
-                <input type="text" onChange={event => setName(event.target.value)} required />      
-              </div>      
-
-              {
-                  cartItems.map(item => (
-                      <div className='cart-item' key={item.productAttributeId ? item.productAttributeId : item._id}>
-                          <h4>{item.name}</h4>
-                          {
-                            item.productAttributeId && item.variantName && item.variantValue && (
-                              <p>{item.variantName}: {item.variantValue}</p>
-                            )
-                          }
-                          <p>Price: ${item.price}</p>
-                          <img src={`http://localhost:4000/images/${item.image}`} alt=''/>
-                          <p>Quantity: {item.count}</p>
-                          <p>Product Total: ${(item.price * item.count)}</p>
+            <form onSubmit={handleSubmit} className='checkout-form'>
+              <div className='checkout-content'>
+                <div className='checkout-left'>
+                  <div className='customer-info-section'>
+                    <h2>Customer Information</h2>
+                    
+                    <div className='form-row'>
+                      <div className='form-group'>
+                        <label htmlFor="firstName">First Name *</label>
+                        <input 
+                          type="text" 
+                          id="firstName"
+                          value={firstName}
+                          onChange={event => setFirstName(event.target.value)} 
+                          placeholder="Enter your first name"
+                          required 
+                        />
                       </div>
-                  ))
-              }
+                      
+                      <div className='form-group'>
+                        <label htmlFor="lastName">Last Name *</label>
+                        <input 
+                          type="text" 
+                          id="lastName"
+                          value={lastName}
+                          onChange={event => setLastName(event.target.value)} 
+                          placeholder="Enter your last name"
+                          required 
+                        />
+                      </div>
+                    </div>
 
-              <div className='cart-total'>
-                  <h3>TOTAL: ${totalPrice}</h3>
-              </div>
-              
-              <div className='clear-cart-container'>
-                  <button type ='submit' className='button-checkout'>
-                      Place order
-                  </button>
-              </div>
+                    <div className='form-group'>
+                      <label htmlFor="address">Delivery Address *</label>
+                      <input 
+                        type="text" 
+                        id="address"
+                        value={address}
+                        onChange={event => setAddress(event.target.value)} 
+                        placeholder="Enter your delivery address"
+                        required 
+                      />
+                    </div>
+                  </div>
+                </div>
 
+                <div className='checkout-right'>
+                  <div className='order-summary-section'>
+                    <h2>Order Summary</h2>
+                    <div className='order-items'>
+                      {
+                        cartItems.map(item => (
+                          <div className='checkout-item' key={item.productAttributeId ? item.productAttributeId : item._id}>
+                            <div className='checkout-item-image'>
+                              <img src={`http://localhost:4000/images/${item.image}`} alt={item.name}/>
+                            </div>
+                            <div className='checkout-item-details'>
+                              <h4 className='checkout-item-name'>{item.name}</h4>
+                              {
+                                item.productAttributeId && item.variantName && item.variantValue && (
+                                  <p className='checkout-item-variant'>{item.variantName}: {item.variantValue}</p>
+                                )
+                              }
+                              <div className='checkout-item-price-qty'>
+                                <span className='checkout-item-price'>${item.price.toFixed(2)}</span>
+                                <span className='checkout-item-quantity'>Qty: {item.count}</span>
+                              </div>
+                            </div>
+                            <div className='checkout-item-total'>
+                              ${(item.price * item.count).toFixed(2)}
+                            </div>
+                          </div>
+                        ))
+                      }
+                    </div>
+
+                    <div className='order-total'>
+                      <div className='total-row grand-total'>
+                        <span>Total:</span>
+                        <span>${totalPrice.toFixed(2)}</span>
+                      </div>
+                    </div>
+
+                    <button type='submit' className='button-place-order'>
+                      Place Order
+                    </button>
+                  </div>
+                </div>
+              </div>
             </form>
         </div>
     );
