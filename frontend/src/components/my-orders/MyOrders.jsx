@@ -164,12 +164,10 @@ const MyOrders = () => {
                       </div>
                       <div className="item-details">
                         <h4 className="item-name">{item.productName}</h4>
-                        <p className="item-category">{item.productCategory}</p>
                         
                         {item.attributeName && (
                           <div className="item-variant">
-                            <span className="variant-label">{item.attributeName}:</span>
-                            <span className="variant-value">{item.attributeValue}</span>
+                            <span className="variant-label">{item.attributeName}: {item.attributeValue}</span>
                           </div>
                         )}
                         
