@@ -32,11 +32,40 @@ nav {
   margin-left: 15px;
 }
 
+.cart-link {
+  position: relative;
+  display: inline-block;
+  text-decoration: none;
+}
+
+.cart-icon-container {
+  position: relative;
+  display: inline-block;
+  padding: 12px 15px;
+}
+
 .cart-icon {
-  margin-top: 10px;
-  margin-right: 25px;
-  margin-bottom: 10px;
-  margin-left: 15px;
+  width: 25px;
+  height: 25px;
+  display: block;
+}
+
+.cart-badge {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  background-color: #e74e3a;
+  color: white;
+  font-size: 11px;
+  font-weight: bold;
+  padding: 2px 6px;
+  border-radius: 50%;
+  min-width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .login-button {

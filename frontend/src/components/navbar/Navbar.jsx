@@ -5,12 +5,14 @@ import './Navbar.css';
 import logo from '../assets/logo.png';
 import cartImage from '../assets/cart.png';
 import { useAuth } from '../../context/AuthContext';
+import { useCart } from '../../context/CartContext';
 
 const Navbar = () => {
     const [isNavCollapsed, setIsNavCollapsed] = useState(true);
     const handleNavCollapse = () => setIsNavCollapsed(!isNavCollapsed);
 
     const { user, logout, isAdmin, isAuthenticated } = useAuth();
+    const { cartItemCount } = useCart();
 
     const handleLogout = () => {
       logout();
@@ -80,7 +82,12 @@ const Navbar = () => {
 
           <div className="navbar-nav ml-auto">
             <Link to="/cart" onClick={handleNavCollapse}>
-              <img className="cart-icon" src={cartImage} alt="Cart" style={{ width: '25px', height: '25px' }} />
+              <div className="cart-icon-container">
+                <img className="cart-icon" src={cartImage} alt="Cart" style={{ width: '25px', height: '25px' }} />
+                {cartItemCount > 0 && (
+                  <span className="cart-badge">{cartItemCount}</span>
+                )}
+              </div>
             </Link>
 
             {user ? (

@@ -25,12 +25,14 @@ import LoginPage from './pages/LoginPage';
 import SignupPage from './pages/SignupPage';
 import MyOrdersPage from './pages/MyOrdersPage';
 import { AuthProvider } from './context/AuthContext';
+import { CartProvider } from './context/CartContext';
 
 // Adapted code from GreatStack Tutorial https://www.youtube.com/watch?v=jbfuzcrfjqQ&ab_channel=GreatStack
 function App() {
   return (
     <Provider store={store}>
       <AuthProvider>
+        <CartProvider>
         <div>
           <BrowserRouter>
             <Navbar/>
@@ -89,6 +91,7 @@ function App() {
             </Routes>
           </BrowserRouter>
         </div>
+        </CartProvider>
       </AuthProvider>
     </Provider>
   );

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { createNewCart, addItemToCart } from '../../api/cartService';
 import { getProduct, getProductAttributesAndPrices } from '../../api/productService';
+import { useCart } from '../../context/CartContext';
 
 import './Item.css';
 
@@ -9,6 +10,7 @@ import './Item.css';
 const Item = () => {
     // Add quantity state
     const [quantity, setQuantity] = useState(1);
+    const { updateCartCount } = useCart();
 
     // Add to cart handler
     const handleAddToCart = async (productId, productAttributeId) => {
@@ -24,6 +26,9 @@ const Item = () => {
 
         // Add item to cart with quantity
         await addItemToCart(cartId, productId, productAttributeId, qty);
+
+        // Update cart count in navbar
+        updateCartCount();
 
         // Display confirmation message
         alert(`Added ${qty} item(s) to cart!`);
