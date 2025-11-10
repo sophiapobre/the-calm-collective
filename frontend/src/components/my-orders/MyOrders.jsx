@@ -121,7 +121,7 @@ const MyOrders = () => {
               <div className="empty-icon">📦</div>
               <h3>No orders yet</h3>
               <p>When you place orders, they'll appear here.</p>
-              <Link to="/" className="shop-now-btn">Start Shopping</Link>
+              <Link to="/categories" className="shop-now-btn">Start shopping</Link>
             </div>
           ) : (
             orders.map(order => (
