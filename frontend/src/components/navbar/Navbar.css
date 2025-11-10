@@ -48,6 +48,7 @@ nav {
   width: 25px;
   height: 25px;
   display: block;
+  margin-top: 4px;
 }
 
 .cart-badge {
