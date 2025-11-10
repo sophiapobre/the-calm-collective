@@ -18,16 +18,22 @@ const Item = () => {
         cartId = await createNewCart();
       }
 
+      // Ensure quantity is a number and at least 1
+      const qty = parseInt(quantity) || 1;
+
       // Add item to cart with quantity
-      for (let i = 0; i < quantity; i++) {
+      for (let i = 0; i < qty; i++) {
         await addItemToCart(cartId, productId, productAttributeId);
       }
 
       // Display confirmation message
-      alert(`Added ${quantity} item(s) to cart!`);
+      alert(`Added ${qty} item(s) to cart!`);
       
       // Reset quantity to 1 after adding
       setQuantity(1);
+    } catch (error) {
+      console.error('Error adding to cart:', error);
+      alert('Failed to add item to cart. Please try again.');
     }
 
     // Quantity handlers
@@ -40,9 +46,24 @@ const Item = () => {
     }
 
     const handleQuantityChange = (e) => {
-      const value = parseInt(e.target.value);
-      if (value >= 1) {
-        setQuantity(value);
+      const value = e.target.value;
+  
+      // Allow empty string while typing
+      if (value === '') {
+        setQuantity('');
+        return;
+      }
+      
+      const numValue = parseInt(value);
+      if (!isNaN(numValue) && numValue >= 1) {
+        setQuantity(numValue);
+      }
+    }
+
+    const handleQuantityBlur = () => {
+      // If quantity is empty or invalid, reset to 1
+      if (quantity === '' || quantity < 1) {
+        setQuantity(1);
       }
     }
 
@@ -57,7 +78,7 @@ const Item = () => {
       getProduct(productId)
         .then(setProduct)
         .catch(console.error);
-    }, []);
+    }, [productId]);
 
     // Fetch product attributes and prices
     useEffect(() => {
@@ -132,6 +153,7 @@ const Item = () => {
                       className='quantity-input'
                       value={quantity} 
                       onChange={handleQuantityChange}
+                      onBlur={handleQuantityBlur}
                       min='1'
                     />
                     <button 
