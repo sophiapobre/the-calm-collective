@@ -12,28 +12,30 @@ const Item = () => {
 
     // Add to cart handler
     const handleAddToCart = async (productId, productAttributeId) => {
-      // Retrieve cartId if it exists, otherwise create a new cart
-      let cartId = localStorage.getItem('cartId'); 
-      if (!cartId) {
-        cartId = await createNewCart();
+      try {
+        // Retrieve cartId if it exists, otherwise create a new cart
+        let cartId = localStorage.getItem('cartId'); 
+        if (!cartId) {
+          cartId = await createNewCart();
+        }
+
+        // Ensure quantity is a number and at least 1
+        const qty = parseInt(quantity) || 1;
+
+        // Add item to cart with quantity
+        for (let i = 0; i < qty; i++) {
+          await addItemToCart(cartId, productId, productAttributeId);
+        }
+
+        // Display confirmation message
+        alert(`Added ${qty} item(s) to cart!`);
+        
+        // Reset quantity to 1 after adding
+        setQuantity(1);
+      } catch (error) {
+        console.error('Error adding to cart:', error);
+        alert('Failed to add item to cart. Please try again.');
       }
-
-      // Ensure quantity is a number and at least 1
-      const qty = parseInt(quantity) || 1;
-
-      // Add item to cart with quantity
-      for (let i = 0; i < qty; i++) {
-        await addItemToCart(cartId, productId, productAttributeId);
-      }
-
-      // Display confirmation message
-      alert(`Added ${qty} item(s) to cart!`);
-      
-      // Reset quantity to 1 after adding
-      setQuantity(1);
-    } catch (error) {
-      console.error('Error adding to cart:', error);
-      alert('Failed to add item to cart. Please try again.');
     }
 
     // Quantity handlers
