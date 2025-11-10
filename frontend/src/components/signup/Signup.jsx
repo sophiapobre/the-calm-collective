@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import './Signup.css';
-
+import PasswordRequirements, { getPasswordRequirements } from '../passwordrequirements/PasswordRequirements';
 const Signup = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const passwordRequirements = getPasswordRequirements(password);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   
@@ -92,6 +93,8 @@ const Signup = () => {
               minLength="6"
             />
           </div>
+
+          <PasswordRequirements requirements={passwordRequirements} />
 
           <button className="login-button" type="submit" disabled={loading}>
             {loading ? 'Signing up...' : 'Sign Up'}
