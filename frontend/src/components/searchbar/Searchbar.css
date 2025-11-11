@@ -1,59 +1,178 @@
 /* Adapted code from GreatStack Tutorial https://www.youtube.com/watch?v=jbfuzcrfjqQ&ab_channel=GreatStack */
-h1 {
-    text-align: center;
-}
-
 .overall-search-container {
-  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  padding: 2rem 1rem;
+  width: 100%;
+  max-width: 100vw;
+  overflow-x: hidden;
+  box-sizing: border-box;
+  margin: 0;
 }
 
+/* Header */
+.search-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.search-header h1 {
+  margin: 0 0 0.5rem 0;
+  color: #2c3e50;
+  font-size: 2.5rem;
+  font-weight: 700;
+}
+
+.search-subtitle {
+  font-size: 1.1rem;
+  color: #6c757d;
+  margin: 0;
+}
+
+/* Search Container */
 .search-container {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin: 40px auto;
   width: 100%;
-  max-width: 400px;
+  max-width: 1400px;
+  margin: 0 auto;
 }
 
 .search-bar {
   display: flex;
   width: 100%;
+  max-width: 600px;
   justify-content: center;
-  gap: 8px;
-  margin: 20px;
+  gap: 0.5rem;
+  margin-bottom: 2rem;
 }
 
 .search-bar input[type="text"] {
-  padding: 8px;
+  padding: 0.75rem 1rem;
   font-size: 1rem;
-  border: 1px solid rgb(204, 202, 202);
-  border-radius: 4px;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
   flex: 1;
-}
-
-.search-bar button {
-  padding: 8px 16px;
-  font-size: 1rem;
-  border: none;
-  border-radius: 4px;
-  background: #e74e3a;
-  color: white;
-  cursor: pointer;
-}
-
-.result-container {
-  margin: 16px;
-  display: grid !important;
-  grid-template-columns: 1fr 1fr 1fr !important;
-  gap: 0.5rem;
-  width: calc(100vw - 2rem);
-  padding: 0;
-  max-width: 100vw;
-  margin: 0;
+  transition: border-color 0.2s;
   box-sizing: border-box;
 }
 
-.p {
-  align-items: center;
+.search-bar input[type="text"]:focus {
+  outline: none;
+  border-color: #e74e3a;
+}
+
+.search-bar button {
+  padding: 0.75rem 2rem;
+  font-size: 1rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  background: #e74e3a;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  white-space: nowrap;
+}
+
+.search-bar button:hover {
+  background: #d43d29;
+}
+
+/* Results Section */
+.search-results-section {
+  width: 100%;
+  margin-top: 1rem;
+}
+
+.search-results-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #2c3e50;
+  margin: 0 0 2rem 6rem;
+  text-align: left;
+}
+
+.result-container {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+  width: 100%;
+  padding-left: 6rem;
+  padding-right: 6rem;
+  padding-bottom: 3rem;
+  margin: 0 0 0 0;
+  box-sizing: border-box;
+}
+
+/* Empty State */
+.empty-search-results {
+  text-align: center;
+  padding: 4rem 2rem;
+  background: white;
+  border-radius: 12px;
+  box-shadow: none;
+  max-width: 500px;
+  margin: 2rem auto;
+}
+
+.empty-search-icon {
+  font-size: 4rem;
+  margin-bottom: 1rem;
+}
+
+.empty-search-results h3 {
+  color: #2c3e50;
+  font-size: 1.5rem;
+  margin: 0 0 0.5rem 0;
+}
+
+.empty-search-results p {
+  color: #6c757d;
+  font-size: 1rem;
+  margin: 0;
+}
+
+/* Responsive Design */
+@media (max-width: 900px) {
+  .result-container {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    margin-left: 0;
+  }
+  
+  .search-results-title {
+    margin-left: 0;
+    text-align: center;
+  }
+}
+
+@media (max-width: 600px) {
+  .overall-search-container {
+    padding: 1.5rem 0.75rem;
+  }
+  
+  .search-header h1 {
+    font-size: 2rem;
+  }
+  
+  .search-bar {
+    flex-direction: column;
+    max-width: 100%;
+  }
+  
+  .search-bar button {
+    width: 100%;
+  }
+  
+  .result-container {
+    grid-template-columns: 1fr;
+    margin-left: 0;
+  }
+  
+  .search-results-title {
+    font-size: 1.25rem;
+    margin-left: 0;
+    text-align: center;
+  }
 }

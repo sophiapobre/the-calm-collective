@@ -31,24 +31,40 @@ const Searchbar = () => {
 
     return (
         <div className='overall-search-container'>
-            <h1>Product Search</h1>
+            <div className='search-header'>
+                <h1>Product Search</h1>
+            </div>
+            
             <div className='search-container'>
                 <div className='search-bar'>
-                    <input type='text' placeholder='Search...' value={keyword} onChange={onChange} />
+                    <input 
+                        type='text' 
+                        placeholder='Search for products...' 
+                        value={keyword} 
+                        onChange={onChange}
+                        onKeyPress={(e) => e.key === 'Enter' && onSubmit()}
+                    />
                     <button onClick={() => onSubmit()}>Search</button>
                 </div>
-                  {results === null ? null :
-                      results.length === 0 ? (
-                          <p>No matching products found.</p>
-                      ) : (
-                          <>
-                              <h2>Showing search results for "{submittedKeyword}"</h2>
-                              <div className='result-container'>
-                                  <ItemCard products={results ?? []} />
-                              </div>
-                          </>
-                      )
-                  }
+                
+                {results === null ? null :
+                    results.length === 0 ? (
+                        <div className="empty-search-results">
+                            <div className="empty-search-icon">🔍</div>
+                            <h3>No products found</h3>
+                            <p>Try using different keywords</p>
+                        </div>
+                    ) : (
+                        <div className='search-results-section'>
+                            <h2 className='search-results-title'>
+                                Search Results for "{submittedKeyword}"
+                            </h2>
+                            <div className='result-container'>
+                                <ItemCard products={results ?? []} />
+                            </div>
+                        </div>
+                    )
+                }
             </div>
         </div>
     )
