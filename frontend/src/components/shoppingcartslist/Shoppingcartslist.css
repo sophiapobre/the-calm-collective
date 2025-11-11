@@ -158,6 +158,33 @@
   margin: 0 0 0.5rem 0;
 }
 
+.admin-cart-customer {
+  color: #6c757d;
+  font-size: 1rem;
+  margin: 0.5rem 0 0 0;
+}
+
+.admin-cart-customer .admin-label {
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+.admin-cart-email {
+  font-size: 0.875rem;
+  color: #6c757d;
+}
+
+.admin-cart-date {
+  color: #6c757d;
+  font-size: 0.875rem;
+  margin: 0.5rem 0 0 0;
+}
+
+.admin-cart-date .admin-label {
+  font-weight: 600;
+  color: #2c3e50;
+}
+
 .admin-cart-summary {
   display: flex;
   gap: 2rem;

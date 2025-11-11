@@ -209,6 +209,41 @@ const Shoppingcartslist = () => {
                     <div className='admin-cart-card-header'>
                       <div className='admin-cart-info'>
                         <h3>Cart #{cart.cartId}</h3>
+                        <p className='admin-cart-customer'>
+                          <span className='admin-label'>Customer:</span>{' '}
+                          {cartInfo?.userId ? (
+                            <>
+                              {cartInfo.userId.name || 'Unknown'} 
+                              {cartInfo.userId.email && <span className='admin-cart-email'> ({cartInfo.userId.email})</span>}
+                            </>
+                          ) : (
+                            'Anonymous'
+                          )}
+                        </p>
+                        {cartInfo?.createdAt && (
+                          <p className='admin-cart-date'>
+                            <span className='admin-label'>Created:</span>{' '}
+                            {new Date(cartInfo.createdAt).toLocaleDateString('en-US', {
+                              year: 'numeric',
+                              month: 'short',
+                              day: 'numeric',
+                              hour: '2-digit',
+                              minute: '2-digit'
+                            })}
+                          </p>
+                        )}
+                        {cartInfo?.updatedAt && (
+                          <p className='admin-cart-date'>
+                            <span className='admin-label'>Last Updated:</span>{' '}
+                            {new Date(cartInfo.updatedAt).toLocaleDateString('en-US', {
+                              year: 'numeric',
+                              month: 'short',
+                              day: 'numeric',
+                              hour: '2-digit',
+                              minute: '2-digit'
+                            })}
+                          </p>
+                        )}
                       </div>
                       <div className='admin-cart-summary'>
                         <div className='admin-summary-item'>
