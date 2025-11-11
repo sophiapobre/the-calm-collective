@@ -152,9 +152,13 @@ const Shoppingcartslist = () => {
 
     if (loading) {
       return (
-        <div className='overall-admin-container'>
-          <h1>Shopping Carts List</h1>
-          <div className='admin-container'>
+        <div className='admin-carts-page'>
+          <div className='admin-carts-header'>
+            <h1>Shopping Carts</h1>
+            <p className='admin-carts-subtitle'>View all active customer shopping carts</p>
+          </div>
+          <div className='admin-carts-loading-container'>
+            <div className="admin-carts-loading-spinner"></div>
             <p>Loading shopping carts...</p>
           </div>
         </div>
@@ -163,10 +167,14 @@ const Shoppingcartslist = () => {
 
     if (error) {
       return (
-        <div className='overall-admin-container'>
-          <h1>Shopping Carts List</h1>
-          <div className='admin-container'>
-            <p style={{ color: 'red' }}>Error: {error}</p>
+        <div className='admin-carts-page'>
+          <div className='admin-carts-header'>
+            <h1>Shopping Carts</h1>
+            <p className='admin-carts-subtitle'>View all active customer shopping carts</p>
+          </div>
+          <div className="admin-carts-error-container">
+            <div className="admin-carts-error-icon">⚠️</div>
+            <h3>Error: {error}</h3>
             {error.includes('Authentication') && (
               <p>Please make sure you're logged in as an admin.</p>
             )}
@@ -176,32 +184,77 @@ const Shoppingcartslist = () => {
     }
 
     return (
-      <div className='overall-admin-container'>
-        <h1>Shopping Carts List</h1>
-        <div className='admin-container'>
-          {carts.length === 0 && <p>There are currently no active shopping carts.</p>}
+      <div className='admin-carts-page'>
+        <div className='admin-carts-header'>
+          <h1>Shopping Carts</h1>
+          <p className='admin-carts-subtitle'>View all active customer shopping carts</p>
+        </div>
+        
+        <div className='admin-carts-container'>
+          {carts.length === 0 ? (
+            <div className="admin-carts-empty">
+              <div className="admin-carts-empty-icon">🛒</div>
+              <h3>No active shopping carts</h3>
+              <p>There are currently no customers with items in their carts</p>
+            </div>
+          ) : (
+            <div className='admin-carts-list'>
+              {cartsWithDetails.map(cart => {
+                const cartInfo = carts.find(c => c.cartId === cart.cartId);
+                const totalItems = cart.items.reduce((sum, item) => sum + item.quantity, 0);
+                const totalPrice = cart.items.reduce((sum, item) => sum + (item.productPrice * item.quantity), 0);
 
-          <ul>
-            {cartsWithDetails.map(cart => (
-              <div className='admin-shoppingcart' key={cart.cartId}>
-                <h4>Cart ID: {cart.cartId}</h4>
-                <ul>
-                  {cart.items.map((item, idx) => (
-                    <li key={idx}>
-                      <b>Product Name:</b> {item.productName} | <b>Product ID:</b> {item.productId}
-                      <ul>
-                        <li>
-                          <b>Product Attribute:</b> {item.attributeName ? `${item.attributeName}: ${item.attributeValue}` : "None"} | <b>Product Attribute ID:</b> {item.productAttributeId ? item.productAttributeId : "None"}
-                        </li>
-                        <li><b>Price:</b> ${item.productPrice}</li>
-                        <li><b>Quantity:</b> {item.quantity}</li>
-                      </ul>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
-          </ul>
+                return (
+                  <div className='admin-cart-card' key={cart.cartId}>
+                    <div className='admin-cart-card-header'>
+                      <div className='admin-cart-info'>
+                        <h3>Cart #{cart.cartId}</h3>
+                      </div>
+                      <div className='admin-cart-summary'>
+                        <div className='admin-summary-item'>
+                          <span className='admin-summary-label'>Items:</span>
+                          <span className='admin-summary-value'>{totalItems}</span>
+                        </div>
+                        <div className='admin-summary-item'>
+                          <span className='admin-summary-label'>Total:</span>
+                          <span className='admin-summary-value'>${totalPrice.toFixed(2)}</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className='admin-cart-items'>
+                      <h4>Cart Items:</h4>
+                      {cart.items.map((item, idx) => (
+                        <div className='admin-cart-item' key={idx}>
+                          <div className='admin-item-main-info'>
+                            <div className='admin-item-name-section'>
+                              <span className='admin-item-name'>{item.productName}</span>
+                              {item.attributeName && (
+                                <span className='admin-item-variant'>
+                                  {item.attributeName}: {item.attributeValue}
+                                </span>
+                              )}
+                            </div>
+                            <div className='admin-item-price-section'>
+                              <span className='admin-item-price'>${item.productPrice}</span>
+                              <span className='admin-item-quantity'>Qty: {item.quantity}</span>
+                              <span className='admin-item-subtotal'>${(item.productPrice * item.quantity).toFixed(2)}</span>
+                            </div>
+                          </div>
+                          <div className='admin-item-ids'>
+                            <span>Product ID: {item.productId}</span>
+                            {item.productAttributeId && (
+                              <span>Attribute ID: {item.productAttributeId}</span>
+                            )}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
         </div>
       </div>
     )
