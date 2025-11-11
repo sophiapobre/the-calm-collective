@@ -17,21 +17,21 @@ const Admin = (item) => {
                         <div className='admin-card'>
                             <div className='admin-card-icon'>🛒</div>
                             <h3>Shopping Carts</h3>
-                            <p>View customer shopping carts</p>
+                            <p>View active shopping carts</p>
                         </div>
                     </Link>
                     <Link to='/admin/orders' className='admin-card-link'>
                         <div className='admin-card'>
                             <div className='admin-card-icon'>📦</div>
                             <h3>Orders</h3>
-                            <p>Track customer orders</p>
+                            <p>View completed orders</p>
                         </div>
                     </Link>
                     <Link to='/admin/products' className='admin-card-link'>
                         <div className='admin-card'>
                             <div className='admin-card-icon'>📝</div>
                             <h3>Products</h3>
-                            <p>Add, edit, or remove products</p>
+                            <p>Add, edit, or delete products</p>
                         </div>
                     </Link>
                 </div>
