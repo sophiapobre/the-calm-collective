@@ -136,6 +136,97 @@ router.post('/:cartId/items', async (request, response) => {
   }
 });
 
+// Remove item from cart
+// DELETE /api/shopping-cart/:cartId/items
+router.delete('/:cartId/items', async (request, response) => {
+  try {
+    const { productId, productAttributeId } = request.body;
+
+    if (!productId) {
+      return response.status(400).json({ message: 'Product ID is required' });
+    }
+
+    const cart = await ShoppingCart.findOne({ cartId: request.params.cartId });
+
+    if (!cart) {
+      return response.status(404).json({ message: 'Cart not found' });
+    }
+
+    // Find and remove the item
+    if (productAttributeId) {
+      cart.items = cart.items.filter(
+        item => !(item.productId.toString() === productId && 
+                  item.productAttributeId && 
+                  item.productAttributeId.toString() === productAttributeId)
+      );
+    } else {
+      cart.items = cart.items.filter(
+        item => !(item.productId.toString() === productId && !item.productAttributeId)
+      );
+    }
+
+    await cart.save();
+    response.json(cart);
+  } catch (error) {
+    console.error('Error removing item from cart:', error);
+    response.status(500).json({ message: 'Internal server error' });
+  }
+});
+
+// Update item quantity in cart
+// PATCH /api/shopping-cart/:cartId/items/quantity
+router.patch('/:cartId/items/quantity', async (request, response) => {
+  try {
+    const { productId, productAttributeId, quantity } = request.body;
+
+    if (!productId) {
+      return response.status(400).json({ message: 'Product ID is required' });
+    }
+
+    if (!quantity || quantity < 1) {
+      return response.status(400).json({ message: 'Quantity must be at least 1' });
+    }
+
+    const cart = await ShoppingCart.findOne({ cartId: request.params.cartId });
+
+    if (!cart) {
+      return response.status(404).json({ message: 'Cart not found' });
+    }
+
+    // Find and update the item
+    let itemFound = false;
+    if (productAttributeId) {
+      const item = cart.items.find(
+        item => item.productId.toString() === productId && 
+                item.productAttributeId && 
+                item.productAttributeId.toString() === productAttributeId
+      );
+      if (item) {
+        item.quantity = quantity;
+        itemFound = true;
+      }
+    } else {
+      const item = cart.items.find(
+        item => item.productId.toString() === productId && !item.productAttributeId
+      );
+      if (item) {
+        item.quantity = quantity;
+        itemFound = true;
+      }
+    }
+
+    if (!itemFound) {
+      return response.status(404).json({ message: 'Item not found in cart' });
+    }
+
+    await cart.save();
+    response.json(cart);
+  } catch (error) {
+    console.error('Error updating item quantity:', error);
+    response.status(500).json({ message: 'Internal server error' });
+  }
+});
+
 // Delete cart
 // DELETE /api/shopping-cart/:cartId
 router.delete('/:cartId', async (request, response) => {
