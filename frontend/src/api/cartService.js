@@ -1,7 +1,15 @@
 export async function createNewCart() {
+  const headers = { 'Content-Type': 'application/json' };
+  
+  // Add auth token if user is logged in
+  const token = localStorage.getItem('token');
+  if (token) {
+    headers['Authorization'] = `Bearer ${token}`;
+  }
+
   const response = await fetch('http://localhost:4000/api/shopping-cart', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' }
+    headers: headers
   });
 
   if (response.status !== 200) {

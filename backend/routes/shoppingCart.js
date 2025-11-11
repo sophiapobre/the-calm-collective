@@ -4,16 +4,23 @@ const mongoose = require('mongoose');
 const Product = require('../models/product');
 const ShoppingCart = require('../models/shoppingCart');
 const ProductAttribute = require('../models/productAttribute');
-const { authenticateToken, requireAdmin } = require('../middleware/auth');
+const { authenticateToken, requireAdmin, optionalAuth } = require('../middleware/auth');
 
 // Create new cart
-// POST /api/shopping-cart
-router.post('/', async (request, response) => {
+// POST /api/shopping-cart (optional auth - works for both logged in and anonymous users)
+router.post('/', optionalAuth, async (request, response) => {
   try {
-    const cart = new ShoppingCart({
+    const cartData = {
       cartId: new mongoose.Types.ObjectId().toString(),
       items: []
-    });
+    };
+
+    // If user is authenticated, add their userId to the cart
+    if (request.user) {
+      cartData.userId = request.user.id;
+    }
+
+    const cart = new ShoppingCart(cartData);
 
     await cart.save();
     response.json({ cartId: cart.cartId });
@@ -27,7 +34,7 @@ router.post('/', async (request, response) => {
 // GET /api/shopping-cart
 router.get('/', authenticateToken, requireAdmin, async (request, response) => {
   try {
-    const carts = await ShoppingCart.find({});
+    const carts = await ShoppingCart.find({}).populate('userId', 'name email');
     response.json(carts);
   } catch (error) {
     console.error('Error fetching carts:', error);
