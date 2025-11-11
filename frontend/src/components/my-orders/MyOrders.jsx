@@ -49,6 +49,7 @@ const MyOrders = () => {
           const processedOrders = (Array.isArray(data) ? data : []).map(order => ({
             orderNumber: order.orderNumber,
             customerName: order.customerName,
+            deliveryAddress: order.deliveryAddress,
             createdAt: order.createdAt,
             subtotal: order.subtotal,
             total: order.total,
@@ -137,6 +138,8 @@ const MyOrders = () => {
                         day: 'numeric'
                       })}
                     </p>
+                    <p className="order-name"><strong>Customer Name:</strong> {order.customerName}</p>
+                    <p className="order-address"><strong>Delivery Address:</strong> {order.deliveryAddress}</p>
                   </div>
                   <div className="order-status">
                     <span className="status-badge completed">Completed</span>

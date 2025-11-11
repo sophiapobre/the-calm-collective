@@ -173,6 +173,20 @@
   font-size: 0.9rem;
 }
 
+.order-name {
+  color: #6c757d;
+  margin-top: 5px;
+  margin-bottom: 0px;
+  font-size: 0.9rem;
+}
+
+.order-address {
+  color: #6c757d;
+  margin-top: 5px;
+  margin-bottom: 0px;
+  font-size: 0.9rem;
+}
+
 .order-status {
   display: flex;
   align-items: center;
