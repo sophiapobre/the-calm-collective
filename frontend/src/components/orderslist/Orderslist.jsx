@@ -52,8 +52,8 @@ const Orderslist = () => {
           const processedOrders = (Array.isArray(data) ? data : []).map(order => ({
             orderNumber: order.orderNumber,
             customerName: order.customerName,
+            deliveryAddress: order.deliveryAddress,
             createdAt: order.createdAt,
-            subtotal: order.subtotal,
             total: order.total,
             items: order.items.map(item => ({
               productId: item.productId,
@@ -86,9 +86,13 @@ const Orderslist = () => {
 
     if (loading) {
       return (
-        <div className='overall-admin-container'>
-          <h1>Orders List</h1>
-          <div className='admin-container'>
+        <div className='admin-orders-page'>
+          <div className='admin-orders-header'>
+            <h1>Orders</h1>
+            <p className='admin-orders-subtitle'>View all completed customer orders</p>
+          </div>
+          <div className='admin-orders-loading-container'>
+            <div className="admin-orders-loading-spinner"></div>
             <p>Loading orders...</p>
           </div>
         </div>
@@ -97,10 +101,14 @@ const Orderslist = () => {
 
     if (error) {
       return (
-        <div className='overall-admin-container'>
-          <h1>Orders List</h1>
-          <div className='admin-container'>
-            <p style={{ color: 'red' }}>Error: {error}</p>
+        <div className='admin-orders-page'>
+          <div className='admin-orders-header'>
+            <h1>Orders</h1>
+            <p className='admin-orders-subtitle'>View all completed customer orders</p>
+          </div>
+          <div className="admin-orders-error-container">
+            <div className="admin-orders-error-icon">⚠️</div>
+            <h3>Error: {error}</h3>
             {error.includes('Authentication') && (
               <p>Please make sure you're logged in as an admin.</p>
             )}
@@ -110,48 +118,100 @@ const Orderslist = () => {
     }
 
     return (
-      <div className='overall-admin-container'>
-        <h1>Orders List</h1>
-        <div className='admin-container'>
-          {orders.length === 0 && <p>There are no completed orders yet.</p>}
+      <div className='admin-orders-page'>
+        <div className='admin-orders-header'>
+          <h1>Orders</h1>
+          <p className='admin-orders-subtitle'>View all completed customer orders</p>
+        </div>
+        
+        <div className='admin-orders-container'>
+          {orders.length === 0 ? (
+            <div className="admin-orders-empty">
+              <div className="admin-orders-empty-icon">📦</div>
+              <h3>No completed orders</h3>
+              <p>There are no completed orders yet</p>
+            </div>
+          ) : (
+            <div className='admin-orders-list'>
+              {orders.map(order => {
+                const totalItems = order.items.reduce((sum, item) => sum + item.quantity, 0);
 
-          <ul>
-            {orders.map(order => (
-              <div className='admin-shoppingcart' key={order.orderNumber}>
-                <h4>
-                  Order ID: {order.orderNumber} | Customer Name: {order.customerName}
-                  {order.createdAt && (
-                    <span> | Date: {new Date(order.createdAt).toLocaleDateString()}</span>
-                  )}
-                </h4>
-                
-                <ul>
-                  {order.items.map((item, idx) => (
-                    <li key={idx}>
-                      <b>Product Name:</b> {item.productName} | <b>Product ID:</b> {item.productId}
-                      <ul>
-                        <li>
-                          <b>Product Attribute:</b> {item.attributeName ? `${item.attributeName}: ${item.attributeValue}` : "None"} 
-                          {item.productAttributeId && (
-                            <span> | <b>Product Attribute ID:</b> {item.productAttributeId}</span>
-                          )}
-                        </li>
-                        <li><b>Price:</b> ${item.productPrice}</li>
-                        <li><b>Quantity:</b> {item.quantity}</li>
-                        <li><b>Total:</b> ${(item.productPrice * item.quantity).toFixed(2)}</li>
-                      </ul>
-                    </li>
-                  ))}
-                </ul>
-                
-                {/* Add order totals */}
-                <div className="order-totals" style={{ marginTop: '10px', fontWeight: 'bold' }}>
-                  {order.subtotal && <div>Subtotal: ${order.subtotal.toFixed(2)}</div>}
-                  {order.total && <div>Total: ${order.total.toFixed(2)}</div>}
-                </div>
-              </div>
-            ))}
-          </ul>
+                return (
+                  <div className='admin-order-card' key={order.orderNumber}>
+                    <div className='admin-order-card-header'>
+                      <div className='admin-order-info'>
+                        <h3>Order #{order.orderNumber}</h3>
+                        <p className='admin-order-customer'>
+                          <span className='admin-order-label'>Customer:</span> {order.customerName}
+                        </p>
+                        <p className='admin-order-customer'>
+                          <span className='admin-order-label'>Address:</span> {order.deliveryAddress || "Not Available"}
+                        </p>
+                        {order.createdAt && (
+                          <p className='admin-order-date'>
+                            <span className='admin-order-label'>Date:</span>{' '}
+                            {new Date(order.createdAt).toLocaleDateString('en-US', {
+                              year: 'numeric',
+                              month: 'short',
+                              day: 'numeric',
+                              hour: '2-digit',
+                              minute: '2-digit'
+                            })}
+                          </p>
+                        )}
+                      </div>
+                      <div className='admin-order-summary'>
+                        <div className='admin-order-summary-item'>
+                          <span className='admin-order-summary-label'>Items:</span>
+                          <span className='admin-order-summary-value'>{totalItems}</span>
+                        </div>
+                        <div className='admin-order-summary-item'>
+                          <span className='admin-order-summary-label'>Total:</span>
+                          <span className='admin-order-summary-value'>${(order.total || 0).toFixed(2)}</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className='admin-order-items'>
+                      <h4>Order Items:</h4>
+                      {order.items.map((item, idx) => (
+                        <div className='admin-order-item' key={idx}>
+                          <div className='admin-order-item-main-info'>
+                            <div className='admin-order-item-name-section'>
+                              <span className='admin-order-item-name'>{item.productName}</span>
+                              {item.attributeName && (
+                                <span className='admin-order-item-variant'>
+                                  {item.attributeName}: {item.attributeValue}
+                                </span>
+                              )}
+                            </div>
+                            <div className='admin-order-item-price-section'>
+                              <span className='admin-order-item-price'>${item.productPrice}</span>
+                              <span className='admin-order-item-quantity'>Qty: {item.quantity}</span>
+                              <span className='admin-order-item-subtotal'>${(item.productPrice * item.quantity).toFixed(2)}</span>
+                            </div>
+                          </div>
+                          <div className='admin-order-item-ids'>
+                            <span>Product ID: {item.productId}</span>
+                            {item.productAttributeId && (
+                              <span>Attribute ID: {item.productAttributeId}</span>
+                            )}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+
+                    <div className='admin-order-totals'>
+                      <div className='admin-order-total-row admin-order-total-final'>
+                        <span className='admin-order-total-label'>Order Total:</span>
+                        <span className='admin-order-total-value'>${(order.total || 0).toFixed(2)}</span>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
         </div>
       </div>
     )
