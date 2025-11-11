@@ -78,7 +78,7 @@ const Bestsellerslist = () => {
         <div className='product-grid'>
             <div className='categories-header'>
                 <h1>Best Sellers</h1>
-                <p className='categories-subtitle'>Our most popular products across all categories</p>
+                <p className='categories-subtitle'>Our most-loved products for mindful living</p>
             </div>
 
             {!loading && categoryEntries.length === 0 ? (

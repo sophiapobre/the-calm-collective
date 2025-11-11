@@ -1,13 +1,30 @@
-@import url('https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@400;600;700&display=swap');
+
+:root {
+  /* Still Color Palette - Minimalist & Calm */
+  --ivory-white: #FAF9F7;
+  --warm-gray: #DAD6CE;
+  --soft-beige: #EDE9E4;
+  --charcoal-text: #2B2B2B;
+  --accent-sage: #9CA897;
+  --accent-terracotta: #C4A79A;
+}
 
 * {
-  font-family: 'Nunito Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 }
 
 body {
   margin: 0;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: var(--ivory-white);
+  color: var(--charcoal-text);
+}
+
+/* Headers use Playfair Display */
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Playfair Display', serif;
 }
 
 code {
@@ -16,7 +33,7 @@ code {
 }
 
 .categories-title {
-  color: #e74e3a;
+  color: var(--accent-sage);
   text-decoration: none;
 }
 

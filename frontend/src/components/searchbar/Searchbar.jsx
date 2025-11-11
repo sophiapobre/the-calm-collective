@@ -32,14 +32,15 @@ const Searchbar = () => {
     return (
         <div className='overall-search-container'>
             <div className='search-header'>
-                <h1>Product Search</h1>
+                <h1>Find Your Moment</h1>
+                <p className='search-subtitle'>Search our collection of mindful essentials</p>
             </div>
             
             <div className='search-container'>
                 <div className='search-bar'>
                     <input 
                         type='text' 
-                        placeholder='Search for products...' 
+                        placeholder='Search for candles, journals, tea...' 
                         value={keyword} 
                         onChange={onChange}
                         onKeyPress={(e) => e.key === 'Enter' && onSubmit()}
@@ -51,8 +52,8 @@ const Searchbar = () => {
                     results.length === 0 ? (
                         <div className="empty-search-results">
                             <div className="empty-search-icon">🔍</div>
-                            <h3>No products found</h3>
-                            <p>Try using different keywords</p>
+                            <h3>Nothing found</h3>
+                            <p>Try searching for tea, candles, or journals</p>
                         </div>
                     ) : (
                         <div className='search-results-section'>

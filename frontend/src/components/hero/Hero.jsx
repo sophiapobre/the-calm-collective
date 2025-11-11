@@ -37,7 +37,8 @@ const Hero = () => {
 
     return (
         <div className='hero'>
-            <h2>Our Best Sellers</h2>
+            <h2>Products for Mindful Living</h2>
+            <p className='hero-subtitle'>Slow down, reflect, and savor the moment</p>
             <div className='hero-images'>
                 {images.map((img) => (
                     <img src={img} className='hero-img' key={img}/>
@@ -45,7 +46,7 @@ const Hero = () => {
             </div>
             <div className='hero-content'>
                 <Link to='/BestSellers' className='link'>
-                    <button className='hero-button'>Shop now</button>
+                    <button className='hero-button'>Explore Collection</button>
                 </Link>
             </div>
         </div>
