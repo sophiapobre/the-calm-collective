@@ -116,7 +116,7 @@ const Item = () => {
     }
 
     return (
-        <div className='item-details'>
+        <div className='main-item-details'>
             <div className='item-left'>
                 <img src={`http://localhost:4000/images/${product.image}`} alt=''/>
             </div>

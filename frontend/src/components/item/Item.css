@@ -1,4 +1,4 @@
-.item-details {
+.main-item-details {
     display: flex;
     flex-direction: row !important;
     gap: 48px;
