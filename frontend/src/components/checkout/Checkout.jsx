@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { getCart, deleteCart } from '../../api/cartService';
 import { getProduct, getProductAttribute, getProductAttributePrice } from '../../api/productService';
 import { useAuth } from '../../context/AuthContext';
+import { useCart } from '../../context/CartContext';
 
 import './Checkout.css';
 
@@ -15,6 +16,7 @@ const Checkout = () => {
 
     const navigate = useNavigate();
     const { getAuthToken } = useAuth();
+    const { clearCartCount } = useCart();
 
     const handleSubmit = async (event) => {
       event.preventDefault();
@@ -63,6 +65,9 @@ const Checkout = () => {
         
         // Delete the cart once the order is placed
         handleClearCart();
+        
+        // Reset cart count in navbar to 0
+        clearCartCount();
 
         // Redirect to order confirmation page
         navigate(`/orders/${order.orderNumber}`);
