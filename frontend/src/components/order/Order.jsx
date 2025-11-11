@@ -10,81 +10,144 @@ const Order = () => {
     // Get order number from params
     const { orderNumber } = useParams();
 
-    const [customerName, setCustomerName] = useState('');
-    const [orderItems, setOrderItems] = useState([]);
+    const [order, setOrder] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
     useEffect(() => {
       async function fetchOrderDetails() {
-        // Get order by order number
-        const response = await fetch(`http://localhost:4000/api/orders/${orderNumber}`);
-        
-        if (!response.ok) {
-          console.error('Failed to fetch order');
-          return;
-        }
-        
-        const order = await response.json();
-
-        setCustomerName(order.customerName);
-
-        // Fetch product details for each item
-        let productDetails = [];
-        for (const item of order.items) {
-          let variantName = null;
-          let variantValue = null;
-
-          if (item.attributeSnapshot) {
-            variantName = item.attributeSnapshot.attributeName;
-            variantValue = item.attributeSnapshot.attributeValue;
+        try {
+          // Get order by order number
+          const response = await fetch(`http://localhost:4000/api/orders/${orderNumber}`);
+          
+          if (!response.ok) {
+            setError('Order not found');
+            setLoading(false);
+            return;
           }
-
-          productDetails.push({
-            name: item.productSnapshot.name,
-            description: item.productSnapshot.description,
-            image: item.productSnapshot.image,
-            category: item.productSnapshot.category,
-            productAttributeId: item.productAttributeId,
-            count: item.quantity,
-            variantName,
-            variantValue,
-            price: item.finalPrice
-          });
-        } 
-        setOrderItems(productDetails);
+          
+          const orderData = await response.json();
+          setOrder(orderData);
+        } catch (err) {
+          console.error('Failed to fetch order:', err);
+          setError('Failed to load order');
+        } finally {
+          setLoading(false);
+        }
       }
       fetchOrderDetails();
     }, [orderNumber]);
 
-    let totalPrice = orderItems.reduce((sum, item) => sum + item.price * item.count, 0);
+    if (loading) {
+      return (
+        <div className='order-container'>
+          <div className='loading-container'>
+            <div className="loading-spinner"></div>
+            <p>Loading order details...</p>
+          </div>
+        </div>
+      );
+    }
+
+    if (error || !order) {
+      return (
+        <div className='order-container'>
+          <div className='error-container'>
+            <div className="error-icon">⚠️</div>
+            <p className="error-message">{error || 'Order not found'}</p>
+          </div>
+        </div>
+      );
+    }
 
     return (
         <div className='order-container'>
-            <h1>Order Confirmation</h1>
-            <div className='thanks-container'>
-              Thanks for your order, {customerName}!
+            <div className='order-confirmation-header'>
+              <div className="success-icon">✓</div>
+              <h1>Order Confirmed!</h1>
+              <p className="confirmation-message">Thank you for your purchase, {order.firstName}!</p>
             </div>
-            <div className='ordernumber-container'>
-              <b>Order Number:</b> {orderNumber}
+
+            <div className='order-footer'>
+              <p className='shipping-note'>📦 Your order will be shipped within 2-3 business days</p>
             </div>
-            {
-                orderItems.map(item => (
-                    <div className='cart-item' key={item._id}>
-                        <h4>{item.name}</h4>
+
+            <div className='order-details-card'>
+              <h2>Order Details</h2>
+              <div className='details-grid'>
+                <div className='detail-item'>
+                  <span className='detail-label'>Order Number:</span>
+                  <span className='detail-value'>#{order.orderNumber}</span>
+                </div>
+                <div className='detail-item'>
+                  <span className='detail-label'>Customer Name:</span>
+                  <span className='detail-value'>{order.firstName} {order.lastName}</span>
+                </div>
+                <div className='detail-item'>
+                  <span className='detail-label'>Delivery Address:</span>
+                  <span className='detail-value'>{order.deliveryAddress}</span>
+                </div>
+                <div className='detail-item'>
+                  <span className='detail-label'>Order Date:</span>
+                  <span className='detail-value'>
+                    {new Date(order.createdAt).toLocaleDateString('en-US', {
+                      weekday: 'long',
+                      year: 'numeric',
+                      month: 'long',
+                      day: 'numeric'
+                    })}
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <div className='order-items-card'>
+              <h2>Order Items</h2>
+              <div className='order-items-list'>
+                {
+                  order.items.map((item, idx) => (
+                    <div className='order-item' key={idx}>
+                      <div className='order-item-image'>
+                        {item.productSnapshot?.image ? (
+                          <img 
+                            src={`http://localhost:4000/images/${item.productSnapshot.image}`} 
+                            alt={item.productSnapshot.name}
+                          />
+                        ) : (
+                          <div className="image-placeholder">
+                            <span>No image</span>
+                          </div>
+                        )}
+                      </div>
+                      <div className='order-item-details'>
+                        <h4 className='order-item-name'>{item.productSnapshot?.name}</h4>
                         {
-                          item.variantName && item.variantValue && (
-                            <p>{item.variantName}: {item.variantValue}</p>
+                          item.attributeSnapshot?.attributeName && item.attributeSnapshot?.attributeValue && (
+                            <p className='order-item-variant'>
+                              {item.attributeSnapshot.attributeName}: {item.attributeSnapshot.attributeValue}
+                            </p>
                           )
                         }
-                        <p>Price: ${item.price}</p>
-                        <img src={`http://localhost:4000/images/${item.image}`} alt=''/>
-                        <p>Quantity: {item.count}</p>
-                        <p>Product Total: ${(item.price * item.count)}</p>
+                        <div className='order-item-price-qty'>
+                          <span className='order-item-price'>${item.finalPrice.toFixed(2)}</span>
+                          <span className='order-item-quantity'>Qty: {item.quantity}</span>
+                        </div>
+                      </div>
+                      <div className='order-item-total'>
+                        <span className='total-label'>Total</span>
+                        <span className='total-amount'>${(item.finalPrice * item.quantity).toFixed(2)}</span>
+                      </div>
                     </div>
-                ))
-            }
+                  ))
+                }
+              </div>
 
-            <div className='cart-total'>
-                <h3>TOTAL: ${totalPrice}</h3>
+              <div className='order-summary'>
+                <div className='summary-row total-row'>
+                  <span>Order Total:</span>
+                  <span>${order.total.toFixed(2)}</span>
+                </div>
+              </div>
             </div>
         </div>
     );
