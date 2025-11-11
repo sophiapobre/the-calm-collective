@@ -186,10 +186,6 @@ const MyOrders = () => {
                 </div>
                 
                 <div className="order-summary">
-                  <div className="summary-row">
-                    <span>Subtotal:</span>
-                    <span>${order.subtotal?.toFixed(2) || order.total?.toFixed(2)}</span>
-                  </div>
                   <div className="summary-row total-row">
                     <span>Order Total:</span>
                     <span>${order.total?.toFixed(2)}</span>
