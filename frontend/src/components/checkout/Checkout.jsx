@@ -136,7 +136,7 @@ const Checkout = () => {
               <h1>Checkout</h1>
             </div>
 
-            <p className='checkout-subtitle'>Please enter your details to place your order. Orders will be shipped in 2-3 business days.</p>
+            <p className='checkout-subtitle'>Please enter your details to place your order. Orders will be shipped within 2-3 business days.</p>
 
             <form onSubmit={handleSubmit} className='checkout-form'>
               <div className='checkout-content'>
