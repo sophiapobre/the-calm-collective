@@ -7,17 +7,34 @@ const Admin = (item) => {
 
     return (
         <div className='overall-admin-container'>
-            <h1>Admin</h1>
+            <div className='admin-header'>
+                <h1>Admin Dashboard</h1>
+                <p className='admin-subtitle'>Manage your online shop</p>
+            </div>
             <div className='admin-container'>
-                <Link to='/admin/shopping-carts'>
-                    <button className='admin-button'>View Shopping Carts</button>
-                </Link>
-                <Link to='/admin/orders'>
-                    <button className='admin-button'>View Orders</button>
-                </Link>
-                <Link to='/admin/products'>
-                    <button className='admin-button'>Manage Products</button>
-                </Link>
+                <div className='admin-card-grid'>
+                    <Link to='/admin/shopping-carts' className='admin-card-link'>
+                        <div className='admin-card'>
+                            <div className='admin-card-icon'>🛒</div>
+                            <h3>Shopping Carts</h3>
+                            <p>View customer shopping carts</p>
+                        </div>
+                    </Link>
+                    <Link to='/admin/orders' className='admin-card-link'>
+                        <div className='admin-card'>
+                            <div className='admin-card-icon'>📦</div>
+                            <h3>Orders</h3>
+                            <p>Track customer orders</p>
+                        </div>
+                    </Link>
+                    <Link to='/admin/products' className='admin-card-link'>
+                        <div className='admin-card'>
+                            <div className='admin-card-icon'>📝</div>
+                            <h3>Products</h3>
+                            <p>Add, edit, or remove products</p>
+                        </div>
+                    </Link>
+                </div>
             </div>
         </div>
     )
