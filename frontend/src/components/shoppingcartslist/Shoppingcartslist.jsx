@@ -10,12 +10,20 @@ const Shoppingcartslist = () => {
     const [carts, setCarts] = useState([]);
     const [cartsWithDetails, setCartsWithDetails] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [showLoading, setShowLoading] = useState(false);
     const [error, setError] = useState(null);
     
     const { getAuthToken } = useAuth(); 
 
     // Fetch shopping carts with authentication
     useEffect(() => {
+      // Only show loading spinner after 300ms delay
+      const loadingTimer = setTimeout(() => {
+        if (loading) {
+          setShowLoading(true);
+        }
+      }, 300);
+
       const fetchCarts = async () => {
         try {
           const token = getAuthToken();
@@ -58,10 +66,13 @@ const Shoppingcartslist = () => {
           setCarts([]); // Set empty array on error
         } finally {
           setLoading(false);
+          setShowLoading(false);
         }
       };
 
       fetchCarts();
+
+      return () => clearTimeout(loadingTimer);
     }, [getAuthToken]);
 
     // Fetch items in each cart
@@ -150,7 +161,7 @@ const Shoppingcartslist = () => {
       fetchCartItems();
     }, [carts, getAuthToken]);
 
-    if (loading) {
+    if (loading && showLoading) {
       return (
         <div className='admin-carts-page'>
           <div className='admin-carts-header'>
@@ -191,7 +202,7 @@ const Shoppingcartslist = () => {
         </div>
         
         <div className='admin-carts-container'>
-          {carts.length === 0 ? (
+          {!loading && carts.length === 0 ? (
             <div className="admin-carts-empty">
               <div className="admin-carts-empty-icon">🛒</div>
               <h3>No active shopping carts</h3>
