@@ -1,83 +1,194 @@
-.attribute-row {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 8px;
-  justify-content: flex-start;
-  margin-bottom: 8px;
-}
-
-.attribute-value-input,
-.attribute-price-input {
-  width: 120px;
-  margin-right: 8px;
-}
-
-.attribute-price-input {
-  width: 80px;
-}
-
-.attribute-delete-label {
-  display: flex;
-  align-items: center;
-  margin-left: 20px;
-  white-space: nowrap;
-}
-
-.attribute-delete-checkbox {
-  margin-right: 4px;
-  margin-left: 4px;
-}
-
-.attribute-add-row {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 8px;
-}
-
-.attribute-add-row input {
-  box-sizing: border-box;
-}
-
-.attribute-add-row button {
-  padding: 8px 16px;
-  font-size: 1rem;
-  border: none;
-  border-radius: 4px;
-  background: #e74e3a;
-  color: white;
-  cursor: pointer;
-  margin: 0;
-}
-
-
-.attribute-action-button {
+/* Product Attributes Editor */
+.product-attributes-section {
   width: 100%;
-  padding: 12px 0;
-  font-size: 1rem;
-  border: none;
-  border-radius: 4px;
-  background: #e74e3a;
-  color: white;
-  cursor: pointer;
-  margin-top: 12px;
-  margin-bottom: 0;
-  display: block;
 }
 
+/* Attribute Name Input */
 .attribute-name-row {
   width: 100%;
-  margin-bottom: 16px;
+  margin-bottom: 1.5rem;
 }
 
 .attribute-name-input {
   width: 100%;
   box-sizing: border-box;
-  font-weight: bold;
+  font-weight: 600;
   font-size: 1.1rem;
-  padding: 10px;
-  border-radius: 6px;
-  border: 1px solid #ccc;
+  padding: 0.875rem;
+  border-radius: 8px;
+  border: 1px solid #e0e0e0;
+  background: #f8f9fa;
+  color: #2c3e50;
+  transition: all 0.3s ease;
+}
+
+.attribute-name-input:focus {
+  outline: none;
+  border-color: #e74e3a;
+  background: white;
+  box-shadow: 0 0 0 3px rgba(231, 78, 58, 0.1);
+}
+
+.attribute-name-input::placeholder {
+  color: #6c757d;
+  font-weight: 500;
+}
+
+/* Existing Attribute Rows */
+.attribute-row {
+  display: grid;
+  grid-template-columns: 2fr 1.2fr auto;
+  gap: 1rem;
+  align-items: center;
+  margin-bottom: 1rem;
+  padding: 1rem;
+  background: #f8f9fa;
+  border-radius: 8px;
+  border: 1px solid #e0e0e0;
+}
+
+.attribute-value-input,
+.attribute-price-input {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 1rem;
+  background: white;
+  box-sizing: border-box;
+  transition: all 0.3s ease;
+}
+
+.attribute-value-input:focus,
+.attribute-price-input:focus {
+  outline: none;
+  border-color: #e74e3a;
+  box-shadow: 0 0 0 3px rgba(231, 78, 58, 0.1);
+}
+
+.attribute-value-input:disabled,
+.attribute-price-input:disabled {
+  background: #f0f0f0;
+  color: #999;
+  cursor: not-allowed;
+}
+
+.attribute-delete-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  white-space: nowrap;
+  margin-left: -3px;
+  margin-top: 10px;
+  cursor: pointer;
+  color: #6c757d;
+  font-size: 0.95rem;
+  user-select: none;
+}
+
+.attribute-delete-checkbox {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+  accent-color: #e74e3a;
+}
+
+/* Add New Attribute Row */
+.attribute-add-row {
+  display: grid;
+  grid-template-columns: 2fr 1.2fr auto;
+  gap: 1rem;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  padding: 1rem;
+  background: white;
+  border-radius: 8px;
+  border: 2px dashed #e0e0e0;
+}
+
+.attribute-add-row input {
+  width: 100% !important;
+  padding: 0.75rem;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 1rem;
+  background: #fafafa;
+  box-sizing: border-box;
+  transition: all 0.3s ease;
+}
+
+.attribute-add-row input:focus {
+  outline: none;
+  border-color: #e74e3a;
+  background: white;
+  box-shadow: 0 0 0 3px rgba(231, 78, 58, 0.1);
+}
+
+.attribute-add-row button {
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  background: #e74e3a;
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.attribute-add-row button:hover:not(:disabled) {
+  background: #d43d28;
+  transform: translateY(-1px);
+}
+
+.attribute-add-row button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Save Button */
+.attribute-action-button {
+  width: 100%;
+  padding: 0.875rem 2rem;
+  font-size: 1rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  background: #e74e3a;
+  color: white;
+  cursor: pointer;
+  margin-top: 1.5rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.attribute-action-button:hover:not(:disabled) {
+  background: #d43d28;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  transform: translateY(-1px);
+}
+
+.attribute-action-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .attribute-row,
+  .attribute-add-row {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+
+  .attribute-delete-label {
+    justify-content: first baseline;
+    padding: 0.5rem;
+    border-radius: 6px;
+  }
+
+  .attribute-add-row button {
+    width: 100%;
+  }
 }

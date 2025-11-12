@@ -18,8 +18,10 @@ const Cart = () => {
       fetchCartItems();
     }, []);
 
-    async function fetchCartItems() {
-      setLoading(true);
+    async function fetchCartItems(showLoadingSpinner = true) {
+      if (showLoadingSpinner) {
+        setLoading(true);
+      }
       const cartId = localStorage.getItem('cartId');
 
       // If no cartId is saved, do not create a new one
@@ -83,6 +85,13 @@ const Cart = () => {
       const cartId = localStorage.getItem('cartId');
       if (!cartId) return;
 
+      // Optimistic UI update - remove item immediately
+      const previousItems = [...cartItems];
+      const updatedItems = cartItems.filter(item => 
+        !(item._id === productId && item.productAttributeId === productAttributeId)
+      );
+      setCartItems(updatedItems);
+
       try {
         // Call API to remove item from cart
         const response = await fetch(`http://localhost:4000/api/shopping-cart/${cartId}/items`, {
@@ -92,16 +101,18 @@ const Cart = () => {
         });
 
         if (response.ok) {
-          // Refresh cart items
-          await fetchCartItems();
-          
           // Update cart count in navbar
           const cart = await getCart(cartId);
           const totalItems = cart.items.reduce((sum, item) => sum + item.quantity, 0);
           updateCartCount(totalItems);
+        } else {
+          // Revert if API call fails
+          setCartItems(previousItems);
+          alert('Failed to remove item from cart');
         }
       } catch (error) {
         console.error('Error removing item:', error);
+        setCartItems(previousItems);
         alert('Failed to remove item from cart');
       }
     }
@@ -112,6 +123,16 @@ const Cart = () => {
       const cartId = localStorage.getItem('cartId');
       if (!cartId) return;
 
+      // Optimistic UI update - update quantity immediately
+      const previousItems = [...cartItems];
+      const updatedItems = cartItems.map(item => {
+        if (item._id === productId && item.productAttributeId === productAttributeId) {
+          return { ...item, count: newQuantity };
+        }
+        return item;
+      });
+      setCartItems(updatedItems);
+
       try {
         // Call API to update item quantity
         const response = await fetch(`http://localhost:4000/api/shopping-cart/${cartId}/items/quantity`, {
@@ -121,16 +142,18 @@ const Cart = () => {
         });
 
         if (response.ok) {
-          // Refresh cart items
-          await fetchCartItems();
-          
           // Update cart count in navbar
           const cart = await getCart(cartId);
           const totalItems = cart.items.reduce((sum, item) => sum + item.quantity, 0);
           updateCartCount(totalItems);
+        } else {
+          // Revert if API call fails
+          setCartItems(previousItems);
+          alert('Failed to update quantity');
         }
       } catch (error) {
         console.error('Error updating quantity:', error);
+        setCartItems(previousItems);
         alert('Failed to update quantity');
       }
     }

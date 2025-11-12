@@ -7,12 +7,20 @@ import './Orderslist.css';
 const Orderslist = () => {
     const [orders, setOrders] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [showLoading, setShowLoading] = useState(false);
     const [error, setError] = useState(null);
     
     const { getAuthToken } = useAuth();
 
     // Fetch orders with authentication
     useEffect(() => {
+      // Only show loading spinner after 300ms delay
+      const loadingTimer = setTimeout(() => {
+        if (loading) {
+          setShowLoading(true);
+        }
+      }, 300);
+
       const fetchOrders = async () => {
         try {
           const token = getAuthToken();
@@ -78,13 +86,16 @@ const Orderslist = () => {
           setOrders([]);
         } finally {
           setLoading(false);
+          setShowLoading(false);
         }
       };
 
       fetchOrders();
+
+      return () => clearTimeout(loadingTimer);
     }, [getAuthToken]);
 
-    if (loading) {
+    if (loading && showLoading) {
       return (
         <div className='admin-orders-page'>
           <div className='admin-orders-header'>
@@ -125,7 +136,7 @@ const Orderslist = () => {
         </div>
         
         <div className='admin-orders-container'>
-          {orders.length === 0 ? (
+          {!loading && orders.length === 0 ? (
             <div className="admin-orders-empty">
               <div className="admin-orders-empty-icon">📦</div>
               <h3>No completed orders</h3>

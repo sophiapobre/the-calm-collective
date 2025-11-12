@@ -82,24 +82,97 @@ function AddProductForm() {
   };
 
   return (
-    <div className="overall-admin-container">
-      <h1>Add a Product</h1>
+    <div className="add-product-page">
+      <div className="add-product-header">
+        <h1>Add New Product</h1>
+        <p className="add-product-subtitle">Fill in the details to add a product to your catalog</p>
+      </div>
+      
       <form className="add-product-form" onSubmit={handleSubmit} encType="multipart/form-data">
-        <input value={name} onChange={event => setName(event.target.value)} placeholder="Name" required />
-        <input type="file" accept="image/*" onChange={event => setImage(event.target.files[0])} required />
-        <input value={description} onChange={event => setDescription(event.target.value)} placeholder="Description" required />
-        <input value={price} onChange={event => setPrice(event.target.value)} placeholder="Price" type="number" required />
-        <input value={category} onChange={event => setCategory(event.target.value)} placeholder="Category" required />
-        <div className="checkbox-row">
-          <input
-            type="checkbox"
-            id="bestseller"
-            checked={bestseller}
-            onChange={e => setBestseller(e.target.checked)}
+        <div className="add-product-form-group">
+          <label htmlFor="product-name">Product Name *</label>
+          <input 
+            id="product-name"
+            type="text"
+            value={name} 
+            onChange={event => setName(event.target.value)} 
+            placeholder="Enter product name" 
+            required 
           />
-          <label htmlFor="bestseller"> Best Seller?</label>
         </div>
-        <button type="submit">Add Product</button>
+
+        <div className="add-product-form-group">
+          <label htmlFor="product-image">Product Image *</label>
+          <input 
+            id="product-image"
+            type="file" 
+            accept="image/*" 
+            onChange={event => setImage(event.target.files[0])} 
+            required 
+          />
+          <span className="add-product-help-text">Upload a clear product image (JPG, PNG)</span>
+        </div>
+
+        <div className="add-product-form-group">
+          <label htmlFor="product-description">Description *</label>
+          <textarea
+            id="product-description"
+            value={description} 
+            onChange={event => setDescription(event.target.value)} 
+            placeholder="Describe the product..." 
+            rows="4"
+            required 
+          />
+        </div>
+
+        <div className="add-product-form-row">
+          <div className="add-product-form-group">
+            <label htmlFor="product-price">Price (USD) *</label>
+            <input 
+              id="product-price"
+              type="number" 
+              step="0.01"
+              min="0"
+              value={price} 
+              onChange={event => setPrice(event.target.value)} 
+              placeholder="0.00" 
+              required 
+            />
+          </div>
+
+          <div className="add-product-form-group">
+            <label htmlFor="product-category">Category *</label>
+            <input 
+              id="product-category"
+              type="text"
+              value={category} 
+              onChange={event => setCategory(event.target.value)} 
+              placeholder="e.g., Tea, Candles" 
+              required 
+            />
+          </div>
+        </div>
+
+        <div className="add-product-form-group">
+          <div className="add-product-checkbox-row">
+            <input
+              type="checkbox"
+              id="bestseller"
+              checked={bestseller}
+              onChange={e => setBestseller(e.target.checked)}
+            />
+            <label htmlFor="bestseller">Mark as Best Seller</label>
+          </div>
+        </div>
+
+        <div className="add-product-form-actions">
+          <button type="button" className="add-product-cancel-btn" onClick={() => navigate('/admin/products')}>
+            Cancel
+          </button>
+          <button type="submit" className="add-product-submit-btn">
+            Add Product
+          </button>
+        </div>
       </form>
     </div>
   );

@@ -11,7 +11,11 @@ const router = express.Router();
 router.post('/register', [
   body('name').isLength({ min: 1 }).trim().escape(),
   body('email').isEmail().normalizeEmail(),
-  body('password').isLength({ min: 6 }),
+  body('password')
+    .isLength({ min: 12 }).withMessage('Password must be at least 12 characters long')
+    .matches(/[A-Z]/).withMessage('Password must contain at least one uppercase letter')
+    .matches(/[0-9]/).withMessage('Password must contain at least one number')
+    .matches(/[!@#$%^&*(),.?":{}|<>]/).withMessage('Password must contain at least one symbol'),
   body('role').optional().isIn(['user', 'admin'])
 ], async (req, res) => {
   try {

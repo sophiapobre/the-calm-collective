@@ -82,9 +82,13 @@ const ProductManager = () => {
 
     if (loading) {
         return (
-            <div className='overall-admin-container'>
-                <h1>Manage Products</h1>
-                <div className='admin-container'>
+            <div className='product-manager-page'>
+                <div className='product-manager-header'>
+                    <h1>Manage Products</h1>
+                    <p className='product-manager-subtitle'>Add, edit, or delete products from your catalog</p>
+                </div>
+                <div className='product-manager-loading-container'>
+                    <div className="product-manager-loading-spinner"></div>
                     <p>Loading products...</p>
                 </div>
             </div>
@@ -93,42 +97,72 @@ const ProductManager = () => {
 
     if (error) {
         return (
-            <div className='overall-admin-container'>
-                <h1>Manage Products</h1>
-                <div className='admin-container'>
-                    <p style={{ color: 'red' }}>Error: {error}</p>
-                    <button onClick={() => window.location.reload()}>Retry</button>
+            <div className='product-manager-page'>
+                <div className='product-manager-header'>
+                    <h1>Manage Products</h1>
+                    <p className='product-manager-subtitle'>Add, edit, or remove products from your catalog</p>
+                </div>
+                <div className='product-manager-error-container'>
+                    <div className='product-manager-error-icon'>⚠️</div>
+                    <h3>Error Loading Products</h3>
+                    <p>{error}</p>
+                    <button className='product-manager-retry-btn' onClick={() => window.location.reload()}>
+                        Retry
+                    </button>
                 </div>
             </div>
         );
     }
 
     return (
-        <div className='overall-admin-container'>
-            <h1>Manage Products</h1>
-            <div className='admin-container'>
+        <div className='product-manager-page'>
+            <div className='product-manager-header'>
+                <h1>Manage Products</h1>
+                <p className='product-manager-subtitle'>Add, edit, or remove products from your catalog</p>
+            </div>
+            
+            <div className='product-manager-actions'>
                 <Link to='/admin/products/add'>
-                    <button className='admin-button'>Add a Product</button>
+                    <button className='product-manager-add-btn'>+ Add New Product</button>
                 </Link>
             </div>
-            <div className="product-list">
-                {products.map(product => (
-                    <div className="product-row" key={product._id}>
-                        <div className="product-id">
-                            {product._id}
+
+            {products.length === 0 ? (
+                <div className='product-manager-empty'>
+                    <div className='product-manager-empty-icon'>📦</div>
+                    <h3>No Products Yet</h3>
+                    <p>Get started by adding your first product</p>
+                    <Link to='/admin/products/add'>
+                        <button className='product-manager-add-btn'>Add Product</button>
+                    </Link>
+                </div>
+            ) : (
+                <div className="product-manager-list">
+                    {products.map(product => (
+                        <div className="product-manager-card" key={product._id}>
+                            <div className="product-manager-card-info">
+                                <h3 className="product-manager-card-name">{product.name}</h3>
+                                <p className="product-manager-card-id">ID: {product._id}</p>
+                                <p className="product-manager-card-price">${product.price.toFixed(2)}</p>
+                            </div>
+                            <div className="product-manager-card-actions">
+                                <button 
+                                    className="product-manager-edit-btn" 
+                                    onClick={() => navigate(`/admin/products/edit/${product._id}`)}
+                                >
+                                    Manage
+                                </button>
+                                <button 
+                                    className="product-manager-delete-btn" 
+                                    onClick={() => handleDelete(product._id)}
+                                >
+                                    Delete
+                                </button>
+                            </div>
                         </div>
-                        <span>{product.name}</span>
-                        <div className="button-row">
-                            <button className="admin-button" onClick={() => navigate(`/admin/products/edit/${product._id}`)}>
-                                Manage
-                            </button>
-                            <button className="admin-button" onClick={() => handleDelete(product._id)}>
-                                Delete
-                            </button>
-                        </div>
-                    </div>
-                ))}
-            </div>
+                    ))}
+                </div>
+            )}
         </div>
     );
 };

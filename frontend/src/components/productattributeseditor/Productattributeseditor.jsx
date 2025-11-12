@@ -322,8 +322,7 @@ const ProductAttributesEditor = ({ productId, attributes, setAttributes }) => {
         <input
           value={attributeToAdd.attributeValue}
           onChange={event => handleAddAttributeChange('attributeValue', event.target.value)}
-          placeholder="Attribute Value"
-          style={{ width: 120 }}
+          placeholder="Attribute Value (e.g. Small)"
           disabled={submitting} // Disable during submission
         />
         <input
@@ -331,7 +330,8 @@ const ProductAttributesEditor = ({ productId, attributes, setAttributes }) => {
           onChange={event => handleAddAttributeChange('price', event.target.value)}
           placeholder="Price"
           type="number"
-          style={{ width: 80 }}
+          step="0.01"
+          min="0"
           disabled={submitting} // Disable during submission
         />
         <button 
