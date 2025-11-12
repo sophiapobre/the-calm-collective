@@ -6,7 +6,7 @@
   justify-content: center;
   min-height: 100vh;
   padding: 2rem 0;
-  background-color: #e74e3a;
+  background-color: #4A6B4E; 
   color: white;
   text-align: center;
   box-sizing: border-box;
@@ -30,7 +30,7 @@
 
 .hero-button {
   background-color: white;
-  color: #e74e3a;
+  color: #4A6B4E; 
   border: none;
   border-radius: 30px;
   padding: 12px 24px;

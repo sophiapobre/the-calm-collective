@@ -33,6 +33,14 @@ nav {
   margin-left: 15px;
 }
 
+.nav-link {
+  color: #F5F5F5 !important;
+}
+
+.nav-link:hover {
+  color: #8BA888 !important;
+}
+
 .cart-link {
   position: relative;
   display: inline-block;
@@ -56,7 +64,7 @@ nav {
   position: absolute;
   top: 2px;
   right: 2px;
-  background-color: #e74e3a;
+  background-color: #7A9777;
   color: white;
   font-size: 11px;
   font-weight: bold;
@@ -72,7 +80,7 @@ nav {
 
 .login-button {
   color: white;
-  background-color: #e74e3a;
+  background-color: #8BA888;
   border: none;
   border-radius: 30px;
   padding: 8px 16px;
@@ -83,7 +91,7 @@ nav {
 }
 
 .login-button:hover {
-  background-color: #c0392b;
+  background-color: #7A9777;
   color: white;
 }
 
@@ -94,7 +102,7 @@ nav {
 }
 
 .welcome-text {
-  color: #333;
+  color: #F5F5F5;
   font-size: 0.9rem;
   white-space: nowrap;
 }

@@ -47,7 +47,7 @@
 .item-right h3 {
     font-size: 2rem;
     margin: 0;
-    color: #e74e3a;
+    color: #4A6B4E;
     font-weight: 700;
 }
 
@@ -82,13 +82,13 @@
 }
 
 .product-attribute-selection select:hover {
-    border-color: #e74e3a;
+    border-color: #3A5A3E;
 }
 
 .product-attribute-selection select:focus {
     outline: none;
-    border-color: #e74e3a;
-    box-shadow: 0 0 0 3px rgba(231, 78, 58, 0.1);
+    border-color: #3A5A3E;
+    box-shadow: 0 0 0 3px rgba(74, 107, 78, 0.1);
 }
 
 /* Quantity selector styles */
@@ -132,7 +132,7 @@
 
 .quantity-btn:hover {
     background: #f8f9fa;
-    color: #e74e3a;
+    color: #4A6B4E;
 }
 
 .quantity-btn:active {
@@ -166,7 +166,7 @@
 .button-add-to-cart {
     margin-top: 12px;
     padding: 16px 32px;
-    background: #e74e3a;
+    background: #4A6B4E;
     color: #fff;
     border: none;
     border-radius: 8px;
@@ -174,19 +174,19 @@
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s;
-    box-shadow: 0 4px 12px rgba(231, 78, 58, 0.2);
+    box-shadow: 0 4px 12px rgba(74, 107, 78, 0.2);
     letter-spacing: 0.5px;
 }
 
 .button-add-to-cart:hover {
-    background: #d43d29;
+    background: #3A5A3E;
     transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(231, 78, 58, 0.3);
+    box-shadow: 0 6px 16px rgba(74, 107, 78, 0.3);
 }
 
 .button-add-to-cart:active {
     transform: translateY(0);
-    box-shadow: 0 2px 8px rgba(231, 78, 58, 0.2);
+    box-shadow: 0 2px 8px rgba(74, 107, 78, 0.2);
 }
 
 .confirmation-message {

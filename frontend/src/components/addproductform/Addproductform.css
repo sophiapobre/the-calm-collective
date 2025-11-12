@@ -73,9 +73,9 @@
 .add-product-form-group input[type="number"]:focus,
 .add-product-form-group textarea:focus {
   outline: none;
-  border-color: #e74e3a;
   background: white;
-  box-shadow: 0 0 0 3px rgba(231, 78, 58, 0.1);
+  border-color: #4A6B4E;
+  box-shadow: 0 0 0 3px rgba(74, 107, 78, 0.1) !important;
 }
 
 .add-product-form-group textarea {
@@ -114,7 +114,7 @@
   width: 20px;
   height: 20px;
   cursor: pointer;
-  accent-color: #e74e3a;
+  accent-color: #4A6B4E;;
 }
 
 .add-product-checkbox-row label {
@@ -158,13 +158,13 @@
 }
 
 .add-product-submit-btn {
-  background: #e74e3a;
+  background: #4A6B4E;
   color: white;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .add-product-submit-btn:hover {
-  background: #d43d28;
+  background: #3A5A3E;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
   transform: translateY(-1px);
 }

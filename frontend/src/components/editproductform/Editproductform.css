@@ -44,7 +44,7 @@
   width: 50px;
   height: 50px;
   border: 4px solid #f3f3f3;
-  border-top: 4px solid #e74e3a;
+  border-top: 4px solid #4A6B4E;;
   border-radius: 50%;
   animation: edit-product-spin 1s linear infinite;
   margin-bottom: 1rem;
@@ -78,7 +78,7 @@
 }
 
 .edit-product-error-container h3 {
-  color: #e74e3a;
+  color: #4A6B4E;;
   font-size: 1.5rem;
   margin: 0 0 0.5rem 0;
 }
@@ -95,14 +95,14 @@
   font-weight: 600;
   border: none;
   border-radius: 8px;
-  background: #e74e3a;
+  background: #4A6B4E;;
   color: white;
   cursor: pointer;
   transition: all 0.3s ease;
 }
 
 .edit-product-retry-btn:hover {
-  background: #d43d28;
+  background: #3A5A3E;
 }
 
 /* Section Container */
@@ -162,9 +162,9 @@
 .edit-product-form-group input[type="number"]:focus,
 .edit-product-form-group textarea:focus {
   outline: none;
-  border-color: #e74e3a;
   background: white;
-  box-shadow: 0 0 0 3px rgba(231, 78, 58, 0.1);
+  border-color: #4A6B4E;
+  box-shadow: 0 0 0 3px rgba(74, 107, 78, 0.1) !important;
 }
 
 .edit-product-form-group textarea {
@@ -220,7 +220,7 @@
   width: 20px;
   height: 20px;
   cursor: pointer;
-  accent-color: #e74e3a;
+  accent-color: #4A6B4E;;
 }
 
 .edit-product-checkbox-row label {
@@ -264,13 +264,13 @@
 }
 
 .edit-product-submit-btn {
-  background: #e74e3a;
+  background: #4A6B4E;;
   color: white;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .edit-product-submit-btn:hover:not(:disabled) {
-  background: #d43d28;
+  background: #3A5A3E;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
   transform: translateY(-1px);
 }

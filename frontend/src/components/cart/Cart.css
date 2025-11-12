@@ -44,7 +44,7 @@
   width: 50px;
   height: 50px;
   border: 4px solid #f3f3f3;
-  border-top: 4px solid #e74e3a;
+  border-top: 4px solid #4A6B4E;;
   border-radius: 50%;
   animation: cart-spin 1s linear infinite;
   margin-bottom: 1rem;
@@ -90,7 +90,7 @@
 }
 
 .cart-continue-shopping {
-  background: #e74e3a;
+  background: #4A6B4E;;
   color: white;
   border: none;
   border-radius: 6px;
@@ -102,7 +102,7 @@
 }
 
 .cart-continue-shopping:hover {
-  background: #d43d2a;
+  background: #3A5A3E !important;
 }
 
 /* Cart Content Layout */
@@ -226,7 +226,7 @@
 }
 
 .cart-item-subtotal {
-  color: #e74e3a;
+  color: #4A6B4E;;
   font-size: 1.25rem;
   font-weight: 700;
   margin: 0;
@@ -244,7 +244,7 @@
 }
 
 .cart-remove-btn:hover {
-  /* color: #e74e3a; */
+  /* color: #4A6B4E;; */
   background-color: transparent;
 }
 
@@ -295,7 +295,7 @@
 
 .cart-checkout-btn {
   width: 100%;
-  background: #e74e3a;
+  background: #4A6B4E;;
   color: white;
   border: none;
   border-radius: 8px;
@@ -308,7 +308,7 @@
 }
 
 .cart-checkout-btn:hover {
-  background: #d43d2a;
+  background: #3A5A3E;
 }
 
 .cart-clear-btn {
@@ -327,8 +327,8 @@
 
 .cart-clear-btn:hover {
   background: #f8f9fa;
-  color: #e74e3a;
-  border-color: #e74e3a;
+  color: #4A6B4E;;
+  border-color: #4A6B4E;;
 }
 
 /* Responsive Design */

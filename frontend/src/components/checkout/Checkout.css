@@ -87,7 +87,7 @@
 
 .form-group input:focus {
   outline: none;
-  border-color: #e74e3a;
+  border-color: #4A6B4E;;
   box-shadow: 0 0 0 3px rgba(231, 78, 58, 0.1);
 }
 
@@ -182,7 +182,7 @@
 }
 
 .checkout-item-price {
-  color: #e74e3a;
+  color: #4A6B4E;;
   font-weight: 700;
   font-size: 0.95rem;
 }
@@ -224,13 +224,13 @@
 }
 
 .grand-total span:last-child {
-  color: #e74e3a;
+  color: #4A6B4E;;
 }
 
 /* Place Order Button */
 .button-place-order {
   width: 100%;
-  background-color: #e74e3a;
+  background-color: #4A6B4E;;
   color: white;
   padding: 16px 24px;
   border: none;
@@ -243,9 +243,9 @@
 }
 
 .button-place-order:hover {
-  background-color: #c0392b;
+  background: #3A5A3E;
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(231, 78, 58, 0.3);
+  box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
 }
 
 .button-place-order:active {

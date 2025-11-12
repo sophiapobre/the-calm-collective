@@ -41,13 +41,14 @@
 
 .form-group input:focus {
   outline: none;
-  border-color: #e74e3a;
+  border-color: #3A5A3E;
+  box-shadow: 0 0 0 3px rgba(74, 107, 78, 0.1) !important;
 }
 
 button {
   /* width: 100%; */
   color: white;
-  background-color: #e74e3a;
+  background-color: #4A6B4E;
   border: none;
   border-radius: 30px;
   padding: 8px 16px;
@@ -93,11 +94,11 @@ button:disabled {
 }
 
 .signup-link {
-  color: #e74e3a;
+  color: #4A6B4E;
   text-decoration: none;
 }
 
 .signup-link:hover {
   text-decoration: none;
-  color: #c0392b;
+  color: #7A9777;
 }

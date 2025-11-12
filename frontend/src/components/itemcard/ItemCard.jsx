@@ -12,7 +12,7 @@ const ItemCard = ({products}) => {
                   <div className='itemcard' key={item._id}>
                     <Link to={`/products/${item._id}`} className='link'>
                         <img src={`http://localhost:4000/images/${item.image}`} alt='' className='itemcard-img'/>
-                        <p>{item.name}</p>
+                        <p className="itemcard-name">{item.name}</p>
                     </Link>
                     <div className='itemcard-price'>
                         ${item.price}

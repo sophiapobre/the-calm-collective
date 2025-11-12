@@ -27,6 +27,10 @@
     font-weight: 600;
 }
 
+.itemcard-name {
+  color: #4A6B4E; 
+}
+
 .itemcard-price {
     display: flex;
     gap: 20px;
@@ -44,7 +48,7 @@
 }
 
 a.link {
-  color: #e74e3a !important;
+  color: #4A6B4E !important;
   text-decoration: none !important;
   text-align: center;
   display: block;

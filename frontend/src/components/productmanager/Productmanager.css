@@ -42,7 +42,7 @@
   font-weight: 600;
   border: none;
   border-radius: 8px;
-  background: #e74e3a;
+  background: #4A6B4E;;
   color: white;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -50,7 +50,7 @@
 }
 
 .product-manager-add-btn:hover {
-  background: #d43d28;
+  background: #3A5A3E;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
   transform: translateY(-1px);
 }
@@ -69,7 +69,7 @@
   width: 50px;
   height: 50px;
   border: 4px solid #f3f3f3;
-  border-top: 4px solid #e74e3a;
+  border-top: 4px solid #4A6B4E;;
   border-radius: 50%;
   animation: product-manager-spin 1s linear infinite;
   margin-bottom: 1rem;
@@ -103,7 +103,7 @@
 }
 
 .product-manager-error-container h3 {
-  color: #e74e3a;
+  color: #4A6B4E;;
   font-size: 1.5rem;
   margin: 0 0 0.5rem 0;
 }
@@ -120,14 +120,14 @@
   font-weight: 600;
   border: none;
   border-radius: 8px;
-  background: #e74e3a;
+  background: #4A6B4E;;
   color: white;
   cursor: pointer;
   transition: all 0.3s ease;
 }
 
 .product-manager-retry-btn:hover {
-  background: #d43d28;
+  background: #3A5A3E;
 }
 
 /* Empty State */
@@ -210,7 +210,7 @@
 }
 
 .product-manager-card-price {
-  color: #e74e3a;
+  color: #4A6B4E;;
   font-size: 1.125rem;
   font-weight: 600;
   margin: 0;
@@ -234,12 +234,12 @@
 }
 
 .product-manager-edit-btn {
-  background: #e74e3a;
+  background: #4A6B4E;;
   color: white;
 }
 
 .product-manager-edit-btn:hover {
-  background: #d43d28;
+  background: #3A5A3E;
   transform: translateY(-1px);
 }
 
