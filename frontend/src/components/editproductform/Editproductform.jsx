@@ -153,95 +153,162 @@ function EditProductForm() {
 
   if (loading) { 
     return (
-      <div className="edit-product-container">
-        <h2>Edit Product Details</h2>
-        <p>Loading product details...</p>
+      <div className="edit-product-page">
+        <div className="edit-product-header">
+          <h1>Edit Product</h1>
+          <p className="edit-product-subtitle">Update product details and manage variants</p>
+        </div>
+        <div className="edit-product-loading-container">
+          <div className="edit-product-loading-spinner"></div>
+          <p>Loading product details...</p>
+        </div>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="edit-product-container">
-        <h2>Edit Product Details</h2>
-        <p style={{ color: 'red' }}>Error: {error}</p>
-        <button onClick={() => window.location.reload()}>Retry</button>
+      <div className="edit-product-page">
+        <div className="edit-product-header">
+          <h1>Edit Product</h1>
+          <p className="edit-product-subtitle">Update product details and manage variants</p>
+        </div>
+        <div className="edit-product-error-container">
+          <div className="edit-product-error-icon">⚠️</div>
+          <h3>Error Loading Product</h3>
+          <p>{error}</p>
+          <button className="edit-product-retry-btn" onClick={() => window.location.reload()}>
+            Retry
+          </button>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="edit-product-container">
-      <h2>Edit Product Details</h2>
-
-      <form className="edit-product-form" onSubmit={handleEditProductSubmit} encType="multipart/form-data">
-        <input 
-          value={name} 
-          onChange={event => setName(event.target.value)} 
-          placeholder="Name" 
-          required 
-          disabled={submitting} // Disable during submission
-        />
-        {displayImage && (
-          <img
-            src={`http://localhost:4000/images/${displayImage}`}
-            alt="Current Product"
-          />
-        )}
-        <input 
-          type="file" 
-          accept="image/*" 
-          onChange={event => setImage(event.target.files[0])} 
-          disabled={submitting} // Disable during submission
-        />
-        <input 
-          value={description} 
-          onChange={event => setDescription(event.target.value)} 
-          placeholder="Description" 
-          required 
-          disabled={submitting} // Disable during submission
-        />
-        <input 
-          value={price} 
-          onChange={event => setPrice(event.target.value)} 
-          placeholder="Price" 
-          type="number" 
-          required 
-          disabled={submitting} // Disable during submission
-        />
-        <input 
-          value={category} 
-          onChange={event => setCategory(event.target.value)} 
-          placeholder="Category" 
-          required 
-          disabled={submitting} // Disable during submission
-        />
-
-        <div className="checkbox-row">
-          <input
-            type="checkbox"
-            id="bestseller"
-            checked={bestseller}
-            onChange={event => setBestseller(event.target.checked)}
-            disabled={submitting} // Disable during submission
-          />
-          <label htmlFor="bestseller"> Best Seller?</label>
-        </div>
-
-        <button type="submit" disabled={submitting}>
-          {submitting ? 'Saving Changes...' : 'Save Changes'}
-        </button>
-      </form>
-
-      <h2>Manage Product Attributes</h2>
-      <div className='manage-product-attributes-form'>
-        <ProductAttributesEditor
-          productId={productId}
-          attributes={attributes}
-          setAttributes={setAttributes}
-        />
+    <div className="edit-product-page">
+      <div className="edit-product-header">
+        <h1>Edit Product</h1>
+        <p className="edit-product-subtitle">Update product details and manage variants</p>
       </div>
-      
+
+      <div className="edit-product-section">
+        <h2 className="edit-product-section-title">Product Details</h2>
+        <form className="edit-product-form" onSubmit={handleEditProductSubmit} encType="multipart/form-data">
+          <div className="edit-product-form-group">
+            <label htmlFor="product-name">Product Name *</label>
+            <input 
+              id="product-name"
+              type="text"
+              value={name} 
+              onChange={event => setName(event.target.value)} 
+              placeholder="Enter product name" 
+              required 
+              disabled={submitting}
+            />
+          </div>
+
+          <div className="edit-product-form-group">
+            <label>Current Image</label>
+            {displayImage && (
+              <div className="edit-product-image-preview">
+                <img
+                  src={`http://localhost:4000/images/${displayImage}`}
+                  alt="Current Product"
+                />
+              </div>
+            )}
+          </div>
+
+          <div className="edit-product-form-group">
+            <label htmlFor="product-image">Update Image</label>
+            <input 
+              id="product-image"
+              type="file" 
+              accept="image/*" 
+              onChange={event => setImage(event.target.files[0])} 
+              disabled={submitting}
+            />
+            <span className="edit-product-help-text">Leave blank to keep current image</span>
+          </div>
+
+          <div className="edit-product-form-group">
+            <label htmlFor="product-description">Description *</label>
+            <textarea
+              id="product-description"
+              value={description} 
+              onChange={event => setDescription(event.target.value)} 
+              placeholder="Describe the product..." 
+              rows="4"
+              required 
+              disabled={submitting}
+            />
+          </div>
+
+          <div className="edit-product-form-row">
+            <div className="edit-product-form-group">
+              <label htmlFor="product-price">Price (USD) *</label>
+              <input 
+                id="product-price"
+                type="number"
+                step="0.01"
+                min="0"
+                value={price} 
+                onChange={event => setPrice(event.target.value)} 
+                placeholder="0.00" 
+                required 
+                disabled={submitting}
+              />
+            </div>
+
+            <div className="edit-product-form-group">
+              <label htmlFor="product-category">Category *</label>
+              <input 
+                id="product-category"
+                type="text"
+                value={category} 
+                onChange={event => setCategory(event.target.value)} 
+                placeholder="e.g., Tea, Candles" 
+                required 
+                disabled={submitting}
+              />
+            </div>
+          </div>
+
+          <div className="edit-product-form-group">
+            <div className="edit-product-checkbox-row">
+              <input
+                type="checkbox"
+                id="bestseller"
+                checked={bestseller}
+                onChange={event => setBestseller(event.target.checked)}
+                disabled={submitting}
+              />
+              <label htmlFor="bestseller">Mark as Best Seller</label>
+            </div>
+          </div>
+
+          <div className="edit-product-form-actions">
+            <button type="button" className="edit-product-cancel-btn" onClick={() => navigate('/admin/products')} disabled={submitting}>
+              Cancel
+            </button>
+            <button type="submit" className="edit-product-submit-btn" disabled={submitting}>
+              {submitting ? 'Saving Changes...' : 'Save Changes'}
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <div className="edit-product-section">
+        <h2 className="edit-product-section-title">Product Variants</h2>
+        <div className='edit-product-attributes-container'>
+          <ProductAttributesEditor
+            productId={productId}
+            attributes={attributes}
+            setAttributes={setAttributes}
+          />
+        </div>
+      </div>
     </div>
   );
 }
