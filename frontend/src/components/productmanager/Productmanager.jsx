@@ -106,7 +106,7 @@ const ProductManager = () => {
             <div className='product-manager-page'>
                 <div className='product-manager-header'>
                     <h1>Manage Products</h1>
-                    <p className='product-manager-subtitle'>Add, edit, or remove products from your catalog</p>
+                    <p className='product-manager-subtitle'>Add, edit, or delete products from your catalog</p>
                 </div>
                 <div className='product-manager-error-container'>
                     <div className='product-manager-error-icon'>⚠️</div>
@@ -124,7 +124,7 @@ const ProductManager = () => {
         <div className='product-manager-page'>
             <div className='product-manager-header'>
                 <h1>Manage Products</h1>
-                <p className='product-manager-subtitle'>Add, edit, or remove products from your catalog</p>
+                <p className='product-manager-subtitle'>Add, edit, or delete products from your catalog</p>
             </div>
             
             <div className='product-manager-actions'>
