@@ -5,6 +5,7 @@ const ProductAttribute = require('../models/productAttribute');
 const ProductAttributePrice = require('../models/productAttributePrice');
 const CategoryProduct = require('../models/categoryProduct');
 const Category = require('../models/category');
+const ShoppingCart = require('../models/shoppingCart');
 const multer = require('multer');
 const cloudinary = require('cloudinary').v2;
 const { CloudinaryStorage } = require('multer-storage-cloudinary');
@@ -178,6 +179,12 @@ router.delete('/:productId', authenticateToken, requireAdmin, async (request, re
       await ProductAttributePrice.deleteMany({ productAttributeId: attributeId });
     }
     await ProductAttribute.deleteMany({ productId: request.params.productId });
+
+    // Remove product from all shopping carts
+    await ShoppingCart.updateMany(
+      { 'items.productId': request.params.productId },
+      { $pull: { items: { productId: request.params.productId } } }
+    );
     
     response.json({ message: 'Product deleted successfully' });
   } catch (error) {
