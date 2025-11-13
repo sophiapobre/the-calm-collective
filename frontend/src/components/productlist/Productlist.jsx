@@ -19,7 +19,7 @@ const Productlist = () => {
             }
         }, 300);
 
-        fetch(`${API_URL}/api/categories'`)
+        fetch(`${API_URL}/api/categories`)
             .then(res => res.json())
             .then(data => setCategories(data))
             .catch(err => console.error(err));
