@@ -42,8 +42,8 @@ const Hero = () => {
 
     return (
         <div className='hero'>
-            <h2>Products for Mindful Living</h2>
-            <p className='hero-subtitle'>Slow down, reflect, and savor the moment</p>
+            <h2>Find Your Calm</h2>
+            <p className='hero-subtitle'>Curated essentials for your perfect wind-down</p>
             <div className='hero-images'>
                 {images.map((img) => (
                     <img src={img} className='hero-img' key={img}/>

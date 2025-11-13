@@ -76,7 +76,7 @@ const Productlist = () => {
         <div className='product-grid'>
             <div className='categories-header'>
                 <h1>Shop by Category</h1>
-                <p className='categories-subtitle'>Curated collections for a slower, more intentional life</p>
+                <p className='categories-subtitle'>Curated collections for the senses</p>
             </div>
 
             {!loading && filteredCategories.length === 0 ? (
