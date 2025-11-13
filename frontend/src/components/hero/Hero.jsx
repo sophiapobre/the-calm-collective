@@ -60,7 +60,7 @@ const Hero = () => {
     return (
         <div className='hero'>
             <h2>Find Your Calm</h2>
-            <p className='hero-subtitle'>Curated essentials for your perfect wind-down</p>
+            <p className='hero-subtitle'>Hand-picked essentials for your perfect wind-down</p>
             <div className='hero-images'>
                 {images.map((img, index) => (
                     <img src={img} alt="" className='hero-img' key={`${img}-${index}`}/>
