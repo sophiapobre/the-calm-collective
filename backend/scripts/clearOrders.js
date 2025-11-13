@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const Order = require('../models/order');
 const Counter = require('../models/counter');
 
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/ecommerce')
+mongoose.connect(process.env.MONGO_URL || 'mongodb://localhost:27017/e-commerce')
   .then(async () => {
     // Clear all orders
     await Order.deleteMany();
