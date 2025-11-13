@@ -80,7 +80,7 @@ const Productlist = () => {
                 filteredCategories.map(([categoryName, products]) => (
                     <div className='category-section' key={categoryName}>
                         <h2 className='categories-title'>
-                            {categoryName.charAt(0).toUpperCase() + categoryName.slice(1)}
+                            {categoryName.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}
                         </h2>
                         <div className='product-container'>
                             <ItemCard products={products} />

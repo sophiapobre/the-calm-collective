@@ -71,7 +71,7 @@ const Bestsellerslist = () => {
                 categoryEntries.map(([category, products]) => (
                     <div key={category} className='category-section'>
                         <h2 className='categories-title'>
-                            {category.charAt(0).toUpperCase() + category.slice(1)}
+                            {category.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}
                         </h2>
                         <div className='product-container'>
                             {products.map(product => (
