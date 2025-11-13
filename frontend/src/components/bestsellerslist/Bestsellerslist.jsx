@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { API_URL } from '../../config';
 import ItemCard from '../itemcard/ItemCard';
-import { getProductCategoryNames } from '../../api/productService';
 
 import './Bestsellerslist.css';
 
@@ -11,56 +10,67 @@ const Bestsellerslist = () => {
     const [loading, setLoading] = useState(true);
     const [showLoading, setShowLoading] = useState(false);
 
-    // Fetch best seller products
+    // Fetch best seller products and their categories in one go
     useEffect(() => {
-      // Only show loading spinner after 300ms delay
       const loadingTimer = setTimeout(() => {
         if (loading) {
           setShowLoading(true);
         }
       }, 300);
 
-      fetch(`${API_URL}/api/category-products/category/${encodeURIComponent('best sellers')}`)
-        .then(response => response.json())
-        .then(data => {
-          setProducts(data);
-        })
-        .catch(err => console.error(err));
-
-      return () => clearTimeout(loadingTimer);
-    }, [loading])
-    
-    // Fetch specific category name (shoes/bags/electronics) of each best seller product
-    useEffect(() => {
-      if (products.length === 0) return;
-
-      async function fetchProductCategories() {
+      async function fetchBestSellers() {
         try {
-          let associations = {};
+          // Fetch best sellers
+          const response = await fetch(`${API_URL}/api/category-products/category/${encodeURIComponent('best sellers')}`);
+          const data = await response.json();
+          setProducts(data);
 
-          for (const product of products) {
-            const categoryNames = await getProductCategoryNames(product._id);
-            
-            for (const categoryName of categoryNames) {
-              if (categoryName !== 'best sellers') {
+          if (data.length === 0) {
+            setLoading(false);
+            setShowLoading(false);
+            return;
+          }
+
+          // Fetch categories for all products in parallel
+          const categoryPromises = data.map(product =>
+            fetch(`${API_URL}/api/category-products/product/${product._id}`)
+              .then(res => res.json())
+              .then(categories => ({ product, categories }))
+              .catch(err => {
+                console.error(`Error fetching categories for product ${product._id}:`, err);
+                return { product, categories: [] };
+              })
+          );
+
+          const results = await Promise.all(categoryPromises);
+
+          // Organize products by category
+          const associations = {};
+          results.forEach(({ product, categories }) => {
+            categories.forEach(cat => {
+              const categoryName = cat.categoryId?.name || cat.name;
+              if (categoryName && categoryName !== 'best sellers') {
                 if (!associations[categoryName]) {
                   associations[categoryName] = [];
                 }
                 associations[categoryName].push(product);
               }
-            }
-          }
+            });
+          });
 
           setProductCategories(associations);
         } catch (err) {
-          console.error(err);
+          console.error('Error fetching best sellers:', err);
         } finally {
           setLoading(false);
           setShowLoading(false);
         }
       }
-      fetchProductCategories();
-    }, [products]);
+
+      fetchBestSellers();
+
+      return () => clearTimeout(loadingTimer);
+    }, []);
 
     if (loading && showLoading) {
         return (

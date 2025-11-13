@@ -1,62 +1,66 @@
-import { API_URL } from '../../config';
 import React, { useState, useEffect } from 'react';
+import { API_URL } from '../../config';
 import ItemCard from '../itemcard/ItemCard';
 
 import './Productlist.css';
 
-const Productlist = () => {
+const Productlist = () {
     const [productsByCategory, setProductsByCategory] = useState({});
-    const [categories, setCategories] = useState([]);
     const [loading, setLoading] = useState(true);
     const [showLoading, setShowLoading] = useState(false);
 
-    // Fetch categories
+    // Fetch categories and products in parallel
     useEffect(() => {
-        // Only show loading spinner after 300ms delay
         const loadingTimer = setTimeout(() => {
             if (loading) {
                 setShowLoading(true);
             }
         }, 300);
 
-        fetch(`${API_URL}/api/categories`)
-            .then(res => res.json())
-            .then(data => setCategories(data))
-            .catch(err => console.error(err));
+        async function fetchAllData() {
+            try {
+                // Fetch categories
+                const categoriesResponse = await fetch(`${API_URL}/api/categories`);
+                const categories = await categoriesResponse.json();
+
+                if (categories.length === 0) {
+                    setLoading(false);
+                    setShowLoading(false);
+                    return;
+                }
+
+                // Fetch products for all categories in parallel
+                const productPromises = categories.map(category =>
+                    fetch(`${API_URL}/api/category-products/category/${encodeURIComponent(category.name)}`)
+                        .then(response => response.json())
+                        .then(data => ({ category: category.name, data }))
+                        .catch(err => {
+                            console.error(`Error fetching products for ${category.name}:`, err);
+                            return { category: category.name, data: [] };
+                        })
+                );
+
+                const results = await Promise.all(productPromises);
+
+                // Organize products by category
+                const newProductsByCategory = {};
+                results.forEach(({ category, data }) => {
+                    newProductsByCategory[category] = data;
+                });
+
+                setProductsByCategory(newProductsByCategory);
+            } catch (err) {
+                console.error('Error fetching data:', err);
+            } finally {
+                setLoading(false);
+                setShowLoading(false);
+            }
+        }
+
+        fetchAllData();
 
         return () => clearTimeout(loadingTimer);
-    }, [loading]);
-
-    // Fetch products by category
-    useEffect(() => {
-      if (categories.length === 0) return;
-
-      const fetchAllProducts = async () => {
-        try {
-          const promises = categories.map(category =>
-            fetch(`${API_URL}/api/category-products/category/${category.name}`)
-              .then(response => response.json())
-              .then(data => ({ category: category.name, data }))
-          );
-
-          const results = await Promise.all(promises);
-          
-          const newProductsByCategory = {};
-          results.forEach(({ category, data }) => {
-            newProductsByCategory[category] = data;
-          });
-
-          setProductsByCategory(newProductsByCategory);
-        } catch (err) {
-          console.error(err);
-        } finally {
-          setLoading(false);
-          setShowLoading(false);
-        }
-      };
-
-      fetchAllProducts();
-    }, [categories]);
+    }, []);
 
     if (loading && showLoading) {
         return (
@@ -69,9 +73,10 @@ const Productlist = () => {
         );
     }
 
-    const filteredCategories = categories
-        .filter(category => category.name !== 'best sellers')
-        .filter(category => productsByCategory[category.name] && productsByCategory[category.name].length > 0);
+    const filteredCategories = Object.entries(productsByCategory)
+        .filter(([categoryName, products]) => 
+            categoryName !== 'best sellers' && products.length > 0
+        );
 
     return (
         <div className='product-grid'>
@@ -87,13 +92,13 @@ const Productlist = () => {
                     <p>Check back soon for new arrivals!</p>
                 </div>
             ) : (
-                filteredCategories.map(category => (
-                    <div className='category-section' key={category.name}>
+                filteredCategories.map(([categoryName, products]) => (
+                    <div className='category-section' key={categoryName}>
                         <h2 className='categories-title'>
-                            {category.name.charAt(0).toUpperCase() + category.name.slice(1)}
+                            {categoryName.charAt(0).toUpperCase() + categoryName.slice(1)}
                         </h2>
                         <div className='product-container'>
-                            <ItemCard products={productsByCategory[category.name] ?? []} />
+                            <ItemCard products={products} />
                         </div>
                     </div>
                 ))
