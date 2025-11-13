@@ -40,23 +40,15 @@ export async function getProductCategoryNames(productId) {
 
   const categoryProductDocs = await response.json();
 
-  // Get the product's category names
-  let categoryNames = [];
-  for (const categoryProductDoc of categoryProductDocs) {
-    const categoryResponse = await fetch(`${API_URL}/api/categories/${categoryProductDoc.categoryId}`, {
-      method: 'GET',
-      headers: { 'Content-Type': 'application/json' },
-    });
-
-    if (categoryResponse.status !== 200) {
-      const errorMsg = await categoryResponse.json();
-      throw new Error(errorMsg.message);
+  // Extract category names from populated categoryId objects
+  const categoryNames = categoryProductDocs.map(doc => {
+    // If categoryId is populated (an object with a name property)
+    if (doc.categoryId && typeof doc.categoryId === 'object' && doc.categoryId.name) {
+      return doc.categoryId.name;
     }
-
-    const category = await categoryResponse.json();
-
-    categoryNames.push(category.name);
-  }
+    // Fallback: if it's just a string ID, return it (shouldn't happen with our optimized backend)
+    return doc.categoryId;
+  }).filter(name => name); // Filter out any null/undefined values
 
   return categoryNames;
 }
