@@ -46,6 +46,10 @@ const Productlist = () => {
     if (loading && showLoading) {
         return (
             <div className='product-grid'>
+                <div className='categories-header'>
+                    <h1>Shop by Category</h1>
+                    <p className='categories-subtitle'>Curated collections for the senses</p>
+                </div>
                 <div className='loading-container'>
                     <div className="loading-spinner"></div>
                     <p>Loading products...</p>

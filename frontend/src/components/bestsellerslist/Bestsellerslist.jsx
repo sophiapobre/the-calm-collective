@@ -40,6 +40,10 @@ const Bestsellerslist = () => {
     if (loading && showLoading) {
         return (
             <div className='product-grid'>
+                <div className='categories-header'>
+                    <h1>Best Sellers</h1>
+                    <p className='categories-subtitle'>Beloved staples for rest and renewal</p>
+                </div>
                 <div className='loading-container'>
                     <div className="loading-spinner"></div>
                     <p>Loading best sellers...</p>
