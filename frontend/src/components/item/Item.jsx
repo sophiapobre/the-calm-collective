@@ -11,10 +11,13 @@ import './Item.css';
 const Item = () => {
     // Add quantity state
     const [quantity, setQuantity] = useState(1);
+    const [loading, setLoading] = useState(true);
+    const [addingToCart, setAddingToCart] = useState(false);
     const { updateCartCount } = useCart();
 
     // Add to cart handler
     const handleAddToCart = async (productId, productAttributeId) => {
+      setAddingToCart(true);
       try {
         // Retrieve cartId if it exists, otherwise create a new cart
         let cartId = localStorage.getItem('cartId'); 
@@ -39,6 +42,8 @@ const Item = () => {
       } catch (error) {
         console.error('Error adding to cart:', error);
         alert('Failed to add item to cart. Please try again.');
+      } finally {
+        setAddingToCart(false);
       }
     }
 
@@ -81,16 +86,24 @@ const Item = () => {
 
     // Fetch product by ID
     useEffect(() => {
-      getProduct(productId)
-        .then(setProduct)
-        .catch(console.error);
-    }, [productId]);
+      const fetchData = async () => {
+        setLoading(true);
+        try {
+          const [productData, attributesData] = await Promise.all([
+            getProduct(productId),
+            getProductAttributesAndPrices(productId)
+          ]);
+          
+          setProduct(productData);
+          setAttributesAndPrices(attributesData);
+        } catch (error) {
+          console.error('Error fetching product data:', error);
+        } finally {
+          setLoading(false);
+        }
+      };
 
-    // Fetch product attributes and prices
-    useEffect(() => {
-      getProductAttributesAndPrices(productId)
-        .then(setAttributesAndPrices)
-        .catch(console.error);
+      fetchData();
     }, [productId]);
 
     const [selectedAttribute, setSelectedAttribute] = useState(null);
@@ -110,9 +123,21 @@ const Item = () => {
     }
 
     // Product not found message
+    if (loading) {
+      return (
+        <div className='item-loading-container'>
+          <div className="item-loading-spinner"></div>
+          <p>Loading product details...</p>
+        </div>
+      );
+    }
+
     if (product === null) {
       return (
-        <div></div> // Display nothing while loading
+        <div className='item-error-container'>
+          <h2>Product not found</h2>
+          <p>The product you're looking for doesn't exist.</p>
+        </div>
       );
     }
 
@@ -172,8 +197,19 @@ const Item = () => {
                   </div>
                 </div>
 
-                <button className='button-add-to-cart' onClick={() => handleAddToCart(product._id, selectedAttribute ? selectedAttribute._id : null)}>
-                    Add to Cart
+                <button 
+                  className='button-add-to-cart' 
+                  onClick={() => handleAddToCart(product._id, selectedAttribute ? selectedAttribute._id : null)}
+                  disabled={addingToCart}
+                >
+                  {addingToCart ? (
+                    <>
+                      <span className="button-spinner"></span>
+                      Adding...
+                    </>
+                  ) : (
+                    'Add to Cart'
+                  )}
                 </button>
 
             </div>
