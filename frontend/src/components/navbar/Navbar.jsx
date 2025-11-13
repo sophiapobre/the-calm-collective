@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import './Navbar.css';
-import logo from '../assets/logo.png';
 import { useAuth } from '../../context/AuthContext';
 import { useCart } from '../../context/CartContext';
 
@@ -25,7 +24,13 @@ const Navbar = () => {
 
     return (
       <nav className="navbar navbar-expand-lg navbar-dark" style={{ backgroundColor: '#001e00' }}>
-        <Link className="navbar-brand" to="/">Solara</Link>
+        <Link className="navbar-brand" to="/">
+          <svg className="brand-icon" width="24" height="24" viewBox="0 0 24 24" fill="white">
+            {/* Leaf icon */}
+            <path d="M17,8C8,10 5.9,16.17 3.82,21.34L5.71,22L6.66,19.7C7.14,19.87 7.64,20 8,20C19,20 22,3 22,3C21,5 14,5.25 9,6.25C4,7.25 2,11.5 2,13.5C2,15.5 3.75,17.25 3.75,17.25C7,8 17,8 17,8Z"/>
+          </svg>
+          Hush
+        </Link>
         
         <button 
           className="navbar-toggler" 

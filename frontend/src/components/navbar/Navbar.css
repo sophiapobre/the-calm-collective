@@ -29,6 +29,11 @@ nav {
   font-family: 'Playfair Display', serif;
 }
 
+.brand-icon {
+  margin-right: 8px;
+  margin-top: -3px;
+}
+
 .nav-item {
   margin-left: 15px;
 }
