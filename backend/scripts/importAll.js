@@ -2,8 +2,8 @@ const { execSync } = require('child_process');
 const path = require('path');
 
 const scripts = [
-  'clearCarts.js',
-  'clearOrders.js'
+  // 'clearCarts.js',
+  // 'clearOrders.js'
 ];
 
 for (const script of scripts) {
