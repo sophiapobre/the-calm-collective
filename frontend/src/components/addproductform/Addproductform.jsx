@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { API_URL } from '../../config';
-import { useAuth } from '../../context/AuthContext'; // Add this import
+import { useAuth } from '../../context/AuthContext';
 
 import './Addproductform.css';
 
@@ -12,6 +12,7 @@ function AddProductForm() {
   const [price, setPrice] = useState('');
   const [category, setCategory] = useState('');
   const [bestseller, setBestseller] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
 
   const navigate = useNavigate();
   const { getAuthToken } = useAuth();
@@ -30,6 +31,8 @@ function AddProductForm() {
       alert('Price cannot be negative.');
       return;
     }
+
+    setSubmitting(true);
 
     // Collect form data
     const formData = new FormData();
@@ -69,16 +72,21 @@ function AddProductForm() {
         // Bad request - show specific error
         const data = await response.json();
         alert(`Failed to add product: ${data.message}`);
+        setSubmitting(false);
       } else if (response.status === 401) {
         alert('Session expired. Please log in again.');
+        setSubmitting(false);
       } else if (response.status === 403) {
         alert('Access denied. Admin privileges required.');
+        setSubmitting(false);
       } else {
         alert(`Failed to add product. Server error: ${response.status}`);
+        setSubmitting(false);
       }
     } catch (error) {
       console.error('Error adding product:', error);
       alert('Network error. Please check your connection and try again.');
+      setSubmitting(false);
     }
   };
 
@@ -167,11 +175,27 @@ function AddProductForm() {
         </div>
 
         <div className="add-product-form-actions">
-          <button type="button" className="add-product-cancel-btn" onClick={() => navigate('/admin/products')}>
+          <button 
+            type="button" 
+            className="add-product-cancel-btn" 
+            onClick={() => navigate('/admin/products')}
+            disabled={submitting}
+          >
             Cancel
           </button>
-          <button type="submit" className="add-product-submit-btn">
-            Add Product
+          <button 
+            type="submit" 
+            className="add-product-submit-btn"
+            disabled={submitting}
+          >
+            {submitting ? (
+              <>
+                <span className="button-spinner"></span>
+                Adding Product...
+              </>
+            ) : (
+              'Add Product'
+            )}
           </button>
         </div>
       </form>
