@@ -1,3 +1,5 @@
+import { API_URL } from '../config';
+
 // Utility function to get the correct image URL
 // Handles both Cloudinary URLs (new products) and local URLs (old products)
 export const getImageUrl = (imagePath) => {
@@ -9,5 +11,5 @@ export const getImageUrl = (imagePath) => {
   }
   
   // Otherwise, it's a local image path
-  return `http://localhost:4000/images/${imagePath}`;
+  return `${API_URL}/images/${imagePath}`;
 };
