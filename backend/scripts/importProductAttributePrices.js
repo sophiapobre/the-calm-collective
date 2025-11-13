@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const ProductAttribute = require('../models/productAttribute');
 const ProductAttributePrice = require('../models/productAttributePrice');
 
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/ecommerce')
+mongoose.connect(process.env.MONGO_URL || 'mongodb://localhost:27017/e-commerce')
   .then(async () => {
     // Clear product attribute prices
     await ProductAttributePrice.deleteMany({});

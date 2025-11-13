@@ -2,7 +2,7 @@ require('dotenv').config();
 const mongoose = require('mongoose');
 const ShoppingCart = require('../models/shoppingCart');
 
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/ecommerce')
+mongoose.connect(process.env.MONGO_URL || 'mongodb://localhost:27017/e-commerce')
   .then(async () => {
     // Clear all shopping carts
     await ShoppingCart.deleteMany();

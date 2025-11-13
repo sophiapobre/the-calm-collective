@@ -2,7 +2,7 @@ require('dotenv').config();
 const mongoose = require('mongoose');
 const Category = require('../models/category');
 
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/ecommerce')
+mongoose.connect(process.env.MONGO_URL || 'mongodb://localhost:27017/e-commerce')
   .then(async () => {
     // Clear categories
     await Category.deleteMany();

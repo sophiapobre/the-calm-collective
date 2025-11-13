@@ -7,10 +7,8 @@ services:
       - ./backend/public/images:/app/public/images
     environment:
       - NODE_ENV=production
-      - MONGO_URL=mongodb://mongo:27017/e-commerce
-    depends_on:
-      mongo:
-        condition: service_healthy
+      # MongoDB Atlas connection string should be set via .env file
+      - MONGO_URL=${MONGO_URL}
 
   frontend:
     build: ./frontend
@@ -18,18 +16,3 @@ services:
       - "3000:3000"
     environment:
       - NODE_ENV=production
-
-  mongo:
-    image: mongo:6
-    ports:
-      - "27017:27017"
-    volumes:
-      - mongo-data:/data/db
-    healthcheck:
-      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
-      interval: 5s
-      timeout: 5s
-      retries: 10
-
-volumes:
-  mongo-data:
