@@ -32,7 +32,7 @@ const MyOrders = () => {
             return;
           }
 
-          const response = await fetch(`${process.env.REACT_APP_API_URL || 'http://localhost:4000'}/api/orders/user/my-orders', {
+          const response = await fetch(`${process.env.REACT_APP_API_URL || 'http://localhost:4000'}/api/orders/user/my-orders`, {
             headers: {
               'Authorization': `Bearer ${token}`,
               'Content-Type': 'application/json'

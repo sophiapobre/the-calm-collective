@@ -33,7 +33,7 @@ const Shoppingcartslist = () => {
             return;
           }
 
-          const response = await fetch(`${process.env.REACT_APP_API_URL || 'http://localhost:4000'}/api/shopping-cart', {
+          const response = await fetch(`${process.env.REACT_APP_API_URL || 'http://localhost:4000'}/api/shopping-cart`, {
             headers: {
               'Authorization': `Bearer ${token}`,
               'Content-Type': 'application/json'

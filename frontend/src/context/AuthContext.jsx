@@ -27,7 +27,7 @@ export const AuthProvider = ({ children }) => {
 
         if (token && userData) {
           // Verify token is still valid by making a request to protected route
-          const response = await axios.get(`${process.env.REACT_APP_API_URL || 'http://localhost:4000'}/api/auth/profile', {
+          const response = await axios.get(`${process.env.REACT_APP_API_URL || 'http://localhost:4000'}/api/auth/profile`, {
             headers: {
               'Authorization': `Bearer ${token}`
             }
