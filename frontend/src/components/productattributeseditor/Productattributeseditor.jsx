@@ -92,7 +92,7 @@ const ProductAttributesEditor = ({ productId, attributes, setAttributes }) => {
     setAttributeToAdd({ attributeValue: '', price: '' });
   };
 
-  // Save all changes
+  // Save all changes using bulk endpoint
   const handleSaveAll = async event => {
     event.preventDefault();
 
@@ -118,156 +118,59 @@ const ProductAttributesEditor = ({ productId, attributes, setAttributes }) => {
     setSubmitting(true);
 
     try {
-      // Create headers with authorization
-      const headers = {
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json'
-      };
+      // Organize attributes into three arrays
+      const attributesToDelete = attributeValues
+        .filter(attr => attr.toDelete && attr._id)
+        .map(attr => attr._id);
 
-      // Delete attributes marked for deletion
-      for (const attributeValue of attributeValues) {
-        if (attributeValue.toDelete && attributeValue._id) {
-          try {
-            // Delete attribute price from backend
-            const priceResponse = await fetch(`${API_URL}/api/product-attribute-prices/${productId}?productAttributeId=${attributeValue._id}`, {
-              method: 'DELETE',
-              headers
-            });
+      const attributesToAdd = attributeValues
+        .filter(attr => !attr._id && !attr.toDelete)
+        .map(attr => ({
+          attributeValue: attr.attributeValue,
+          price: attr.price
+        }));
 
-            // Delete attribute from backend
-            const attributeResponse = await fetch(`${API_URL}/api/product-attributes/attribute/${attributeValue._id}`, {
-              method: 'DELETE',
-              headers
-            });
+      const attributesToUpdate = attributeValues
+        .filter(attr => attr._id && !attr.toDelete)
+        .map(attr => ({
+          _id: attr._id,
+          attributeValue: attr.attributeValue,
+          price: attr.price
+        }));
 
-            if (!priceResponse.ok || !attributeResponse.ok) {
-              if (priceResponse.status === 401 || attributeResponse.status === 401) {
-                alert('Session expired. Please log in again.');
-                return;
-              }
-              alert('Failed to delete some attributes. Please try again.');
-              return;
-            }
-          } catch (error) {
-            console.error('Error deleting attribute:', error);
-            alert('Network error while deleting attributes. Please check your connection.');
-            return;
-          }
-        }
+      // Make single bulk save request
+      const response = await fetch(`${API_URL}/api/product-attributes/${productId}/bulk-save`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          attributeName,
+          attributesToDelete,
+          attributesToAdd,
+          attributesToUpdate
+        })
+      });
+
+      if (response.ok) {
+        const updatedAttributes = await response.json();
+        setAttributes(updatedAttributes);
+        alert('Product attributes saved successfully!');
+        navigate('/admin/products');
+      } else if (response.status === 401) {
+        alert('Session expired. Please log in again.');
+      } else if (response.status === 403) {
+        alert('Access denied. Admin privileges required.');
+      } else if (response.status === 400) {
+        const data = await response.json();
+        alert(`Failed to save attributes: ${data.message}`);
+      } else {
+        alert('Failed to save attributes. Please try again.');
       }
-
-      // Add new attributes (attributes with null _id & not marked for deletion)
-      for (const attributeValue of attributeValues) {
-        if (!attributeValue._id && !attributeValue.toDelete) {
-          try {
-            // Add attribute to backend
-            const attributeResponse = await fetch(`${API_URL}/api/product-attributes/${productId}`, {
-              method: 'POST',
-              headers,
-              body: JSON.stringify({
-                attributeName,
-                attributeValue: attributeValue.attributeValue
-              })
-            });
-
-            if (!attributeResponse.ok) {
-              if (attributeResponse.status === 401) {
-                alert('Session expired. Please log in again.');
-                return;
-              }
-              alert('Failed to add new attribute. Please try again.');
-              return;
-            }
-
-            const newAttribute = await attributeResponse.json();
-
-            // Add attribute price to backend
-            const priceResponse = await fetch(`${API_URL}/api/product-attribute-prices/${productId}`, {
-              method: 'POST',
-              headers,
-              body: JSON.stringify({
-                productAttributeId: newAttribute._id,
-                price: attributeValue.price
-              })
-            });
-
-            if (!priceResponse.ok) {
-              if (priceResponse.status === 401) {
-                alert('Session expired. Please log in again.');
-                return;
-              }
-              alert('Failed to add price for new attribute. Please try again.');
-              return;
-            }
-          } catch (error) {
-            console.error('Error adding attribute:', error);
-            alert('Network error while adding attributes. Please check your connection.');
-            return;
-          }
-        }
-      }
-
-      // Update existing attributes (with _id & not marked for deletion)
-      for (const attributeValue of attributeValues) {
-        if (attributeValue._id && !attributeValue.toDelete) {
-          try {
-            // Update attribute name and value in backend
-            const attributeResponse = await fetch(`${API_URL}/api/product-attributes/attribute/${attributeValue._id}`, {
-              method: 'PUT',
-              headers,
-              body: JSON.stringify({
-                attributeName,
-                attributeValue: attributeValue.attributeValue
-              })
-            });
-
-            // Update price in backend
-            const priceResponse = await fetch(`${API_URL}/api/product-attribute-prices/${productId}`, {
-              method: 'PUT',
-              headers,
-              body: JSON.stringify({
-                productAttributeId: attributeValue._id,
-                price: attributeValue.price
-              })
-            });
-
-            if (!attributeResponse.ok || !priceResponse.ok) {
-              if (attributeResponse.status === 401 || priceResponse.status === 401) {
-                alert('Session expired. Please log in again.');
-                return;
-              }
-              alert('Failed to update attribute value or price. Please try again.');
-              return;
-            }
-          } catch (error) {
-            console.error('Error updating attribute:', error);
-            alert('Network error while updating attributes. Please check your connection.');
-            return;
-          }
-        }
-      }
-
-      // Fetch updates from backend and update parent's local state
-      try {
-        const response = await fetch(`${API_URL}/api/product-attributes/${productId}`, {
-          headers
-        });
-
-        if (response.ok) {
-          const updatedAttributes = await response.json();
-          setAttributes(updatedAttributes);
-          alert('Product attributes saved successfully!');
-          navigate('/admin/products');
-        } else if (response.status === 401) {
-          alert('Session expired. Please log in again.');
-        } else {
-          alert('Failed to refresh attributes.');
-        }
-      } catch (error) {
-        console.error('Error refreshing attributes:', error);
-        alert('Network error while refreshing attributes.');
-      }
-
+    } catch (error) {
+      console.error('Error saving attributes:', error);
+      alert('Network error while saving attributes. Please check your connection.');
     } finally {
       setSubmitting(false);
     }
