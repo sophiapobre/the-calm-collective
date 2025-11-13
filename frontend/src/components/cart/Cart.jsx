@@ -11,6 +11,7 @@ import './Cart.css';
 const Cart = () => {
     const [cartItems, setCartItems] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [clearingCart, setClearingCart] = useState(false);
     const { clearCartCount, updateCartCount } = useCart();
 
     const navigate = useNavigate();
@@ -67,10 +68,18 @@ const Cart = () => {
       const cartId = localStorage.getItem('cartId');
 
       if (cartId) {
-        await deleteCart(cartId);
-        localStorage.removeItem('cartId');
-        setCartItems([]);
-        clearCartCount();
+        setClearingCart(true);
+        try {
+          await deleteCart(cartId);
+          localStorage.removeItem('cartId');
+          setCartItems([]);
+          clearCartCount();
+        } catch (error) {
+          console.error('Error clearing cart:', error);
+          alert('Failed to clear cart. Please try again.');
+        } finally {
+          setClearingCart(false);
+        }
       }
     }
 
@@ -263,8 +272,19 @@ const Cart = () => {
                   <button className='cart-checkout-btn' onClick={() => navigate('/Checkout')}>
                     Proceed to Checkout
                   </button>
-                  <button className='cart-clear-btn' onClick={() => handleClearCart()}>
-                    Clear Cart
+                  <button 
+                    className='cart-clear-btn' 
+                    onClick={() => handleClearCart()}
+                    disabled={clearingCart}
+                  >
+                    {clearingCart ? (
+                      <>
+                        <span className="button-spinner"></span>
+                        Clearing...
+                      </>
+                    ) : (
+                      'Clear Cart'
+                    )}
                   </button>
                 </div>
               </div>

@@ -15,6 +15,8 @@ const Checkout = () => {
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [address, setAddress] = useState('');
+    const [loading, setLoading] = useState(true);
+    const [submitting, setSubmitting] = useState(false);
 
     const navigate = useNavigate();
     const { getAuthToken } = useAuth();
@@ -29,6 +31,8 @@ const Checkout = () => {
         alert('Please add items to your cart before checkout.');
         return;
       }
+
+      setSubmitting(true);
 
       try {
         // Get token if user is logged in (optional)
@@ -60,6 +64,7 @@ const Checkout = () => {
 
         if (!response.ok) {
           alert(`Order could not be placed: ${responseData.message || 'Please try again.'}`);
+          setSubmitting(false);
           return;
         }
 
@@ -77,16 +82,19 @@ const Checkout = () => {
       } catch (err) {
         alert('Error placing order. Please try again.');
         console.error('Full error:', err);
+        setSubmitting(false);
       }
     }
 
     useEffect(() => {
       async function fetchCartItems() {
+        setLoading(true);
         const cartId = localStorage.getItem('cartId');
 
         // If no cartId is saved, do not create a new one
         if (!cartId) {
           setCartItems([]);
+          setLoading(false);
           return;
         }
 
@@ -116,6 +124,8 @@ const Checkout = () => {
           setCartItems(productDetails);
         } catch (error) {
           console.error('Error fetching cart items:', error);
+        } finally {
+          setLoading(false);
         }
       }
       fetchCartItems();
@@ -132,6 +142,38 @@ const Checkout = () => {
     }
 
     let totalPrice = cartItems.reduce((sum, item) => sum + item.price * item.count, 0);
+
+    if (loading) {
+      return (
+        <div className='checkout-container'>
+          <div className='checkout-header'>
+            <h1>Checkout</h1>
+          </div>
+          <div className='checkout-loading-container'>
+            <div className="checkout-loading-spinner"></div>
+            <p>Loading your order...</p>
+          </div>
+        </div>
+      );
+    }
+
+    if (cartItems.length === 0) {
+      return (
+        <div className='checkout-container'>
+          <div className='checkout-header'>
+            <h1>Checkout</h1>
+          </div>
+          <div className='checkout-empty'>
+            <div className='checkout-empty-icon'>🛒</div>
+            <h3>Your cart is empty</h3>
+            <p>Add some items before checking out!</p>
+            <button className='checkout-continue-shopping' onClick={() => navigate('/')}>
+              Continue shopping
+            </button>
+          </div>
+        </div>
+      );
+    }
 
     return (
         <div className='checkout-container'>
@@ -224,8 +266,15 @@ const Checkout = () => {
                       </div>
                     </div>
 
-                    <button type='submit' className='button-place-order'>
-                      Place Order
+                    <button type='submit' className='button-place-order' disabled={submitting}>
+                      {submitting ? (
+                        <>
+                          <span className="button-spinner"></span>
+                          Processing...
+                        </>
+                      ) : (
+                        'Place Order'
+                      )}
                     </button>
                   </div>
                 </div>
