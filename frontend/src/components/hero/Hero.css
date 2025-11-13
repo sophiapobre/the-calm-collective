@@ -10,11 +10,30 @@
   color: white;
   text-align: center;
   box-sizing: border-box;
+  background-image: url('../../../public/yoal-desurmont-jqgsM3B9Fpo-unsplash.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(1, 15, 10, 0.5);
+  z-index: 1;
+}
+
+.hero > * {
+  position: relative;
+  z-index: 2;
 }
 
 .hero h2 {
   font-size: 3rem;
-  margin-bottom: 2rem;
 }
 
 .hero-images {
