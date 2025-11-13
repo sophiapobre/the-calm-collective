@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { getImageUrl } from '../../utils/imageUtils';
 
 import './Hero.css';
 
@@ -24,10 +25,14 @@ const Hero = () => {
         .then(data => {
           let imgs = [];
           
-          // Randomly select 3 images from the best sellers category
-          const shuffledData = shuffleImages(data);
-          for (let i = 0; i < 3; i++) {
-            imgs.push(`http://localhost:4000/images/${shuffledData[i].image}`);
+          // Filter out products without images and randomly select up to 3
+          const validProducts = data.filter(product => product && product.image);
+          const shuffledData = shuffleImages(validProducts);
+          
+          // Get up to 3 images (or fewer if not enough products)
+          const count = Math.min(3, shuffledData.length);
+          for (let i = 0; i < count; i++) {
+            imgs.push(getImageUrl(shuffledData[i].image));
           }
 
           setImages(imgs);
