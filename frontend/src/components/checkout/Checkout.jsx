@@ -1,8 +1,8 @@
 
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getCart, deleteCart } from '../../api/cartService';
-import { getProduct, getProductAttribute, getProductAttributePrice } from '../../api/productService';
+import { API_URL } from '../../config';
+import { deleteCart } from '../../api/cartService';
 import { useAuth } from '../../context/AuthContext';
 import { useCart } from '../../context/CartContext';
 import { getImageUrl } from '../../utils/imageUtils';
@@ -90,37 +90,33 @@ const Checkout = () => {
           return;
         }
 
-        // Get items array from cart
-        const cart = await getCart(cartId);
-
-        // Fetch product details for each item
-        let productDetails = [];
-        for (const item of cart.items) {
-          const product = await getProduct(item.productId);
-
-          let variantName = null;
-          let variantValue = null;
-          let variantPrice = null;
-
-          if (item.productAttributeId) {
-            const attribute = await getProductAttribute(item.productAttributeId);
-            variantName = attribute.attributeName;
-            variantValue = attribute.attributeValue;
-
-            const priceObj = await getProductAttributePrice(item.productId, item.productAttributeId);
-            variantPrice = priceObj.price;
+        try {
+          // Get cart with all product details in one request
+          const response = await fetch(`${API_URL}/api/shopping-cart/${cartId}/items-detailed`);
+          
+          if (!response.ok) {
+            throw new Error('Failed to fetch cart');
           }
 
-          productDetails.push({
-            ...product,
+          const data = await response.json();
+
+          // Transform the data to match the component's expected format
+          const productDetails = data.items.map(item => ({
+            _id: item.product?._id || item.productId,
+            name: item.product?.name || 'Product unavailable',
+            description: item.product?.description || '',
+            image: item.product?.image || '',
+            price: item.finalPrice,
             productAttributeId: item.productAttributeId,
             count: item.quantity,
-            variantName,
-            variantValue,
-            price: variantPrice !== null ? variantPrice : product.price
-          });
-        } 
-        setCartItems(productDetails);
+            variantName: item.attribute?.attributeName || null,
+            variantValue: item.attribute?.attributeValue || null
+          }));
+
+          setCartItems(productDetails);
+        } catch (error) {
+          console.error('Error fetching cart items:', error);
+        }
       }
       fetchCartItems();
     }, []);
