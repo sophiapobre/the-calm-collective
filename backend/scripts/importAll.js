@@ -3,13 +3,7 @@ const path = require('path');
 
 const scripts = [
   'clearCarts.js',
-  'clearOrders.js',
-  'createAdmin.js',
-  'importProducts.js',
-  'importCategories.js',
-  'importCategoryProductAssociations.js',
-  'importProductAttributes.js',
-  'importProductAttributePrices.js',
+  'clearOrders.js'
 ];
 
 for (const script of scripts) {
