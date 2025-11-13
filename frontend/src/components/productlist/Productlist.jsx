@@ -4,7 +4,7 @@ import ItemCard from '../itemcard/ItemCard';
 
 import './Productlist.css';
 
-const Productlist = () {
+const Productlist = () => {
     const [productsByCategory, setProductsByCategory] = useState({});
     const [loading, setLoading] = useState(true);
     const [showLoading, setShowLoading] = useState(false);
