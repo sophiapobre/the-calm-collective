@@ -100,6 +100,10 @@ nav {
   color: white;
 }
 
+.navbar-collapse .login-button {
+  width: 100%;
+}
+
 .auth-section {
   display: flex;
   align-items: center;
