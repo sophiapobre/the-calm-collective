@@ -92,7 +92,7 @@ export const AuthProvider = ({ children }) => {
     // Notify the backend to invalidate the token server-side
     const token = localStorage.getItem('token');
     if (token) {
-      axios.post(`${process.env.REACT_APP_API_URL || 'http://localhost:4000'}/api/auth/logout', {}, {
+      axios.post(`${process.env.REACT_APP_API_URL || 'http://localhost:4000'}/api/auth/logout`, {}, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
