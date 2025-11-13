@@ -97,7 +97,10 @@ const MyOrders = () => {
     if (loading && showLoading) {
       return (
         <div className='my-orders-container'>
-          <h1>My Orders</h1>
+          <div className="my-orders-header">
+            <h1>My Orders</h1>
+            <p className="orders-count">Loading...</p>
+          </div>
           <div className='loading-container'>
             <div className="loading-spinner"></div>
             <p>Loading your orders...</p>
@@ -109,7 +112,9 @@ const MyOrders = () => {
     if (error) {
       return (
         <div className='my-orders-container'>
-          <h1>My Orders</h1>
+          <div className="my-orders-header">
+            <h1>My Orders</h1>
+          </div>
           <div className='error-container'>
             <div className="error-icon">⚠️</div>
             <p className="error-message">{error}</p>
