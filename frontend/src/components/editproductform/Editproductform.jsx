@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import API_URL from '../../config';
 import { getProduct, getProductCategoryNames, getProductAttributesAndPrices } from '../../api/productService';
 import { useAuth } from '../../context/AuthContext';
 import ProductAttributesEditor from '../productattributeseditor/Productattributeseditor';
@@ -117,7 +118,7 @@ function EditProductForm() {
 
     try {
       // Send form data to backend with authentication
-      const response = await fetch(`http://localhost:4000/api/products/${productId}`, {
+      const response = await fetch(`${API_URL}/api/products/${productId}`, {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${token}`,

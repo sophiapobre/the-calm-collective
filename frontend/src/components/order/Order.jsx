@@ -1,3 +1,4 @@
+import API_URL from '../../config';
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { getCart, deleteCart } from '../../api/cartService';
@@ -19,7 +20,7 @@ const Order = () => {
       async function fetchOrderDetails() {
         try {
           // Get order by order number
-          const response = await fetch(`http://localhost:4000/api/orders/${orderNumber}`);
+          const response = await fetch(`${API_URL}/api/orders/${orderNumber}`);
           
           if (!response.ok) {
             setError('Order not found');

@@ -1,3 +1,4 @@
+import API_URL from '../../config';
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getCart, deleteCart } from '../../api/cartService';
@@ -49,7 +50,7 @@ const Checkout = () => {
         };
 
         // Create order
-        const response = await fetch('http://localhost:4000/api/orders', {
+        const response = await fetch('${API_URL}/api/orders', {
           method: 'POST',
           headers: headers,
           body: JSON.stringify(payload)

@@ -1,3 +1,4 @@
+import API_URL from '../config';
 export async function getProduct(productId) {
   const token = localStorage.getItem('token');
   const headers = { 'Content-Type': 'application/json' };
@@ -5,7 +6,7 @@ export async function getProduct(productId) {
   if (token) {
     headers['Authorization'] = `Bearer ${token}`;
   }
-  const response = await fetch(`http://localhost:4000/api/products/${productId}`, {
+  const response = await fetch(`${API_URL}/api/products/${productId}`, {
     method: 'GET',
     headers: headers,
   });
@@ -27,7 +28,7 @@ export async function getProductCategoryNames(productId) {
   }
 
   // Get category product documents associated with the product
-  const response = await fetch(`http://localhost:4000/api/category-products/product/${productId}`, {
+  const response = await fetch(`${API_URL}/api/category-products/product/${productId}`, {
     method: 'GET',
     headers: headers,
   });
@@ -42,7 +43,7 @@ export async function getProductCategoryNames(productId) {
   // Get the product's category names
   let categoryNames = [];
   for (const categoryProductDoc of categoryProductDocs) {
-    const categoryResponse = await fetch(`http://localhost:4000/api/categories/${categoryProductDoc.categoryId}`, {
+    const categoryResponse = await fetch(`${API_URL}/api/categories/${categoryProductDoc.categoryId}`, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
     });
@@ -68,7 +69,7 @@ export async function getProductAttributes(productId) {
     headers['Authorization'] = `Bearer ${token}`;
   }
 
-  const response = await fetch(`http://localhost:4000/api/product-attributes/${productId}`, {
+  const response = await fetch(`${API_URL}/api/product-attributes/${productId}`, {
     method: 'GET',
     headers: headers,
   });
@@ -89,7 +90,7 @@ export async function getProductAttribute(attributeId) {
     headers['Authorization'] = `Bearer ${token}`;
   }
 
-  const response = await fetch(`http://localhost:4000/api/product-attributes/attribute/${attributeId}`, {
+  const response = await fetch(`${API_URL}/api/product-attributes/attribute/${attributeId}`, {
     method: 'GET',
     headers: headers,
   });
@@ -110,7 +111,7 @@ export async function getProductAttributePrices(productId) {
     headers['Authorization'] = `Bearer ${token}`;
   }
 
-  const response = await fetch(`http://localhost:4000/api/product-attribute-prices/${productId}/all`, {
+  const response = await fetch(`${API_URL}/api/product-attribute-prices/${productId}/all`, {
     method: 'GET',
     headers: headers,
   });
@@ -131,7 +132,7 @@ export async function getProductAttributePrice(productId, productAttributeId) {
     headers['Authorization'] = `Bearer ${token}`;
   }
 
-  const response = await fetch(`http://localhost:4000/api/product-attribute-prices/${productId}?productAttributeId=${productAttributeId}`, {
+  const response = await fetch(`${API_URL}/api/product-attribute-prices/${productId}?productAttributeId=${productAttributeId}`, {
     method: 'GET',
     headers: headers,
   });

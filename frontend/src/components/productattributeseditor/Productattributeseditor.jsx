@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import API_URL from '../../config';
 import { useAuth } from '../../context/AuthContext';
 
 import './Productattributeseditor.css'; 
@@ -128,13 +129,13 @@ const ProductAttributesEditor = ({ productId, attributes, setAttributes }) => {
         if (attributeValue.toDelete && attributeValue._id) {
           try {
             // Delete attribute price from backend
-            const priceResponse = await fetch(`http://localhost:4000/api/product-attribute-prices/${productId}?productAttributeId=${attributeValue._id}`, {
+            const priceResponse = await fetch(`${API_URL}/api/product-attribute-prices/${productId}?productAttributeId=${attributeValue._id}`, {
               method: 'DELETE',
               headers
             });
 
             // Delete attribute from backend
-            const attributeResponse = await fetch(`http://localhost:4000/api/product-attributes/attribute/${attributeValue._id}`, {
+            const attributeResponse = await fetch(`${API_URL}/api/product-attributes/attribute/${attributeValue._id}`, {
               method: 'DELETE',
               headers
             });
@@ -160,7 +161,7 @@ const ProductAttributesEditor = ({ productId, attributes, setAttributes }) => {
         if (!attributeValue._id && !attributeValue.toDelete) {
           try {
             // Add attribute to backend
-            const attributeResponse = await fetch(`http://localhost:4000/api/product-attributes/${productId}`, {
+            const attributeResponse = await fetch(`${API_URL}/api/product-attributes/${productId}`, {
               method: 'POST',
               headers,
               body: JSON.stringify({
@@ -181,7 +182,7 @@ const ProductAttributesEditor = ({ productId, attributes, setAttributes }) => {
             const newAttribute = await attributeResponse.json();
 
             // Add attribute price to backend
-            const priceResponse = await fetch(`http://localhost:4000/api/product-attribute-prices/${productId}`, {
+            const priceResponse = await fetch(`${API_URL}/api/product-attribute-prices/${productId}`, {
               method: 'POST',
               headers,
               body: JSON.stringify({
@@ -211,7 +212,7 @@ const ProductAttributesEditor = ({ productId, attributes, setAttributes }) => {
         if (attributeValue._id && !attributeValue.toDelete) {
           try {
             // Update attribute name and value in backend
-            const attributeResponse = await fetch(`http://localhost:4000/api/product-attributes/attribute/${attributeValue._id}`, {
+            const attributeResponse = await fetch(`${API_URL}/api/product-attributes/attribute/${attributeValue._id}`, {
               method: 'PUT',
               headers,
               body: JSON.stringify({
@@ -221,7 +222,7 @@ const ProductAttributesEditor = ({ productId, attributes, setAttributes }) => {
             });
 
             // Update price in backend
-            const priceResponse = await fetch(`http://localhost:4000/api/product-attribute-prices/${productId}`, {
+            const priceResponse = await fetch(`${API_URL}/api/product-attribute-prices/${productId}`, {
               method: 'PUT',
               headers,
               body: JSON.stringify({
@@ -248,7 +249,7 @@ const ProductAttributesEditor = ({ productId, attributes, setAttributes }) => {
 
       // Fetch updates from backend and update parent's local state
       try {
-        const response = await fetch(`http://localhost:4000/api/product-attributes/${productId}`, {
+        const response = await fetch(`${API_URL}/api/product-attributes/${productId}`, {
           headers
         });
 

@@ -1,3 +1,4 @@
+import API_URL from '../../config';
 import React, { useState, useEffect } from 'react';
 import ItemCard from '../itemcard/ItemCard';
 
@@ -18,7 +19,7 @@ const Productlist = () => {
             }
         }, 300);
 
-        fetch('http://localhost:4000/api/categories')
+        fetch('${API_URL}/api/categories')
             .then(res => res.json())
             .then(data => setCategories(data))
             .catch(err => console.error(err));
@@ -33,7 +34,7 @@ const Productlist = () => {
       const fetchAllProducts = async () => {
         try {
           const promises = categories.map(category =>
-            fetch(`http://localhost:4000/api/category-products/category/${category.name}`)
+            fetch(`${API_URL}/api/category-products/category/${category.name}`)
               .then(response => response.json())
               .then(data => ({ category: category.name, data }))
           );

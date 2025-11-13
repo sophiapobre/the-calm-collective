@@ -1,3 +1,4 @@
+import API_URL from '../../config';
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom'
 import { useAuth } from '../../context/AuthContext';
@@ -31,7 +32,7 @@ const Orderslist = () => {
             return;
           }
 
-          const response = await fetch('http://localhost:4000/api/orders', {
+          const response = await fetch('${API_URL}/api/orders', {
             headers: {
               'Authorization': `Bearer ${token}`,
               'Content-Type': 'application/json'

@@ -9,8 +9,30 @@ const cors = require('cors');
 // Add environment variables support
 require('dotenv').config();
 
+// Configure CORS
+const corsOptions = {
+  origin: function (origin, callback) {
+    // Allow requests with no origin (like mobile apps, Postman, etc.)
+    if (!origin) return callback(null, true);
+    
+    // List of allowed origins
+    const allowedOrigins = [
+      'http://localhost:3000',  // Local development
+      'http://localhost:5173',  // Vite dev server (if you switch to Vite)
+      process.env.FRONTEND_URL  // Production frontend URL (set in Vercel)
+    ].filter(Boolean); // Remove undefined values
+    
+    if (allowedOrigins.indexOf(origin) !== -1 || origin.endsWith('.vercel.app')) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true
+};
+
 app.use(express.json());
-app.use(cors());
+app.use(cors(corsOptions));
 
 // MongoDB connection
 const mongoUrl = process.env.MONGO_URL || 'mongodb://localhost:27017/e-commerce';

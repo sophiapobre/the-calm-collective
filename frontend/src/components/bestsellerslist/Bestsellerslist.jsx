@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import API_URL from '../../config';
 import ItemCard from '../itemcard/ItemCard';
 import { getProductCategoryNames } from '../../api/productService';
 
@@ -19,7 +20,7 @@ const Bestsellerslist = () => {
         }
       }, 300);
 
-      fetch(`http://localhost:4000/api/category-products/category/${encodeURIComponent('best sellers')}`)
+      fetch(`${API_URL}/api/category-products/category/${encodeURIComponent('best sellers')}`)
         .then(response => response.json())
         .then(data => {
           setProducts(data);

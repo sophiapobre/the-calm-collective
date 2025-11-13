@@ -1,3 +1,4 @@
+import API_URL from '../config';
 export async function createNewCart() {
   const headers = { 'Content-Type': 'application/json' };
   
@@ -7,7 +8,7 @@ export async function createNewCart() {
     headers['Authorization'] = `Bearer ${token}`;
   }
 
-  const response = await fetch('http://localhost:4000/api/shopping-cart', {
+  const response = await fetch('${API_URL}/api/shopping-cart', {
     method: 'POST',
     headers: headers
   });
@@ -24,7 +25,7 @@ export async function createNewCart() {
 }
 
 export async function addItemToCart(cartId, productId, productAttributeId, quantity) {
-  const response = await fetch(`http://localhost:4000/api/shopping-cart/${cartId}/items`, {
+  const response = await fetch(`${API_URL}/api/shopping-cart/${cartId}/items`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ productId, productAttributeId, quantity })
@@ -39,7 +40,7 @@ export async function addItemToCart(cartId, productId, productAttributeId, quant
 }
 
 export async function getCart(cartId) {
-  const response = await fetch(`http://localhost:4000/api/shopping-cart/${cartId}/items`, {
+  const response = await fetch(`${API_URL}/api/shopping-cart/${cartId}/items`, {
     method: 'GET',
     headers: { 'Content-Type': 'application/json' }
   });
@@ -53,7 +54,7 @@ export async function getCart(cartId) {
 }
 
 export async function deleteCart(cartId) {
-  const response = await fetch(`http://localhost:4000/api/shopping-cart/${cartId}`, {
+  const response = await fetch(`${API_URL}/api/shopping-cart/${cartId}`, {
     method: 'DELETE',
     headers: { 'Content-Type': 'application/json' }
   });

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import API_URL from '../../config';
 import { getCart, deleteCart } from '../../api/cartService';
 import { getProduct, getProductAttribute, getProductAttributePrice } from '../../api/productService';
 import { useCart } from '../../context/CartContext';
@@ -95,7 +96,7 @@ const Cart = () => {
 
       try {
         // Call API to remove item from cart
-        const response = await fetch(`http://localhost:4000/api/shopping-cart/${cartId}/items`, {
+        const response = await fetch(`${API_URL}/api/shopping-cart/${cartId}/items`, {
           method: 'DELETE',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ productId, productAttributeId })
@@ -136,7 +137,7 @@ const Cart = () => {
 
       try {
         // Call API to update item quantity
-        const response = await fetch(`http://localhost:4000/api/shopping-cart/${cartId}/items/quantity`, {
+        const response = await fetch(`${API_URL}/api/shopping-cart/${cartId}/items/quantity`, {
           method: 'PATCH',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ productId, productAttributeId, quantity: newQuantity })
