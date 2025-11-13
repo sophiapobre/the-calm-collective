@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import API_URL from '../../config';
+import { API_URL } from '../../config';
 import { getProduct, getProductCategoryNames, getProductAttributesAndPrices } from '../../api/productService';
 import { useAuth } from '../../context/AuthContext';
 import ProductAttributesEditor from '../productattributeseditor/Productattributeseditor';

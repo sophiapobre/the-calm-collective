@@ -1,4 +1,5 @@
-import API_URL from '../config';
+import { API_URL } from '../config';
+
 export async function createNewCart() {
   const headers = { 'Content-Type': 'application/json' };
   
@@ -8,7 +9,7 @@ export async function createNewCart() {
     headers['Authorization'] = `Bearer ${token}`;
   }
 
-  const response = await fetch('${API_URL}/api/shopping-cart', {
+  const response = await fetch(`${API_URL}/api/shopping-cart`, {
     method: 'POST',
     headers: headers
   });

@@ -63,7 +63,7 @@ const Hero = () => {
             <p className='hero-subtitle'>Curated essentials for your perfect wind-down</p>
             <div className='hero-images'>
                 {images.map((img, index) => (
-                    <img src={img} className='hero-img' key={`${img}-${index}`}/>
+                    <img src={img} alt="" className='hero-img' key={`${img}-${index}`}/>
                 ))}
             </div>
             <div className='hero-content'>

@@ -1,4 +1,4 @@
-import API_URL from '../../config';
+import { API_URL } from '../../config';
 import React, { useState, useEffect } from 'react';
 import ItemCard from '../itemcard/ItemCard';
 
@@ -19,7 +19,7 @@ const Productlist = () => {
             }
         }, 300);
 
-        fetch('${API_URL}/api/categories')
+        fetch(`${API_URL}/api/categories')
             .then(res => res.json())
             .then(data => setCategories(data))
             .catch(err => console.error(err));

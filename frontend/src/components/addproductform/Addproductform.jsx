@@ -1,6 +1,6 @@
-import API_URL from '../../config';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { API_URL } from '../../config';
 import { useAuth } from '../../context/AuthContext'; // Add this import
 
 import './Addproductform.css';
@@ -44,7 +44,7 @@ function AddProductForm() {
 
     try {
       // Send POST request to backend with authentication
-      const response = await fetch('${API_URL}/api/products', {
+      const response = await fetch(`${API_URL}/api/products`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,

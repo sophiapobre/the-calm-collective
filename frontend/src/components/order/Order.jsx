@@ -1,8 +1,6 @@
-import API_URL from '../../config';
+import { API_URL } from '../../config';
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { getCart, deleteCart } from '../../api/cartService';
-import { getProduct, getProductAttribute, getProductAttributePrice } from '../../api/productService';
 import { getImageUrl } from '../../utils/imageUtils';
 
 import './Order.css';

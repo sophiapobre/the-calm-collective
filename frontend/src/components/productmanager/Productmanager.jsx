@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import API_URL from '../../config';
+import { API_URL } from '../../config';
 import { useAuth } from '../../context/AuthContext';
 
 import './Productmanager.css';
@@ -17,7 +17,7 @@ const ProductManager = () => {
     useEffect(() => {
         const fetchProducts = async () => {
             try {
-                const response = await fetch('${API_URL}/api/products');
+                const response = await fetch(`${API_URL}/api/products');
                 
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import API_URL from '../../config';
+import { API_URL } from '../../config';
 import { getCart, deleteCart } from '../../api/cartService';
 import { getProduct, getProductAttribute, getProductAttributePrice } from '../../api/productService';
 import { useCart } from '../../context/CartContext';

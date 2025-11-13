@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import API_URL from '../../config';
+import { API_URL } from '../../config';
 import './Signup.css';
 import PasswordRequirements, { getPasswordRequirements } from '../passwordrequirements/PasswordRequirements';
 const Signup = () => {
