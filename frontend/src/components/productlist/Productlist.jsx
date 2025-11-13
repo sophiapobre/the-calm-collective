@@ -9,7 +9,7 @@ const Productlist = () => {
     const [loading, setLoading] = useState(true);
     const [showLoading, setShowLoading] = useState(false);
 
-    // Fetch categories and products in parallel
+    // Fetch categories and products in one request
     useEffect(() => {
         const loadingTimer = setTimeout(() => {
             if (loading) {
@@ -19,33 +19,14 @@ const Productlist = () => {
 
         async function fetchAllData() {
             try {
-                // Fetch categories
-                const categoriesResponse = await fetch(`${API_URL}/api/categories`);
-                const categories = await categoriesResponse.json();
-
-                if (categories.length === 0) {
-                    setLoading(false);
-                    setShowLoading(false);
-                    return;
-                }
-
-                // Fetch products for all categories in parallel
-                const productPromises = categories.map(category =>
-                    fetch(`${API_URL}/api/category-products/category/${encodeURIComponent(category.name)}`)
-                        .then(response => response.json())
-                        .then(data => ({ category: category.name, data }))
-                        .catch(err => {
-                            console.error(`Error fetching products for ${category.name}:`, err);
-                            return { category: category.name, data: [] };
-                        })
-                );
-
-                const results = await Promise.all(productPromises);
+                // Fetch all categories with their products in one request
+                const response = await fetch(`${API_URL}/api/category-products/all-with-products`);
+                const data = await response.json();
 
                 // Organize products by category
                 const newProductsByCategory = {};
-                results.forEach(({ category, data }) => {
-                    newProductsByCategory[category] = data;
+                data.forEach(({ category, products }) => {
+                    newProductsByCategory[category] = products;
                 });
 
                 setProductsByCategory(newProductsByCategory);

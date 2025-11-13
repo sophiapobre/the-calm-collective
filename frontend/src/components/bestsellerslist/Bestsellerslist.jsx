@@ -5,12 +5,11 @@ import ItemCard from '../itemcard/ItemCard';
 import './Bestsellerslist.css';
 
 const Bestsellerslist = () => {
-    const [products, setProducts] = useState([]);
     const [productCategories, setProductCategories] = useState({});
     const [loading, setLoading] = useState(true);
     const [showLoading, setShowLoading] = useState(false);
 
-    // Fetch best seller products and their categories in one go
+    // Fetch best sellers organized by category in one request
     useEffect(() => {
       const loadingTimer = setTimeout(() => {
         if (loading) {
@@ -20,45 +19,11 @@ const Bestsellerslist = () => {
 
       async function fetchBestSellers() {
         try {
-          // Fetch best sellers
-          const response = await fetch(`${API_URL}/api/category-products/category/${encodeURIComponent('best sellers')}`);
+          // Fetch best sellers organized by their other categories in one request
+          const response = await fetch(`${API_URL}/api/category-products/best-sellers-by-category`);
           const data = await response.json();
-          setProducts(data);
 
-          if (data.length === 0) {
-            setLoading(false);
-            setShowLoading(false);
-            return;
-          }
-
-          // Fetch categories for all products in parallel
-          const categoryPromises = data.map(product =>
-            fetch(`${API_URL}/api/category-products/product/${product._id}`)
-              .then(res => res.json())
-              .then(categories => ({ product, categories }))
-              .catch(err => {
-                console.error(`Error fetching categories for product ${product._id}:`, err);
-                return { product, categories: [] };
-              })
-          );
-
-          const results = await Promise.all(categoryPromises);
-
-          // Organize products by category
-          const associations = {};
-          results.forEach(({ product, categories }) => {
-            categories.forEach(cat => {
-              const categoryName = cat.categoryId?.name || cat.name;
-              if (categoryName && categoryName !== 'best sellers') {
-                if (!associations[categoryName]) {
-                  associations[categoryName] = [];
-                }
-                associations[categoryName].push(product);
-              }
-            });
-          });
-
-          setProductCategories(associations);
+          setProductCategories(data);
         } catch (err) {
           console.error('Error fetching best sellers:', err);
         } finally {

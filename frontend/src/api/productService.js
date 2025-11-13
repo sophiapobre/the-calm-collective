@@ -146,22 +146,23 @@ export async function getProductAttributePrice(productId, productAttributeId) {
 }
 
 export async function getProductAttributesAndPrices(productId, productAttributeId) {  
-  const attributes = await getProductAttributes(productId);
-  const attributePrices = await getProductAttributePrices(productId);
+  const token = localStorage.getItem('token');
+  const headers = { 'Content-Type': 'application/json' };
 
-  let attributesWithPrices = [];
-
-  for (const attribute of attributes) {
-    for (const price of attributePrices) {
-      if (attribute._id === price.productAttributeId) {
-        attributesWithPrices.push({
-          ...attribute,
-          price: price.price
-        });
-        break;
-      }
-    }
+  if (token) {
+    headers['Authorization'] = `Bearer ${token}`;
   }
 
-  return attributesWithPrices;
+  // Use the optimized combined endpoint
+  const response = await fetch(`${API_URL}/api/product-attribute-prices/${productId}/with-attributes`, {
+    method: 'GET',
+    headers: headers,
+  });
+
+  if (response.status !== 200) {
+    const errorMsg = await response.json();
+    throw new Error(errorMsg.message);
+  }
+
+  return response.json();
 }

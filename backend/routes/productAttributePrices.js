@@ -5,6 +5,49 @@ const ProductAttribute = require('../models/productAttribute');
 const ProductAttributePrice = require('../models/productAttributePrice');
 const { authenticateToken, requireAdmin } = require('../middleware/auth');
 
+// Get product attributes with their prices combined (optimized endpoint)
+// GET /api/product-attribute-prices/:productId/with-attributes
+router.get('/:productId/with-attributes', async (request, response) => {
+  try {
+    const { productId } = request.params;
+
+    // Get all attributes for this product
+    const attributes = await ProductAttribute.find({ productId });
+
+    if (!attributes || attributes.length === 0) {
+      return response.json([]);
+    }
+
+    // Get all attribute IDs
+    const attributeIds = attributes.map(attr => attr._id);
+
+    // Get all prices in one query
+    const prices = await ProductAttributePrice.find({ 
+      productAttributeId: { $in: attributeIds } 
+    });
+
+    // Combine attributes with their prices
+    const attributesWithPrices = attributes.map(attribute => {
+      const priceDoc = prices.find(p => 
+        p.productAttributeId.toString() === attribute._id.toString()
+      );
+      
+      return {
+        _id: attribute._id,
+        productId: attribute.productId,
+        attributeName: attribute.attributeName,
+        attributeValue: attribute.attributeValue,
+        price: priceDoc ? priceDoc.price : null
+      };
+    }).filter(attr => attr.price !== null); // Only return attributes that have prices
+
+    response.json(attributesWithPrices);
+  } catch (error) {
+    console.error('Error fetching product attributes with prices:', error);
+    response.status(500).json({ message: 'Internal server error' });
+  }
+});
+
 // Get all product attribute prices for a product
 // GET /api/product-attribute-prices/:productId/all
 router.get('/:productId/all', async (request, response) => {
