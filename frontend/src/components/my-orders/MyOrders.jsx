@@ -94,17 +94,19 @@ const MyOrders = () => {
       return () => clearTimeout(loadingTimer);
     }, [getAuthToken, loading]);
 
-    if (loading && showLoading) {
+    if (loading) {
       return (
         <div className='my-orders-container'>
           <div className="my-orders-header">
             <h1>My Orders</h1>
             <p className="orders-count">Loading...</p>
           </div>
-          <div className='loading-container'>
-            <div className="loading-spinner"></div>
-            <p>Loading your orders...</p>
-          </div>
+          {showLoading && (
+            <div className='loading-container'>
+              <div className="loading-spinner"></div>
+              <p>Loading your orders...</p>
+            </div>
+          )}
         </div>
       );
     }
