@@ -34,7 +34,7 @@ const Hero = () => {
       }
 
       // Otherwise, fetch and shuffle new images
-      fetch(`http://localhost:4000/api/category-products/category/${encodeURIComponent('best sellers')}`)
+      fetch(`${process.env.REACT_APP_API_URL || 'http://localhost:4000'}/api/category-products/category/${encodeURIComponent('best sellers')}`)
         .then(response => response.json())
         .then(data => {
           // Filter out products without images and shuffle
