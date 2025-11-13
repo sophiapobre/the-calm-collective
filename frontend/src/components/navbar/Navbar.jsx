@@ -24,7 +24,7 @@ const Navbar = () => {
     };
 
     return (
-      <nav className="navbar navbar-expand-lg navbar-dark" style={{ backgroundColor: '#023020' }}>
+      <nav className="navbar navbar-expand-lg navbar-dark" style={{ backgroundColor: '#001e00' }}>
         <Link className="navbar-brand" to="/">Solara</Link>
         
         <button 

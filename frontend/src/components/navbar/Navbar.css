@@ -80,7 +80,7 @@ nav {
 
 .login-button {
   color: white;
-  background-color: #8BA888;
+  background-color: #657a63;
   border: none;
   border-radius: 30px;
   padding: 8px 16px;
@@ -91,7 +91,7 @@ nav {
 }
 
 .login-button:hover {
-  background-color: #7A9777;
+  background-color: #8BA888;
   color: white;
 }
 
