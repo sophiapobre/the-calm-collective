@@ -128,12 +128,37 @@ router.get('/:productId', async (request, response) => {
 // DELETE /api/products/:productId
 router.delete('/:productId', authenticateToken, requireAdmin, async (request, response) => {
   try {
-    // Delete the product if it exists
-    const product = await Product.findByIdAndDelete(request.params.productId);
+    // Get the product first to access the image URL
+    const product = await Product.findById(request.params.productId);
 
     if (!product) {
       return response.status(404).json({ message: 'Product not found' });
     }
+
+    // Delete image from Cloudinary if it's a Cloudinary URL
+    if (product.image && (product.image.startsWith('http://res.cloudinary.com') || product.image.startsWith('https://res.cloudinary.com'))) {
+      try {
+        // Extract public_id from Cloudinary URL
+        // URL format: https://res.cloudinary.com/cloud_name/image/upload/v123456/folder/filename.ext
+        const urlParts = product.image.split('/');
+        const uploadIndex = urlParts.indexOf('upload');
+        if (uploadIndex !== -1 && uploadIndex + 2 < urlParts.length) {
+          // Get everything after 'upload/v123456/' and remove file extension
+          const publicIdWithExtension = urlParts.slice(uploadIndex + 2).join('/');
+          const publicId = publicIdWithExtension.substring(0, publicIdWithExtension.lastIndexOf('.'));
+          
+          // Delete from Cloudinary
+          await cloudinary.uploader.destroy(publicId);
+          console.log(`Deleted image from Cloudinary: ${publicId}`);
+        }
+      } catch (cloudinaryError) {
+        console.error('Error deleting image from Cloudinary:', cloudinaryError);
+        // Continue with product deletion even if Cloudinary deletion fails
+      }
+    }
+
+    // Delete the product from database
+    await Product.findByIdAndDelete(request.params.productId);
 
     // Delete any related CategoryProduct associations
     await CategoryProduct.deleteMany({ productId: request.params.productId });
@@ -245,6 +270,27 @@ router.put('/:productId', authenticateToken, requireAdmin, upload.single('image'
     }
 
     if (request.file) {
+      // Delete old image from Cloudinary if it exists and is a Cloudinary URL
+      if (product.image && (product.image.startsWith('http://res.cloudinary.com') || product.image.startsWith('https://res.cloudinary.com'))) {
+        try {
+          // Extract public_id from Cloudinary URL
+          const urlParts = product.image.split('/');
+          const uploadIndex = urlParts.indexOf('upload');
+          if (uploadIndex !== -1 && uploadIndex + 2 < urlParts.length) {
+            const publicIdWithExtension = urlParts.slice(uploadIndex + 2).join('/');
+            const publicId = publicIdWithExtension.substring(0, publicIdWithExtension.lastIndexOf('.'));
+            
+            // Delete old image from Cloudinary
+            await cloudinary.uploader.destroy(publicId);
+            console.log(`Deleted old image from Cloudinary: ${publicId}`);
+          }
+        } catch (cloudinaryError) {
+          console.error('Error deleting old image from Cloudinary:', cloudinaryError);
+          // Continue with update even if deletion fails
+        }
+      }
+      
+      // Set new image path
       product.image = request.file.path;
     }
 
