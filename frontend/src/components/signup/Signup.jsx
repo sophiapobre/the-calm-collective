@@ -102,7 +102,7 @@ const Signup = () => {
           <PasswordRequirements requirements={passwordRequirements} />
 
           <button
-            className="login-button"
+            className="login-button-submit"
             type="submit"
             disabled={loading || !isPasswordValid} // Disable when password requirements not met
             title={!isPasswordValid ? 'Password does not meet requirements' : ''}

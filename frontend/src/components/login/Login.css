@@ -64,7 +64,7 @@ button:disabled {
   cursor: not-allowed;
 }
 
-.login-button {
+.login-button-submit {
   width: 100%;
 }
 
@@ -90,7 +90,7 @@ button:disabled {
 
 .signup-link:hover {
   text-decoration: none;
-  color: #c0392b;
+  color: #3A5A3E;
 }
 
 .success-message {
