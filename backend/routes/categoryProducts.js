@@ -29,8 +29,8 @@ router.get('/category/:categoryName', async (request, response) => {
 // GET /api/category-products/product/:productId
 router.get('/product/:productId', async (request, response) => {
   try {
-    // Find categories associated with the product
-    const associations = await CategoryProduct.find({ productId: request.params.productId });
+    // Find categories associated with the product and populate the categoryId
+    const associations = await CategoryProduct.find({ productId: request.params.productId }).populate('categoryId');
     
     if (!associations) {
       return response.status(404).json({ message: 'Product categories not found'});
