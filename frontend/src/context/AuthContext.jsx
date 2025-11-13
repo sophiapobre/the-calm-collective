@@ -82,6 +82,9 @@ export const AuthProvider = ({ children }) => {
 
   // Logout function
   const logout = () => {
+    // Get token before clearing
+    const token = localStorage.getItem('token');
+    
     // Clear localStorage
     localStorage.removeItem('token');
     localStorage.removeItem('user');
@@ -90,7 +93,6 @@ export const AuthProvider = ({ children }) => {
     setUser(null);
 
     // Notify the backend to invalidate the token server-side
-    const token = localStorage.getItem('token');
     if (token) {
       axios.post(`${process.env.REACT_APP_API_URL || 'http://localhost:4000'}/api/auth/logout`, {}, {
         headers: {
