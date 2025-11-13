@@ -295,7 +295,14 @@ function EditProductForm() {
               Cancel
             </button>
             <button type="submit" className="edit-product-submit-btn" disabled={submitting}>
-              {submitting ? 'Saving Changes...' : 'Save Changes'}
+              {submitting ? (
+                <>
+                  <span className="button-spinner"></span>
+                  Saving Changes...
+                </>
+              ) : (
+                'Save Changes'
+              )}
             </button>
           </div>
         </form>

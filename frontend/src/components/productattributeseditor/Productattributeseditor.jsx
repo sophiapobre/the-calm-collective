@@ -248,7 +248,14 @@ const ProductAttributesEditor = ({ productId, attributes, setAttributes }) => {
       </div>
 
       <button className="attribute-action-button" type="submit" disabled={submitting}>
-        {submitting ? 'Saving Changes...' : 'Save Changes'}
+        {submitting ? (
+          <>
+            <span className="button-spinner"></span>
+            Saving Changes...
+          </>
+        ) : (
+          'Save Changes'
+        )}
       </button>
     </form>
   );
