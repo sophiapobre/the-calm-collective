@@ -85,6 +85,10 @@ const Cart = () => {
       );
       setCartItems(updatedItems);
 
+      // Calculate new total count optimistically
+      const newTotalCount = updatedItems.reduce((sum, item) => sum + item.count, 0);
+      updateCartCount(newTotalCount);
+
       try {
         // Call API to remove item from cart
         const response = await fetch(`${API_URL}/api/shopping-cart/${cartId}/items`, {
@@ -93,19 +97,18 @@ const Cart = () => {
           body: JSON.stringify({ productId, productAttributeId })
         });
 
-        if (response.ok) {
-          // Update cart count in navbar
-          const cart = await getCart(cartId);
-          const totalItems = cart.items.reduce((sum, item) => sum + item.quantity, 0);
-          updateCartCount(totalItems);
-        } else {
+        if (!response.ok) {
           // Revert if API call fails
           setCartItems(previousItems);
+          const revertedCount = previousItems.reduce((sum, item) => sum + item.count, 0);
+          updateCartCount(revertedCount);
           alert('Failed to remove item from cart');
         }
       } catch (error) {
         console.error('Error removing item:', error);
         setCartItems(previousItems);
+        const revertedCount = previousItems.reduce((sum, item) => sum + item.count, 0);
+        updateCartCount(revertedCount);
         alert('Failed to remove item from cart');
       }
     }
@@ -126,6 +129,10 @@ const Cart = () => {
       });
       setCartItems(updatedItems);
 
+      // Calculate new total count optimistically
+      const newTotalCount = updatedItems.reduce((sum, item) => sum + item.count, 0);
+      updateCartCount(newTotalCount);
+
       try {
         // Call API to update item quantity
         const response = await fetch(`${API_URL}/api/shopping-cart/${cartId}/items/quantity`, {
@@ -134,19 +141,18 @@ const Cart = () => {
           body: JSON.stringify({ productId, productAttributeId, quantity: newQuantity })
         });
 
-        if (response.ok) {
-          // Update cart count in navbar
-          const cart = await getCart(cartId);
-          const totalItems = cart.items.reduce((sum, item) => sum + item.quantity, 0);
-          updateCartCount(totalItems);
-        } else {
+        if (!response.ok) {
           // Revert if API call fails
           setCartItems(previousItems);
+          const revertedCount = previousItems.reduce((sum, item) => sum + item.count, 0);
+          updateCartCount(revertedCount);
           alert('Failed to update quantity');
         }
       } catch (error) {
         console.error('Error updating quantity:', error);
         setCartItems(previousItems);
+        const revertedCount = previousItems.reduce((sum, item) => sum + item.count, 0);
+        updateCartCount(revertedCount);
         alert('Failed to update quantity');
       }
     }

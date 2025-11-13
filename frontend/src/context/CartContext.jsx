@@ -19,7 +19,16 @@ export const CartProvider = ({ children }) => {
   const [loading, setLoading] = useState(false);
 
   // Function to update cart count
-  const updateCartCount = async () => {
+  // If count is provided, set it directly (optimistic update)
+  // If no count provided, fetch from server
+  const updateCartCount = async (count) => {
+    // If count is provided directly, set it immediately (no API call)
+    if (typeof count === 'number') {
+      setCartItemCount(count);
+      return;
+    }
+
+    // Otherwise, fetch from server
     try {
       setLoading(true);
       const cartId = localStorage.getItem('cartId');
