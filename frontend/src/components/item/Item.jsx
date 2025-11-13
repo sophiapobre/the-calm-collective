@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import { createNewCart, addItemToCart } from '../../api/cartService';
 import { getProduct, getProductAttributesAndPrices } from '../../api/productService';
 import { useCart } from '../../context/CartContext';
+import { getImageUrl } from '../../utils/imageUtils';
 
 import './Item.css';
 
@@ -118,7 +119,7 @@ const Item = () => {
     return (
         <div className='main-item-details'>
             <div className='item-left'>
-                <img src={`http://localhost:4000/images/${product.image}`} alt=''/>
+                <img src={getImageUrl(product.image)} alt=''/>
             </div>
             <div className='item-right'>
                 <h1>{product.name}</h1>

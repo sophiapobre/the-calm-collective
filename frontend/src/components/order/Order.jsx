@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { getCart, deleteCart } from '../../api/cartService';
 import { getProduct, getProductAttribute, getProductAttributePrice } from '../../api/productService';
+import { getImageUrl } from '../../utils/imageUtils';
 
 import './Order.css';
 
@@ -110,7 +111,7 @@ const Order = () => {
                       <div className='order-item-image'>
                         {item.productSnapshot?.image ? (
                           <img 
-                            src={`http://localhost:4000/images/${item.productSnapshot.image}`} 
+                            src={getImageUrl(item.productSnapshot.image)} 
                             alt={item.productSnapshot.name}
                           />
                         ) : (

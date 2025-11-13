@@ -4,6 +4,7 @@ import { getCart, deleteCart } from '../../api/cartService';
 import { getProduct, getProductAttribute, getProductAttributePrice } from '../../api/productService';
 import { useAuth } from '../../context/AuthContext';
 import { useCart } from '../../context/CartContext';
+import { getImageUrl } from '../../utils/imageUtils';
 
 import './Checkout.css';
 
@@ -197,7 +198,7 @@ const Checkout = () => {
                         cartItems.map(item => (
                           <div className='checkout-item' key={item.productAttributeId ? item.productAttributeId : item._id}>
                             <div className='checkout-item-image'>
-                              <img src={`http://localhost:4000/images/${item.image}`} alt={item.name}/>
+                              <img src={getImageUrl(item.image)} alt={item.name}/>
                             </div>
                             <div className='checkout-item-details'>
                               <h4 className='checkout-item-name'>{item.name}</h4>

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom'
 import { useAuth } from '../../context/AuthContext';
+import { getImageUrl } from '../../utils/imageUtils';
 
 import './MyOrders.css';
 
@@ -163,7 +164,7 @@ const MyOrders = () => {
                       <div className="item-image">
                         {item.productImage ? (
                           <img 
-                            src={`http://localhost:4000/images/${item.productImage}`}
+                            src={getImageUrl(item.productImage)}
                             alt={item.productName}
                             onError={(e) => {
                               e.target.style.display = 'none';

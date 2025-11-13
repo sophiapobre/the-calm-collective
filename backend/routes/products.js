@@ -6,8 +6,16 @@ const ProductAttributePrice = require('../models/productAttributePrice');
 const CategoryProduct = require('../models/categoryProduct');
 const Category = require('../models/category');
 const multer = require('multer');
-const path = require('path');
+const cloudinary = require('cloudinary').v2;
+const { CloudinaryStorage } = require('multer-storage-cloudinary');
 const { authenticateToken, requireAdmin } = require('../middleware/auth');
+
+// Configure Cloudinary
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET
+});
 
 // Get category names for a product
 function getCategoryNames(productId, categoryProducts, categories) {
@@ -145,16 +153,13 @@ router.delete('/:productId', authenticateToken, requireAdmin, async (request, re
   }
 });
 
-// Set up storage for uploaded images
-// Adapted from https://expressjs.com/en/resources/middleware/multer.html
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, 'public/images/');
-  },
-  filename: function (req, file, cb) {
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-    const extension = path.extname(file.originalname);
-    cb(null, uniqueSuffix + extension);
+// Set up Cloudinary storage for uploaded images
+const storage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: {
+    folder: 'products',
+    allowed_formats: ['jpg', 'jpeg', 'png', 'webp'],
+    transformation: [{ width: 1000, height: 1000, crop: 'limit' }]
   }
 });
 const upload = multer({ storage: storage });
@@ -164,7 +169,7 @@ const upload = multer({ storage: storage });
 router.post('/', authenticateToken, requireAdmin, upload.single('image'), async (request, response) => {
   try {
     const { name, description, price, category, bestseller } = request.body;
-    const image = request.file ? request.file.filename : '';
+    const image = request.file ? request.file.path : '';
 
     if (Number(price) < 0) {
       return response.status(400).json({ message: 'Price must be at least 0.0' });
@@ -240,7 +245,7 @@ router.put('/:productId', authenticateToken, requireAdmin, upload.single('image'
     }
 
     if (request.file) {
-      product.image = request.file.filename;
+      product.image = request.file.path;
     }
 
     // Save the updated product

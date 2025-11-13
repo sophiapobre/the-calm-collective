@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { getCart, deleteCart } from '../../api/cartService';
 import { getProduct, getProductAttribute, getProductAttributePrice } from '../../api/productService';
 import { useCart } from '../../context/CartContext';
+import { getImageUrl } from '../../utils/imageUtils';
 
 import './Cart.css';
 
@@ -207,7 +208,7 @@ const Cart = () => {
                     cartItems.map(item => (
                         <div className='cart-item-card' key={`${item._id}-${item.productAttributeId || 'default'}`}>
                             <img 
-                              src={`http://localhost:4000/images/${item.image}`} 
+                              src={getImageUrl(item.image)} 
                               alt={item.name}
                               className='cart-item-image'
                             />

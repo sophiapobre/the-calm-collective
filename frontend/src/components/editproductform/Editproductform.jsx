@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { getProduct, getProductCategoryNames, getProductAttributesAndPrices } from '../../api/productService';
 import { useAuth } from '../../context/AuthContext';
 import ProductAttributesEditor from '../productattributeseditor/Productattributeseditor';
+import { getImageUrl } from '../../utils/imageUtils';
 
 import './Editproductform.css';
 
@@ -213,7 +214,7 @@ function EditProductForm() {
             {displayImage && (
               <div className="edit-product-image-preview">
                 <img
-                  src={`http://localhost:4000/images/${displayImage}`}
+                  src={getImageUrl(displayImage)}
                   alt="Current Product"
                 />
               </div>

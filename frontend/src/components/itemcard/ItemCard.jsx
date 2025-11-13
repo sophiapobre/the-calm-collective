@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom'; 
+import { getImageUrl } from '../../utils/imageUtils';
 
 import './ItemCard.css';
 
@@ -11,7 +12,7 @@ const ItemCard = ({products}) => {
                 products.map((item) => (
                   <div className='itemcard' key={item._id}>
                     <Link to={`/products/${item._id}`} className='link'>
-                        <img src={`http://localhost:4000/images/${item.image}`} alt='' className='itemcard-img'/>
+                        <img src={getImageUrl(item.image)} alt='' className='itemcard-img'/>
                         <p className="itemcard-name">{item.name}</p>
                     </Link>
                     <div className='itemcard-price'>
