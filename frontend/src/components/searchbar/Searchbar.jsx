@@ -9,6 +9,7 @@ const Searchbar = () => {
     const [keyword, setKeyword] = useState('');
     const [results, setResults] = useState(null);
     const [submittedKeyword, setSubmittedKeyword] = useState('');
+    const [loading, setLoading] = useState(false);
 
     const onChange = (e) => {
         setKeyword(e.target.value);
@@ -21,12 +22,21 @@ const Searchbar = () => {
           return;
         }
 
-        setSubmittedKeyword(keyword);
+        setLoading(true);
 
-        // Fetch search results from API
-        const response = await fetch(`${API_URL}/api/products/search?q=${encodeURIComponent(keyword)}`);
-        const data = await response.json();
-        setResults(data);
+        try {
+            // Fetch search results from API
+            const response = await fetch(`${API_URL}/api/products/search?q=${encodeURIComponent(keyword)}`);
+            const data = await response.json();
+
+            setResults(data);
+            setSubmittedKeyword(keyword);
+        } catch (error) {
+            console.error('Error searching products:', error);
+            setResults([]);
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
@@ -45,10 +55,17 @@ const Searchbar = () => {
                         onChange={onChange}
                         onKeyPress={(e) => e.key === 'Enter' && onSubmit()}
                     />
-                    <button onClick={() => onSubmit()}>Search</button>
+                    <button onClick={() => onSubmit()} disabled={loading}>
+                        {loading ? 'Searching...' : 'Search'}
+                    </button>
                 </div>
                 
-                {results === null ? null :
+                {loading ? (
+                    <div className='search-loading-container'>
+                        <div className="search-loading-spinner"></div>
+                        <p>Searching for "{keyword}"...</p>
+                    </div>
+                ) : results === null ? null :
                     results.length === 0 ? (
                         <div className="empty-search-results">
                             <div className="empty-search-icon">🔍</div>
