@@ -112,6 +112,10 @@ nav {
   white-space: nowrap;
 }
 
+.navbar-toggler:hover {
+  background-color: #657a63;
+}
+
 /* Responsive adjustments */
 @media (max-width: 991.98px) {
   .auth-section {
