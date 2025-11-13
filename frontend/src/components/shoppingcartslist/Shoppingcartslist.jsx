@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { getCart } from '../../api/cartService';
-import { getProduct, getProductAttribute, getProductAttributePrice } from '../../api/productService';
+import { API_URL } from '../../config';
 import { useAuth } from '../../context/AuthContext'; 
 
 import './Shoppingcartslist.css';
 
 const Shoppingcartslist = () => {
-    const [carts, setCarts] = useState([]);
     const [cartsWithDetails, setCartsWithDetails] = useState([]);
     const [loading, setLoading] = useState(true);
     const [showLoading, setShowLoading] = useState(false);
@@ -14,7 +12,7 @@ const Shoppingcartslist = () => {
     
     const { getAuthToken } = useAuth(); 
 
-    // Fetch shopping carts with authentication
+    // Fetch all shopping carts with full details in one request
     useEffect(() => {
       // Only show loading spinner after 300ms delay
       const loadingTimer = setTimeout(() => {
@@ -33,7 +31,7 @@ const Shoppingcartslist = () => {
             return;
           }
 
-          const response = await fetch(`${process.env.REACT_APP_API_URL || 'http://localhost:4000'}/api/shopping-cart`, {
+          const response = await fetch(`${API_URL}/api/shopping-cart/all-detailed`, {
             headers: {
               'Authorization': `Bearer ${token}`,
               'Content-Type': 'application/json'
@@ -51,18 +49,18 @@ const Shoppingcartslist = () => {
               alert(`Failed to load shopping carts. Server error: ${response.status}`);
               setError('Failed to load shopping carts');
             }
-            setCarts([]);
+            setCartsWithDetails([]);
             setLoading(false);
             return;
           }
 
           const data = await response.json();
-          setCarts(Array.isArray(data) ? data : []); // Ensure it's always an array
+          setCartsWithDetails(Array.isArray(data) ? data : []);
         } catch (err) {
           console.error('Error fetching carts:', err);
           alert('Network error. Please check your connection and try again.');
           setError('Network error');
-          setCarts([]); // Set empty array on error
+          setCartsWithDetails([]);
         } finally {
           setLoading(false);
           setShowLoading(false);
@@ -72,92 +70,7 @@ const Shoppingcartslist = () => {
       fetchCarts();
 
       return () => clearTimeout(loadingTimer);
-    }, [getAuthToken, loading]);
-
-    // Fetch items in each cart
-    useEffect(() => {
-      if (!carts.length) {
-        setCartsWithDetails([]);
-        return;
-      }
-
-      async function fetchCartItems() {
-        try {
-          let cartsWithDetails = [];
-
-          for (const cart of carts) {
-            try {
-              // Get cart data
-              const cartData = await getCart(cart.cartId);
-
-              if (!cartData.items) {
-                console.warn(`Cart ${cart.cartId} has no items, skipping...`);
-                continue; // Skip this cart but continue with others
-              }
-
-              // Get product details for each item
-              let itemsWithDetails = [];
-              for (const item of cartData.items) {
-                try {
-                  const product = await getProduct(item.productId);
-
-                  let variantName = null;
-                  let variantValue = null;
-                  let variantPrice = null;
-
-                  if (item.productAttributeId) {
-                    const attribute = await getProductAttribute(item.productAttributeId);
-                    variantName = attribute.attributeName;
-                    variantValue = attribute.attributeValue;
-
-                    const priceObj = await getProductAttributePrice(item.productId, item.productAttributeId);
-                    variantPrice = priceObj.price;
-                  }
-
-                  itemsWithDetails.push({
-                    productId: item.productId,
-                    productName: product.name,
-                    productPrice: variantPrice ? variantPrice : product.price,
-                    productAttributeId: item.productAttributeId,
-                    attributeName: variantName,
-                    attributeValue: variantValue,
-                    quantity: item.quantity,
-                  });
-                } catch (productError) {
-                  console.error(`Error loading product details for ${item.productId}:`, productError);
-                  // Add item with basic info even if product details fail
-                  itemsWithDetails.push({
-                    productId: item.productId,
-                    productName: 'Product details unavailable',
-                    productPrice: 0,
-                    productAttributeId: item.productAttributeId,
-                    attributeName: null,
-                    attributeValue: null,
-                    quantity: item.quantity,
-                  });
-                }
-              }
-              
-              cartsWithDetails.push({
-                cartId: cart.cartId,
-                items: itemsWithDetails,
-              });
-            } catch (cartError) {
-              console.error(`Error processing cart ${cart.cartId}:`, cartError);
-              // Continue with next cart instead of failing completely
-            }
-          }
-          
-          setCartsWithDetails(cartsWithDetails);
-        } catch (err) {
-          console.error('Error fetching cart details:', err);
-          alert('Failed to load cart details. Some information may be missing.');
-          setError('Failed to load cart details');
-        }
-      }
-
-      fetchCartItems();
-    }, [carts, getAuthToken]);
+    }, [getAuthToken]);
 
     if (loading && showLoading) {
       return (
@@ -200,7 +113,7 @@ const Shoppingcartslist = () => {
         </div>
         
         <div className='admin-carts-container'>
-          {!loading && carts.length === 0 ? (
+          {!loading && cartsWithDetails.length === 0 ? (
             <div className="admin-carts-empty">
               <div className="admin-carts-empty-icon">🛒</div>
               <h3>No active shopping carts</h3>
@@ -209,7 +122,6 @@ const Shoppingcartslist = () => {
           ) : (
             <div className='admin-carts-list'>
               {cartsWithDetails.map(cart => {
-                const cartInfo = carts.find(c => c.cartId === cart.cartId);
                 const totalItems = cart.items.reduce((sum, item) => sum + item.quantity, 0);
                 const totalPrice = cart.items.reduce((sum, item) => sum + (item.productPrice * item.quantity), 0);
 
@@ -220,19 +132,19 @@ const Shoppingcartslist = () => {
                         <h3>Cart #{cart.cartId}</h3>
                         <p className='admin-cart-customer'>
                           <span className='admin-label'>Customer:</span>{' '}
-                          {cartInfo?.userId ? (
+                          {cart.userId ? (
                             <>
-                              {cartInfo.userId.name || 'Unknown'} 
-                              {cartInfo.userId.email && <span className='admin-cart-email'> ({cartInfo.userId.email})</span>}
+                              {cart.userId.name || 'Unknown'} 
+                              {cart.userId.email && <span className='admin-cart-email'> ({cart.userId.email})</span>}
                             </>
                           ) : (
                             'Anonymous'
                           )}
                         </p>
-                        {cartInfo?.createdAt && (
+                        {cart.createdAt && (
                           <p className='admin-cart-date'>
                             <span className='admin-label'>Created:</span>{' '}
-                            {new Date(cartInfo.createdAt).toLocaleDateString('en-US', {
+                            {new Date(cart.createdAt).toLocaleDateString('en-US', {
                               year: 'numeric',
                               month: 'short',
                               day: 'numeric',
@@ -241,10 +153,10 @@ const Shoppingcartslist = () => {
                             })}
                           </p>
                         )}
-                        {cartInfo?.updatedAt && (
+                        {cart.updatedAt && (
                           <p className='admin-cart-date'>
                             <span className='admin-label'>Last Updated:</span>{' '}
-                            {new Date(cartInfo.updatedAt).toLocaleDateString('en-US', {
+                            {new Date(cart.updatedAt).toLocaleDateString('en-US', {
                               year: 'numeric',
                               month: 'short',
                               day: 'numeric',

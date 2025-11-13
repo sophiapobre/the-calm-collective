@@ -17,39 +17,6 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET
 });
 
-// Get category names for a product
-function getCategoryNames(productId, categoryProducts, categories) {
-  let result = [];
-
-  for (let i = 0; i < categoryProducts.length; i++) {
-    // Find the categoryProduct association
-    if (categoryProducts[i].productId.toString() === productId.toString()) {
-      for (var j = 0; j < categories.length; j++) {
-        // Find the category name
-        if (categories[j]._id.toString() === categoryProducts[i].categoryId.toString()) {
-          result.push(categories[j].name);
-          break;
-        }
-      }
-    }
-  }
-  return result;
-}
-
-// Get attribute name and values for a product
-function getAttributeNameAndValues(productId, attributes) {
-  let result = [];
-
-  for (let i = 0; i < attributes.length; i++) {
-    // Find the attributes matching the productId
-    if (attributes[i].productId.toString() === productId.toString()) {
-      result.push(attributes[i].attributeName);
-      result.push(attributes[i].attributeValue);
-    }
-  }
-  return result;
-}
-
 // Get all products
 // GET /api/products
 router.get('/', async (request, response) => {
@@ -62,49 +29,90 @@ router.get('/', async (request, response) => {
   }
 });
 
-// Search products by query
+// Search products by query (optimized)
 // GET /api/products/search?q=term1+term2
 router.get('/search', async (request, response) => {
-  // Get the search query from request parameters
-  // E.g. /api/products/search?q=tumi+backpack
-  const query = request.query.q;
-  
-  // Return empty array if no query
-  if (!query) {
-    return response.json([]);
-  } 
+  try {
+    // Get the search query from request parameters
+    const query = request.query.q;
+    
+    // Return empty array if no query
+    if (!query) {
+      return response.json([]);
+    } 
 
-  // Split query into separate search terms, ignoring case and extra spaces
-  // E.g. "tumi backpack" -> ["tumi", "backpack"]
-  let terms = [];
-  let split = query.trim().split(/\s+/);
-  for (let i = 0; i < split.length; i++) {
-    terms.push(split[i].toLowerCase());
-  }
+    // Split query into separate search terms, ignoring case and extra spaces
+    const terms = query.trim().toLowerCase().split(/\s+/);
 
-  // Get all products, categories, categoryProducts, and attributes
-  const products = await Product.find();
-  const categories = await Category.find();
-  const categoryProducts = await CategoryProduct.find();
-  const attributes = await ProductAttribute.find();
+    // Create case-insensitive regex patterns for each term
+    const regexPatterns = terms.map(term => new RegExp(term, 'i'));
 
-  const results = [];
-  for (const product of products) {
-    // Join all relevant product information into one lowercase string
-    const productSearchTerms = [
-      product.name,
-      product.description,
-      ...getCategoryNames(product._id, categoryProducts, categories),
-      ...getAttributeNameAndValues(product._id, attributes)
-    ].join(' ').toLowerCase();
+    // Build optimized MongoDB query
+    // Search in product name and description
+    const productQuery = {
+      $or: regexPatterns.flatMap(pattern => [
+        { name: pattern },
+        { description: pattern }
+      ])
+    };
 
-    // Check if all search terms are included in the product search terms
-    if (terms.every(term => productSearchTerms.includes(term))) {
-      results.push(product);
+    // Find matching products
+    const products = await Product.find(productQuery);
+
+    // Also search by category names
+    const categoryQuery = {
+      $or: regexPatterns.map(pattern => ({ name: pattern }))
+    };
+    const matchingCategories = await Category.find(categoryQuery);
+    
+    if (matchingCategories.length > 0) {
+      const categoryIds = matchingCategories.map(cat => cat._id);
+      
+      // Find products in these categories
+      const categoryProducts = await CategoryProduct.find({
+        categoryId: { $in: categoryIds }
+      });
+      
+      const productIdsFromCategories = categoryProducts.map(cp => cp.productId);
+      
+      // Fetch these products if not already in results
+      const additionalProducts = await Product.find({
+        _id: { $in: productIdsFromCategories },
+        _id: { $nin: products.map(p => p._id) } // Exclude already found products
+      });
+      
+      products.push(...additionalProducts);
     }
-  } 
 
-  response.json(results);
+    // Also search by attribute names and values
+    const attributeQuery = {
+      $or: regexPatterns.flatMap(pattern => [
+        { attributeName: pattern },
+        { attributeValue: pattern }
+      ])
+    };
+    const matchingAttributes = await ProductAttribute.find(attributeQuery);
+    
+    if (matchingAttributes.length > 0) {
+      const productIdsFromAttributes = [...new Set(matchingAttributes.map(attr => attr.productId))];
+      
+      // Fetch these products if not already in results
+      const additionalProducts = await Product.find({
+        _id: { $in: productIdsFromAttributes },
+        _id: { $nin: products.map(p => p._id) } // Exclude already found products
+      });
+      
+      products.push(...additionalProducts);
+    }
+
+    // Remove duplicates (just in case) and return
+    const uniqueProducts = Array.from(new Map(products.map(p => [p._id.toString(), p])).values());
+    
+    response.json(uniqueProducts);
+  } catch (error) {
+    console.error('Error searching products:', error);
+    response.status(500).json({ message: 'Internal server error' });
+  }
 });
 
 // Get a single product by productId

@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const Product = require('../models/product');
 const ShoppingCart = require('../models/shoppingCart');
 const ProductAttribute = require('../models/productAttribute');
+const ProductAttributePrice = require('../models/productAttributePrice');
 const { authenticateToken, requireAdmin, optionalAuth } = require('../middleware/auth');
 
 // Create new cart
@@ -38,6 +39,188 @@ router.get('/', authenticateToken, requireAdmin, async (request, response) => {
     response.json(carts);
   } catch (error) {
     console.error('Error fetching carts:', error);
+    response.status(500).json({ message: 'Internal server error' });
+  }
+});
+
+// Get all carts with full product details (optimized for admin view)
+// GET /api/shopping-cart/all-detailed
+router.get('/all-detailed', authenticateToken, requireAdmin, async (request, response) => {
+  try {
+    // Get all carts with user info populated
+    const carts = await ShoppingCart.find({}).populate('userId', 'name email');
+
+    if (carts.length === 0) {
+      return response.json([]);
+    }
+
+    // Collect all unique product IDs and attribute IDs across all carts
+    const allProductIds = new Set();
+    const allAttributeIds = new Set();
+
+    carts.forEach(cart => {
+      cart.items.forEach(item => {
+        allProductIds.add(item.productId.toString());
+        if (item.productAttributeId) {
+          allAttributeIds.add(item.productAttributeId.toString());
+        }
+      });
+    });
+
+    // Fetch all products, attributes, and prices in bulk
+    const products = await Product.find({ _id: { $in: Array.from(allProductIds) } });
+    
+    let attributes = [];
+    let attributePrices = [];
+    if (allAttributeIds.size > 0) {
+      attributes = await ProductAttribute.find({ 
+        _id: { $in: Array.from(allAttributeIds) } 
+      });
+      attributePrices = await ProductAttributePrice.find({ 
+        productAttributeId: { $in: Array.from(allAttributeIds) } 
+      });
+    }
+
+    // Build detailed carts array
+    const detailedCarts = carts.map(cart => {
+      const detailedItems = cart.items.map(item => {
+        const product = products.find(p => 
+          p._id.toString() === item.productId.toString()
+        );
+        
+        let attributeDetails = null;
+        let price = product ? product.price : 0;
+
+        if (item.productAttributeId) {
+          const attribute = attributes.find(a => 
+            a._id.toString() === item.productAttributeId.toString()
+          );
+          const priceDoc = attributePrices.find(p => 
+            p.productAttributeId.toString() === item.productAttributeId.toString()
+          );
+
+          if (attribute) {
+            attributeDetails = {
+              attributeName: attribute.attributeName,
+              attributeValue: attribute.attributeValue
+            };
+          }
+
+          if (priceDoc) {
+            price = priceDoc.price;
+          }
+        }
+
+        return {
+          productId: item.productId,
+          productName: product ? product.name : 'Product unavailable',
+          productPrice: price,
+          productAttributeId: item.productAttributeId,
+          attributeName: attributeDetails?.attributeName || null,
+          attributeValue: attributeDetails?.attributeValue || null,
+          quantity: item.quantity
+        };
+      });
+
+      return {
+        cartId: cart.cartId,
+        userId: cart.userId,
+        createdAt: cart.createdAt,
+        updatedAt: cart.updatedAt,
+        items: detailedItems
+      };
+    });
+
+    response.json(detailedCarts);
+  } catch (error) {
+    console.error('Error fetching detailed carts:', error);
+    response.status(500).json({ message: 'Internal server error' });
+  }
+});
+
+// Get cart items by cartId with full product details (optimized)
+// GET /api/shopping-cart/:cartId/items-detailed
+router.get('/:cartId/items-detailed', async (request, response) => {
+  try {
+    const cart = await ShoppingCart.findOne({ cartId: request.params.cartId });
+    
+    if (!cart) {
+      return response.status(404).json({ message: 'Cart not found' });
+    }
+
+    if (cart.items.length === 0) {
+      return response.json({ cartId: cart.cartId, items: [] });
+    }
+
+    // Get all unique product IDs and attribute IDs
+    const productIds = [...new Set(cart.items.map(item => item.productId))];
+    const attributeIds = cart.items
+      .filter(item => item.productAttributeId)
+      .map(item => item.productAttributeId);
+
+    // Fetch all products in one query
+    const products = await Product.find({ _id: { $in: productIds } });
+
+    // Fetch all attributes in one query (if any)
+    let attributes = [];
+    let attributePrices = [];
+    if (attributeIds.length > 0) {
+      attributes = await ProductAttribute.find({ _id: { $in: attributeIds } });
+      attributePrices = await ProductAttributePrice.find({ 
+        productAttributeId: { $in: attributeIds } 
+      });
+    }
+
+    // Build detailed items array
+    const detailedItems = cart.items.map(item => {
+      const product = products.find(p => p._id.toString() === item.productId.toString());
+      
+      let attributeDetails = null;
+      let price = product ? product.price : 0;
+
+      if (item.productAttributeId) {
+        const attribute = attributes.find(a => 
+          a._id.toString() === item.productAttributeId.toString()
+        );
+        const priceDoc = attributePrices.find(p => 
+          p.productAttributeId.toString() === item.productAttributeId.toString()
+        );
+
+        if (attribute) {
+          attributeDetails = {
+            attributeName: attribute.attributeName,
+            attributeValue: attribute.attributeValue
+          };
+        }
+
+        if (priceDoc) {
+          price = priceDoc.price;
+        }
+      }
+
+      return {
+        productId: item.productId,
+        productAttributeId: item.productAttributeId,
+        quantity: item.quantity,
+        product: product ? {
+          _id: product._id,
+          name: product.name,
+          description: product.description,
+          image: product.image,
+          price: product.price
+        } : null,
+        attribute: attributeDetails,
+        finalPrice: price
+      };
+    });
+
+    response.json({
+      cartId: cart.cartId,
+      items: detailedItems
+    });
+
+  } catch (error) {
+    console.error('Error fetching detailed cart:', error);
     response.status(500).json({ message: 'Internal server error' });
   }
 });
