@@ -9,6 +9,7 @@ const ProductManager = () => {
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [deletingId, setDeletingId] = useState(null);
 
     const { getAuthToken } = useAuth();
 
@@ -50,6 +51,8 @@ const ProductManager = () => {
             return;
         }
         
+        setDeletingId(id);
+
         try {
             // Send DELETE request to the backend
             const response = await fetch(`${API_URL}/api/products/${id}`, { 
@@ -78,6 +81,8 @@ const ProductManager = () => {
             console.error('Delete error:', error);
             alert('Network error. Please check your connection and try again.');
             setError('Network error');
+        } finally {
+            setDeletingId(null);
         }
     };
 
@@ -150,14 +155,23 @@ const ProductManager = () => {
                                 <button 
                                     className="product-manager-edit-btn" 
                                     onClick={() => navigate(`/admin/products/edit/${product._id}`)}
+                                    disabled={deletingId === product._id}
                                 >
                                     Manage
                                 </button>
                                 <button 
                                     className="product-manager-delete-btn" 
                                     onClick={() => handleDelete(product._id)}
+                                    disabled={deletingId === product._id}
                                 >
-                                    Delete
+                                    {deletingId === product._id ? (
+                                        <>
+                                            <span className="button-spinner"></span>
+                                            Deleting...
+                                        </>
+                                    ) : (
+                                        'Delete'
+                                    )}
                                 </button>
                             </div>
                         </div>

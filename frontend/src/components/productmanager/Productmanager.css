@@ -243,6 +243,17 @@
   transform: translateY(-1px);
 }
 
+.product-manager-edit-btn:disabled {
+  background: #6c757d;
+  cursor: not-allowed;
+  opacity: 0.5;
+  transform: none;
+}
+
+.product-manager-edit-btn:disabled:hover {
+  transform: none;
+}
+
 .product-manager-delete-btn {
   background: white;
   color: #6c757d;
@@ -253,6 +264,36 @@
   background: #f8f9fa;
   border-color: #6c757d;
   transform: translateY(-1px);
+}
+
+.product-manager-delete-btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+  transform: none;
+}
+
+.product-manager-delete-btn:disabled:hover {
+  background: white;
+  border-color: #e0e0e0;
+  transform: none;
+}
+
+/* Button Spinner */
+.button-spinner {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border: 2px solid #6c757d;
+  border-top: 2px solid transparent;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  margin-right: 6px;
+  vertical-align: middle;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
 
 /* Responsive Design */
