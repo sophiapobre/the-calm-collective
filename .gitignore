@@ -2,3 +2,6 @@
 .DS_Store
 *.env
 backend/public
+DEPLOYMENT_CHECKLIST.md
+DEPLOYMENT.md
+frontend/.env.production
