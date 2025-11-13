@@ -72,7 +72,7 @@ const Shoppingcartslist = () => {
       fetchCarts();
 
       return () => clearTimeout(loadingTimer);
-    }, [getAuthToken]);
+    }, [getAuthToken, loading]);
 
     // Fetch items in each cart
     useEffect(() => {
@@ -84,7 +84,6 @@ const Shoppingcartslist = () => {
       async function fetchCartItems() {
         try {
           let cartsWithDetails = [];
-          const token = getAuthToken();
 
           for (const cart of carts) {
             try {

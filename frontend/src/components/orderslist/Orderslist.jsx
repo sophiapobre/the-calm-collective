@@ -92,7 +92,7 @@ const Orderslist = () => {
       fetchOrders();
 
       return () => clearTimeout(loadingTimer);
-    }, [getAuthToken]);
+    }, [getAuthToken, loading]);
 
     if (loading && showLoading) {
       return (
