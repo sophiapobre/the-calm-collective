@@ -85,7 +85,7 @@ Create a `.env` file with the following credentials:
 
 ### Running the app locally
 
-1. Clone this repository
+1. Clone this repository:
 
 ```bash
 git clone https://github.com/sophiapobre/the-calm-collective.git
@@ -119,7 +119,7 @@ cd frontend && npm start
 
 ### Running the app on Docker
 
-1. Clone this repository
+1. Clone this repository:
 
 ```bash
 git clone https://github.com/sophiapobre/the-calm-collective.git
