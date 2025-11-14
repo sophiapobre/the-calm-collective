@@ -14,21 +14,21 @@ You can demo the app [here](https://the-calm-collective.vercel.app/).
 
 ## Technologies Used
 
-### **Frontend**
-- React – JavaScript library for building component-based UIs
-- React Context API – for global state management
+### Frontend
+- [React](https://react.dev/) – JavaScript library for building component-based UIs
+- [React Context API](https://react.dev/learn/passing-data-deeply-with-context) – for global state management
 
-### **Backend**
-- Node.js – JavaScript runtime environment
-- Express.js – backend wep app framework for building RESTful APIs with Node.js
-- Mongoose – MongoDB object modeling
-- MongoDB Atlas – cloud database with JSON-like document data model
+### Backend
+- [Node.js](https://nodejs.org/en/) – JavaScript runtime environment
+- [Express.js](https://expressjs.com/) – backend wep app framework for building RESTful APIs with Node.js
+- [Mongoose](https://mongoosejs.com/docs/) – MongoDB object modeling
+- [MongoDB Atlas](https://www.mongodb.com/atlas) – cloud database with JSON-like document data model
 
-### **Other Services**
-- Cloudinary – image upload & asset hosting
+### Other Technologies
+- [Cloudinary](https://cloudinary.com/) – image upload & asset hosting
 - JWT Authentication – for secure role-based admin control
-- Vercel – for automated builds and deployments  
-- Docker – local and development environment
+- [Vercel](https://vercel.com/) – for automated builds and deployments  
+- [Docker](https://www.docker.com/) – local development environment
 
 ## Features
 
@@ -77,8 +77,9 @@ You will need environment variables for [MongoDB Atlas](https://www.mongodb.com/
 Create a `.env` file with the following credentials:
 
 - `PORT=4000`
-- `MONGO_URL` - your MongoDB URI
 - `FRONTEND_URL=http://localhost:3000`
+- `JWT_SECRET` - your JWT secret key
+- `MONGO_URL` - your MongoDB URI
 - `CLOUDINARY_CLOUD_NAME` - your Cloudinary cloud name
 - `CLOUDINARY_API_KEY` - your Cloudinary API key
 - `CLOUDINARY_API_SECRET` - your Cloudinary API secret
@@ -87,30 +88,30 @@ Create a `.env` file with the following credentials:
 
 1. Clone this repository:
 
-```bash
-git clone https://github.com/sophiapobre/the-calm-collective.git
-```
+    ```bash
+    git clone https://github.com/sophiapobre/the-calm-collective.git
+    ```
 
 2. Place your `.env` file in the `/backend` folder
 
 3. Install dependencies for both the frontend and backend:
 
-```bash
-cd backend && npm install
-cd ../frontend && npm install
-```
+    ```bash
+    cd backend && npm install
+    cd ../frontend && npm install
+    ```
 
 4. Start the backend server:
 
-```bash
-cd backend && npm start
-```
+    ```bash
+    cd backend && npm start
+    ```
 
 5. In a new terminal, start the frontend server:
 
-```bash
-cd frontend && npm start
-```
+    ```bash
+    cd frontend && npm start
+    ```
 
 6. Access the app:
    - Launch your browser and go to [http://localhost:3000](http://localhost:3000) to access the frontend.
@@ -121,17 +122,17 @@ cd frontend && npm start
 
 1. Clone this repository:
 
-```bash
-git clone https://github.com/sophiapobre/the-calm-collective.git
-```
+    ```bash
+    git clone https://github.com/sophiapobre/the-calm-collective.git
+    ```
 
 2. Place your `.env` file in the `/backend` folder
 
 3. Build and start all services:
 
-```bash
-docker compose up --build
-```
+    ```bash
+    docker compose up --build
+    ```
 
 4. Access the app:
    - Launch your browser and go to [http://localhost:3000](http://localhost:3000) to access the frontend.
@@ -139,6 +140,6 @@ docker compose up --build
 
 5. To stop running the app, press `Ctrl+C` in the terminal, and then run:
 
-```bash
-docker compose down
-```
+    ```bash
+    docker compose down
+    ```
