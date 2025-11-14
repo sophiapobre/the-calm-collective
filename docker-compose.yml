@@ -3,12 +3,10 @@ services:
     build: ./backend
     ports:
       - "4000:4000"
-    volumes:
-      - ./backend/public/images:/app/public/images
+    env_file:
+      - ./backend/.env
     environment:
       - NODE_ENV=production
-      # MongoDB Atlas connection string should be set via .env file
-      - MONGO_URL=${MONGO_URL}
 
   frontend:
     build: ./frontend
