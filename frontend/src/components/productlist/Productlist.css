@@ -45,6 +45,30 @@ h1 {
   box-sizing: border-box;
 }
 
+@media (max-width: 1465px) {
+  .category-section {
+    margin-left: 4rem;
+  }
+}
+
+@media (max-width: 1388px) {
+  .category-section {
+    margin-left: 2rem;
+  }
+}
+
+@media (max-width: 1320px) {
+  .category-section {
+    margin-left: 1rem;
+  }
+}
+
+@media (max-width: 1025px) {
+  .category-section {
+    margin-left: 0;
+  }
+}
+
 @media (max-width: 900px) {
   .product-container {
     grid-template-columns: repeat(2, 1fr) !important;

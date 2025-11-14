@@ -58,3 +58,53 @@ a.link:hover {
   color: #d43d29 !important;
   text-decoration: none !important;
 }
+
+/* Responsive adjustments */
+@media (max-width: 900px) {
+  .itemcard {
+    padding: 10px;
+  }
+
+  .itemcard p {
+    font-size: 18px;
+  }
+
+  .itemcard-price {
+    gap: 12px;
+    font-size: 17px;
+  }
+
+  .itemcard-img {
+    width: 160px;
+    height: 160px;
+  }
+}
+
+@media (max-width: 600px) {
+  .itemcard {
+    padding: 8px;
+    border-radius: 6px;
+  }
+
+  .itemcard p {
+    font-size: 16px;
+  }
+
+  .itemcard-name {
+    font-size: 16px;
+  }
+
+  .itemcard-price {
+    gap: 8px;
+    font-size: 15px;
+  }
+
+  .itemcard-img {
+    width: 120px;
+    height: 120px;
+  }
+
+  .itemcard {
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+  }
+}
