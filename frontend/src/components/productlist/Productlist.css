@@ -78,6 +78,12 @@ h1 {
   }
 }
 
+@media (max-width: 880px) {
+  .category-section {
+    width: 100% !important;
+  }
+}
+
 @media (max-width: 600px) {
   .product-container {
     grid-template-columns: 1fr !important;
