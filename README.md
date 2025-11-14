@@ -67,6 +67,8 @@ You can demo the app [here](https://the-calm-collective.vercel.app/).
 - Admin product management page: create, edit, delete products & manage product variants
   <img width="1470" height="832" alt="Screenshot 2025-11-15 at 12 04 20 am" src="https://github.com/user-attachments/assets/d8355c15-5700-40cc-ab7c-22a0aa406f48" />
 
+  <img width="1469" height="830" alt="Screenshot 2025-11-15 at 12 52 22 am" src="https://github.com/user-attachments/assets/58332a19-36d6-4e00-ba80-8d9b8958c957" />
+
   https://github.com/user-attachments/assets/85f9eabf-f99f-4c48-8b12-b654a6473c94
 
 ## Getting Started
