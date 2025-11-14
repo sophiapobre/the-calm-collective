@@ -136,8 +136,8 @@
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 1rem;
   width: 100%;
-  padding-left: 6rem;
-  padding-right: 6rem;
+  padding-left: 3rem;
+  padding-right: 3rem;
   padding-bottom: 3rem;
   margin: 0 0 0 0;
   box-sizing: border-box;
