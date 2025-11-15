@@ -40,11 +40,11 @@ You can demo the app [here](https://the-calm-collective.vercel.app/).
   <img width="1470" height="831" alt="Screenshot 2025-11-14 at 11 57 28 pm" src="https://github.com/user-attachments/assets/39cf7de7-bdf8-487d-abda-09dd75f4fad6" />
 
 - Product catalog with "Shop by Category" and "Best Sellers" pages
-  <img width="1469" height="832" alt="Screenshot 2025-11-14 at 11 54 17 pm" src="https://github.com/user-attachments/assets/80d3b832-e36c-4f9a-bde9-abd101ecc206" />
-  <img width="1470" height="831" alt="Screenshot 2025-11-14 at 11 54 31 pm" src="https://github.com/user-attachments/assets/1261426d-29fd-4433-b76c-448d2faecee6" />
+  <img width="1469" height="831" alt="Screenshot 2025-11-15 at 2 36 54 pm" src="https://github.com/user-attachments/assets/8e740e4e-e31a-42db-9997-49726a38d7c1" />
+  <img width="1470" height="830" alt="Screenshot 2025-11-15 at 2 37 11 pm" src="https://github.com/user-attachments/assets/683e0699-b828-49c4-b240-6182ce6067e8" />
 
 - Product search (by product name, description, category, variant)
-  <img width="1470" height="829" alt="Screenshot 2025-11-14 at 11 58 37 pm" src="https://github.com/user-attachments/assets/3c445829-a4c0-4109-bcfc-06be0d87677a" />
+  <img width="1470" height="832" alt="Screenshot 2025-11-15 at 2 37 50 pm" src="https://github.com/user-attachments/assets/0037fbe1-c28f-4e02-8598-d14d21d292f3" />
 
 - Shopping Cart page with optimistic cart updates
   <img width="1469" height="831" alt="Screenshot 2025-11-14 at 11 59 51 pm" src="https://github.com/user-attachments/assets/31f28be4-1749-4401-8d79-68260dffad4e" />
