@@ -127,7 +127,8 @@
   font-size: 1.5rem;
   font-weight: 600;
   color: #2c3e50;
-  margin: 0 0 2rem 6rem;
+  margin-bottom: 2rem;
+  padding-left: 6rem;
   text-align: left;
 }
 
@@ -136,10 +137,10 @@
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 1rem;
   width: 100%;
-  padding-left: 3rem;
-  padding-right: 3rem;
-  padding-bottom: 3rem;
-  margin: 0 0 0 0;
+  padding-left: 6rem;
+  padding-right: 6rem;
+  padding-bottom: 6rem;
+  margin-bottom: 3rem;
   box-sizing: border-box;
 }
 
