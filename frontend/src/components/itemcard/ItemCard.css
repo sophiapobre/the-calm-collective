@@ -28,7 +28,8 @@
 }
 
 .itemcard-name {
-  color: #4A6B4E; 
+  color: #4A6B4E;
+  max-width: 280px;
 }
 
 .itemcard-price {
@@ -72,6 +73,10 @@ a.link:hover {
   .itemcard-price {
     gap: 12px;
     font-size: 17px;
+  }
+
+  .itemcard-name {
+    max-width: 240px;
   }
 
   .itemcard-img {
