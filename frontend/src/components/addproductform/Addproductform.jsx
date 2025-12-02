@@ -15,17 +15,10 @@ function AddProductForm() {
   const [submitting, setSubmitting] = useState(false);
 
   const navigate = useNavigate();
-  const { getAuthToken } = useAuth();
+  const { fetchWithAuth } = useAuth();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-
-    const token = getAuthToken();
-
-    if (!token) {
-      alert('You must be logged in to add products.');
-      return;
-    }
 
     if (Number(price) < 0) {
       alert('Price cannot be negative.');
@@ -47,12 +40,8 @@ function AddProductForm() {
 
     try {
       // Send POST request to backend with authentication
-      const response = await fetch(`${API_URL}/api/products`, {
+      const response = await fetchWithAuth(`${API_URL}/api/products`, {
         method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          // Don't set Content-Type for FormData - browser sets it automatically
-        },
         body: formData
       });
 

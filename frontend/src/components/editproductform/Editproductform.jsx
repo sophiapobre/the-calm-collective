@@ -24,20 +24,11 @@ function EditProductForm() {
 
   const navigate = useNavigate();
   const { productId } = useParams();
-  const { getAuthToken } = useAuth();
+  const { fetchWithAuth } = useAuth();
 
   // Fetch product, categories, and attributes and prices
   useEffect(() => {
     const fetchProduct = async () => {
-      const token = getAuthToken();
-      
-      if (!token) {
-        alert('You must be logged in to edit products.');
-        setError('Authentication required');
-        setLoading(false);
-        return;
-      }
-
       try {
         // Use the existing API service function
         const data = await getProduct(productId);
@@ -83,18 +74,10 @@ function EditProductForm() {
     };
     
     fetchProduct();
-  }, [productId, getAuthToken]);
+  }, [productId]);
 
   const handleEditProductSubmit = async (event) => {
     event.preventDefault();
-
-    const token = getAuthToken();
-
-    if (!token) {
-      alert('You must be logged in to perform this action.');
-      setError('Authentication required');
-      return;
-    }
 
     if (Number(price) < 0) {
       alert('Price cannot be negative.');
@@ -118,12 +101,8 @@ function EditProductForm() {
 
     try {
       // Send form data to backend with authentication
-      const response = await fetch(`${API_URL}/api/products/${productId}`, {
+      const response = await fetchWithAuth(`${API_URL}/api/products/${productId}`, {
         method: 'PUT',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          // Don't set Content-Type for FormData - browser sets it automatically
-        },
         body: formData
       });
 

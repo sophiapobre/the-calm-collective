@@ -1,17 +1,22 @@
 import { API_URL } from '../config';
 
-export async function createNewCart() {
+// Helper to get headers with optional auth token
+const getHeaders = () => {
   const headers = { 'Content-Type': 'application/json' };
-  
-  // Add auth token if user is logged in
   const token = localStorage.getItem('token');
+  
   if (token) {
     headers['Authorization'] = `Bearer ${token}`;
   }
+  
+  return headers;
+};
 
+export async function createNewCart() {
   const response = await fetch(`${API_URL}/api/shopping-cart`, {
     method: 'POST',
-    headers: headers
+    headers: getHeaders(),
+    credentials: 'include' // Include cookies for refresh token if logged in
   });
 
   if (response.status !== 200) {
@@ -20,7 +25,7 @@ export async function createNewCart() {
   }
 
   const data = await response.json();
-  localStorage.setItem('cartId', data.cartId); // Store cartId in localStorage
+  localStorage.setItem('cartId', data.cartId);
 
   return data.cartId;
 }
@@ -28,7 +33,8 @@ export async function createNewCart() {
 export async function addItemToCart(cartId, productId, productAttributeId, quantity) {
   const response = await fetch(`${API_URL}/api/shopping-cart/${cartId}/items`, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: getHeaders(),
+    credentials: 'include',
     body: JSON.stringify({ productId, productAttributeId, quantity })
   });
 
@@ -43,7 +49,8 @@ export async function addItemToCart(cartId, productId, productAttributeId, quant
 export async function getCart(cartId) {
   const response = await fetch(`${API_URL}/api/shopping-cart/${cartId}/items`, {
     method: 'GET',
-    headers: { 'Content-Type': 'application/json' }
+    headers: getHeaders(),
+    credentials: 'include'
   });
 
   if (response.status !== 200) {
@@ -57,7 +64,8 @@ export async function getCart(cartId) {
 export async function deleteCart(cartId) {
   const response = await fetch(`${API_URL}/api/shopping-cart/${cartId}`, {
     method: 'DELETE',
-    headers: { 'Content-Type': 'application/json' }
+    headers: getHeaders(),
+    credentials: 'include'
   });
 
   if (response.status !== 200) {

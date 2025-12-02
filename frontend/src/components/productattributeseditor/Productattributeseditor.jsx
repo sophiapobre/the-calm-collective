@@ -12,7 +12,7 @@ const ProductAttributesEditor = ({ productId, attributes, setAttributes }) => {
   const [submitting, setSubmitting] = useState(false);
 
   const navigate = useNavigate();
-  const { getAuthToken } = useAuth();
+  const { fetchWithAuth } = useAuth();
 
   // Ensure that local state is synced with parent attributes
   useEffect(() => {
@@ -96,13 +96,6 @@ const ProductAttributesEditor = ({ productId, attributes, setAttributes }) => {
   const handleSaveAll = async event => {
     event.preventDefault();
 
-    const token = getAuthToken();
-
-    if (!token) {
-      alert('You must be logged in to perform this action.');
-      return;
-    }
-
     if (!attributeName.trim()) {
       alert('Attribute name is a required field.');
       return;
@@ -139,12 +132,8 @@ const ProductAttributesEditor = ({ productId, attributes, setAttributes }) => {
         }));
 
       // Make single bulk save request
-      const response = await fetch(`${API_URL}/api/product-attributes/${productId}/bulk-save`, {
+      const response = await fetchWithAuth(`${API_URL}/api/product-attributes/${productId}/bulk-save`, {
         method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        },
         body: JSON.stringify({
           attributeName,
           attributesToDelete,

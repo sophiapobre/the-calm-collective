@@ -7,6 +7,22 @@ const { authenticateToken } = require('../middleware/auth');
 
 const router = express.Router();
 
+const generateTokens = (user) => {
+  const accessToken = jwt.sign(
+    { userId: user._id, role: user.role },
+    process.env.JWT_SECRET,
+    { expiresIn: '15m' } // Short-lived access token
+  );
+
+  const refreshToken = jwt.sign(
+    { userId: user._id, role: user.role },
+    process.env.JWT_REFRESH_SECRET,
+    { expiresIn: '7d' } // Long-lived refresh token
+  );
+
+  return { accessToken, refreshToken };
+};
+
 // Register endpoint
 router.post('/register', [
   body('name').isLength({ min: 1 }).trim().escape(),
@@ -44,16 +60,24 @@ router.post('/register', [
 
     await user.save();
 
-    // Generate JWT token
-    const token = jwt.sign(
-      { userId: user._id, role: user.role },
-      process.env.JWT_SECRET,
-      { expiresIn: '24h' }
-    );
+    // Generate tokens
+    const { accessToken, refreshToken } = generateTokens(user);
+
+    // Store refresh token in database
+    user.refreshToken = refreshToken;
+    await user.save();
+
+    // Store access token in HTTP-only cookie
+    res.cookie('refreshToken', refreshToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production', // Require HTTPS in production
+      sameSite: 'Strict',
+      maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
+    });
 
     res.status(201).json({
       message: 'User registered successfully',
-      token,
+      accessToken,
       user: {
         id: user._id,
         name: user.name,
@@ -93,16 +117,24 @@ router.post('/login', [
       return res.status(401).json({ message: 'Invalid credentials' });
     }
 
-    // Generate JWT token
-    const token = jwt.sign(
-      { userId: user._id, role: user.role },
-      process.env.JWT_SECRET,
-      { expiresIn: '24h' }
-    );
+    // Generate tokens
+    const { accessToken, refreshToken } = generateTokens(user);
+
+    // Store refresh token in database
+    user.refreshToken = refreshToken;
+    await user.save();
+
+    // Store access token in HTTP-only cookie
+    res.cookie('refreshToken', refreshToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production', // Require HTTPS in production
+      sameSite: 'Strict',
+      maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
+    });
 
     res.json({
       message: 'Login successful',
-      token,
+      accessToken,
       user: {
         id: user._id,
         name: user.name,
@@ -113,6 +145,41 @@ router.post('/login', [
   } catch (error) {
     console.error('Login error:', error);
     res.status(500).json({ message: 'Server error during login' });
+  }
+});
+
+// Refresh token endpoint
+router.post('/refresh', async (req, res) => {
+  try {
+    const refreshToken = req.cookies.refreshToken;
+    
+    if (!refreshToken) {
+      return res.status(401).json({ message: 'No refresh token provided' });
+    }
+
+    // Verify refresh token
+    const decoded = jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET);
+    
+    // Find user and check if refresh token matches
+    const user = await User.findById(decoded.userId);
+    if (!user || user.refreshToken !== refreshToken) {
+      return res.status(403).json({ message: 'Invalid refresh token' });
+    }
+
+    // Generate new access token
+    const accessToken = jwt.sign(
+      { userId: user._id, role: user.role },
+      process.env.JWT_SECRET,
+      { expiresIn: '15m' }
+    );
+
+    res.json({ accessToken });
+  } catch (error) {
+    if (error.name === 'JsonWebTokenError' || error.name === 'TokenExpiredError') {
+      return res.status(403).json({ message: 'Invalid or expired refresh token' });
+    }
+    console.error('Refresh token error:', error);
+    res.status(500).json({ message: 'Server error during token refresh' });
   }
 });
 
@@ -133,9 +200,24 @@ router.get('/profile', authenticateToken, async (req, res) => {
   }
 });
 
-// Logout endpoint (client-side token removal)
-router.post('/logout', authenticateToken, (req, res) => {
-  res.json({ message: 'Logout successful' });
+// Logout endpoint (invalidates refresh token)
+router.post('/logout', authenticateToken, async (req, res) => {
+  try {
+    // Clear refresh token from database
+    await User.findByIdAndUpdate(req.user._id, { refreshToken: null });
+    
+    // Clear refresh token cookie
+    res.clearCookie('refreshToken', {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict'
+    });
+    
+    res.json({ message: 'Logout successful' });
+  } catch (error) {
+    console.error('Logout error:', error);
+    res.status(500).json({ message: 'Server error during logout' });
+  }
 });
 
 module.exports = router;

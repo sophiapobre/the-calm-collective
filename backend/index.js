@@ -6,6 +6,8 @@ const app = express();
 const mongoose = require('mongoose');
 const cors = require('cors');
 
+const cookieParser = require('cookie-parser');
+
 // Add environment variables support
 require('dotenv').config();
 
@@ -33,6 +35,7 @@ const corsOptions = {
 
 app.use(express.json());
 app.use(cors(corsOptions));
+app.use(cookieParser());
 
 // MongoDB connection
 const mongoUrl = process.env.MONGO_URL || 'mongodb://localhost:27017/e-commerce';

@@ -10,7 +10,7 @@ const Shoppingcartslist = () => {
     const [showLoading, setShowLoading] = useState(false);
     const [error, setError] = useState(null);
     
-    const { getAuthToken } = useAuth(); 
+    const { fetchWithAuth } = useAuth(); 
 
     // Fetch all shopping carts with full details in one request
     useEffect(() => {
@@ -23,19 +23,8 @@ const Shoppingcartslist = () => {
 
       const fetchCarts = async () => {
         try {
-          const token = getAuthToken();
-          
-          if (!token) {
-            setError('Authentication required');
-            setLoading(false);
-            return;
-          }
-
-          const response = await fetch(`${API_URL}/api/shopping-cart/all-detailed`, {
-            headers: {
-              'Authorization': `Bearer ${token}`,
-              'Content-Type': 'application/json'
-            }
+          const response = await fetchWithAuth(`${API_URL}/api/shopping-cart/all-detailed`, {
+            method: 'GET',
           });
 
           if (!response.ok) {
@@ -70,7 +59,7 @@ const Shoppingcartslist = () => {
       fetchCarts();
 
       return () => clearTimeout(loadingTimer);
-    }, [getAuthToken]);
+    }, [fetchWithAuth]);
 
     if (loading && showLoading) {
       return (

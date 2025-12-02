@@ -11,7 +11,7 @@ const ProductManager = () => {
     const [error, setError] = useState(null);
     const [deletingId, setDeletingId] = useState(null);
 
-    const { getAuthToken } = useAuth();
+    const { fetchWithAuth } = useAuth();
 
     const navigate = useNavigate();
 
@@ -39,14 +39,6 @@ const ProductManager = () => {
     }, []);
 
     const handleDelete = async (id) => {
-        const token = getAuthToken();
-
-        if (!token) {
-            alert('You must be logged in to perform this action.');
-            setError('Authentication required');
-            return;
-        }
-
         if (!window.confirm('Are you sure you want to delete this product?')) {
             return;
         }
@@ -55,12 +47,8 @@ const ProductManager = () => {
 
         try {
             // Send DELETE request to the backend
-            const response = await fetch(`${API_URL}/api/products/${id}`, { 
-                method: 'DELETE',
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'application/json'
-                }
+            const response = await fetchWithAuth(`${API_URL}/api/products/${id}`, { 
+                method: 'DELETE'
             });
 
             if (response.ok) {

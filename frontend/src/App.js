@@ -29,10 +29,10 @@ import { CartProvider } from './context/CartContext';
 // Adapted code from GreatStack Tutorial https://www.youtube.com/watch?v=jbfuzcrfjqQ&ab_channel=GreatStack
 function App() {
   return (
-      <AuthProvider>
+      <BrowserRouter>
         <CartProvider>
         <div>
-          <BrowserRouter>
+          <AuthProvider>
             <Navbar/>
             <Routes>
               {/* Public routes */}
@@ -87,10 +87,10 @@ function App() {
               }/>
 
             </Routes>
-          </BrowserRouter>
+          </AuthProvider>
         </div>
         </CartProvider>
-      </AuthProvider>
+      </BrowserRouter>
   );
 }
 

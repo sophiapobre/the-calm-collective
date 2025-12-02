@@ -19,7 +19,7 @@ const Checkout = () => {
     const [submitting, setSubmitting] = useState(false);
 
     const navigate = useNavigate();
-    const { getAuthToken } = useAuth();
+    const { fetchWithAuth } = useAuth();
     const { clearCartCount } = useCart();
 
     const handleSubmit = async (event) => {
@@ -35,17 +35,6 @@ const Checkout = () => {
       setSubmitting(true);
 
       try {
-        // Get token if user is logged in (optional)
-        const token = getAuthToken();
-
-        const headers = {
-          'Content-Type': 'application/json'
-        }
-
-        if (token) {
-          headers['Authorization'] = `Bearer ${token}`;
-        }
-
         const payload = { 
           firstName, 
           lastName, 
@@ -54,9 +43,8 @@ const Checkout = () => {
         };
 
         // Create order
-        const response = await fetch(`${process.env.REACT_APP_API_URL || 'http://localhost:4000'}/api/orders`, {
+        const response = await fetchWithAuth(`${process.env.REACT_APP_API_URL || 'http://localhost:4000'}/api/orders`, {
           method: 'POST',
-          headers: headers,
           body: JSON.stringify(payload)
         });
 

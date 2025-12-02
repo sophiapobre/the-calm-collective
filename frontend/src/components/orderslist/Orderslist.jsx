@@ -9,7 +9,7 @@ const Orderslist = () => {
     const [showLoading, setShowLoading] = useState(false);
     const [error, setError] = useState(null);
     
-    const { getAuthToken } = useAuth();
+    const { fetchWithAuth } = useAuth();
 
     // Fetch orders with authentication
     useEffect(() => {
@@ -22,19 +22,8 @@ const Orderslist = () => {
 
       const fetchOrders = async () => {
         try {
-          const token = getAuthToken();
-
-          if (!token) {
-            setError('Authentication required');
-            setLoading(false);
-            return;
-          }
-
-          const response = await fetch(`${process.env.REACT_APP_API_URL || 'http://localhost:4000'}/api/orders`, {
-            headers: {
-              'Authorization': `Bearer ${token}`,
-              'Content-Type': 'application/json'
-            }
+          const response = await fetchWithAuth(`${process.env.REACT_APP_API_URL || 'http://localhost:4000'}/api/orders`, {
+            method: 'GET',
           });
 
           if (!response.ok) {
@@ -92,7 +81,7 @@ const Orderslist = () => {
       fetchOrders();
 
       return () => clearTimeout(loadingTimer);
-    }, [getAuthToken, loading]);
+    }, [fetchWithAuth, loading]);
 
     if (loading && showLoading) {
       return (
