@@ -81,6 +81,7 @@ Create a `.env` file with the following credentials:
 - `PORT=4000`
 - `FRONTEND_URL=http://localhost:3000`
 - `JWT_SECRET` - your JWT secret key
+- `JWT_REFRESH_SECRET` - your JWT refresh secret key
 - `MONGO_URL` - your MongoDB URI
 - `CLOUDINARY_CLOUD_NAME` - your Cloudinary cloud name
 - `CLOUDINARY_API_KEY` - your Cloudinary API key
